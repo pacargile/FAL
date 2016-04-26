@@ -112,11 +112,7 @@ def makeinlist(infilename):
 	#
 	# for numpy conditional statements, look at:
 	# http://docs.scipy.org/doc/numpy/reference/routines.logic.html
-
-	# seg1cond = ([
-	# 	{'LP':'RESID','OP':np.less,'LV':0.997},
-	# 	])
-
+	
 	# read slicer file
 	regfile = Table.read(infilename,names=['ID','WLstart','WLend','LINWLstart','LINWLend','WLRAN','NUMLINES'],format='ascii')
 
@@ -128,7 +124,6 @@ def makeinlist(infilename):
 			'minlinWL':float(rf_i['LINWLstart']),'maxlinWL':float(rf_i['LINWLend']),
 			'initlines':'/work/02349/cargilpa/FAL/OPTRUN/SEG_4750_7500_PASS2/RUN1startpars.h5',
 			'injectlines':'/work/02349/cargilpa/FAL/OPTRUN/SEG_4750_7500_PASS2/RunMissingLines_PASS1_V2.dat',
-			# 'condst':seg1cond,
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
 			'RUNID':ii})
 

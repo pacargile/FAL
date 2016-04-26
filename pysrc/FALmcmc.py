@@ -1,35 +1,20 @@
 from __future__ import print_function
-import sys,time,datetime, math,re
+import sys,time
 from datetime import datetime
-import glob
-import signal
 import emcee
 import h5py
 
 import numpy as np
 from astropy.table import Table
-from itertools import izip, chain, repeat
-from scipy.interpolate import interp1d,UnivariateSpline
-from scipy.stats import beta,describe,lognorm
-from scipy.linalg import cho_factor, cho_solve
+from scipy.interpolate import UnivariateSpline
+from scipy.stats import beta
 from scipy import constants
-
 speedoflight = constants.c / 1000.0
 
 import FALlinesel
 import FALmod
 import FALGlue
 from FALGlue import *
-
-# setup signal handling functions so we can write using SIGUSR1 signal
-# GOT_SIG = False
-
-# def signal_handler(*args):
-# 	global GOT_SIG
-# 	GOT_SIG = True
-
-# def signal_setup():
-# 	signal.signal(signal.SIGUSR1,signal_handler)
 
 def lnprob(pin,args,verbose=False):
     obswave,obsflux,transflux,fm,Tarr,minWL,maxWL = args
@@ -640,9 +625,6 @@ class FALmcmc(object):
         outf = open(self.outputfile,'a')
 
         outspec = h5py.File('SAMP'+self.outputfile[4:-3]+'h5','a')
-        # initalize signal handler
-        # global GOT_SIG
-        # signal_setup()
 
         # set flag for final print
         finalflag = 0
