@@ -667,11 +667,11 @@ class synthe(object):
               = 'rline' -> read in all of the lines
         """
 
-        if (rtype == None or rtype == "punch500"):
+        if (rtype == None or rtype == "readold"):
             self.rgfalldel(verbose=verbose,reuse_ll=reuse_ll)
-        elif (rtype == 'master'):
+        elif (rtype == 'readmaster'):
             self.rmaster(rlinedict['MASTERLL'],verbose=verbose)
-        elif (rtype == 'rline'):
+        elif (rtype == 'readall'):
             self.rlinefunc(rlinedict,verbose=verbose)
         else:
             raise IOError('Did not understand read line type rtype={0}'.format(rtype))

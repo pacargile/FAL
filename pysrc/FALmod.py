@@ -12,6 +12,337 @@ class FALmod(object):
     Class to take delta line parameters and return a synthesized
     spectrum from SYNTHE to use in python
     """    
+    def __init__(self,ID=None):
+
+        # set ID
+        if ID != None:
+            self.IDraw = ID
+            self.ID = str(ID).rjust(8,str(0))
+        else:
+            import uuid
+            self.ID = uuid.uuid4().hex[:8]
+            self.IDraw = None
+
+        # create the glue        
+        self.glue = FALGlue.glue()
+
+        # initialize SYNTHE package
+        self.SYNTHE = synthepkg.synthe(ID=ID,verbose=verbose,clobber=True,rline=self.rlinebool,LL=self.LLbool,rlinedict=self.rlinedict,arct_bool=self.arct_bool)
+
+        # make dir in memory if not already there
+        if not os.path.exists('/dev/shm/FAL/{0}'.format(self.ID)):
+            os.makedirs('/dev/shm/FAL/{0}'.format(self.ID))
+
+        # make local dir to work in
+        if not os.path.exists('{0}'.format(self.ID)):
+            os.makedirs('{0}'.format(self.ID))
+
+        # define parent directory
+        self.parentdir = os.getcwd()
+
+    def runsynthe(self,**kwargs):
+        """
+        Call SYNTHE
+        """
+        # sort out keywords
+        self.timeit = kwargs.get('timeit',False)
+        self.starpars = kwargs.get('starpars',{'DEFAULT':True})
+
+        verbose = kwargs.get('verbose',False)
+        writespec = kwargs.get('writespec',False)
+        transspec = kwargs.get('transspec',False)
+        parr = kwargs.get('parr',None)
+        linelist = kwargs.get('linelist','master')
+
+        # change into working directory
+        os.chdir('{0}'.format(self.ID))
+
+        # start if timer if needed
+        if self.timeit:
+            self.starttime = time.time()
+            self.lasttime = self.starttime
+
+        # call synbeg
+        if (verbose == True or verbose == 'synbeg'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        self.SYNTHE.synbeg(self.indict,verbose=verbose_i)
+
+        # read in line list
+        if (verbose == True or verbose == 'readlines'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        ll = self._readline(linelist,verbose_i)
+
+        # adjust any delta values if parr has been provided
+        if (verbose == True or verbose == 'adjustlines'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        if parr != None:
+            self._adjustpar(parr,verbose_i)
+
+        # do synthesis calc
+        if (verbose == True) or ('synthesis' in verbose):
+            verbose_i = verbose
+        else:
+            verbose_i = False
+        self._synthesis(verbose_i)
+
+        # do broadening
+        if (verbose == True or ('broaden' in verbose):
+            verbose_i = verbose
+        else:
+            verbose_i = False
+        binspecname = self._broaden(verbose_i)
+
+        # do specout to get final spectrum
+        if (verbose == True or verbose == 'specout'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        outspec = self._specout(binspecname,verbose_i)
+
+        # do lineout to get final line list
+        if (verbose == True or verbose == 'lineout'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        outspec = self._lineout(verbose_i)
+
+        if transspec != None:
+            # do multiply transmission spectrum
+            outspec = self._multiplytrans(outspec,transspec)
+
+        if writespec:
+            # write out spec, line list, and header to ascii
+            self._write(binspecname)
+
+        # cd back into parent directory
+        os.chdir(self.parentdir)
+
+        if timeit:
+            print("Pro: {1} --> FINISHED FALmod -- Full time: {0:7.5f} s".format(time.time()-self.starttime,self.IDraw))
+
+        return (outspec,newll)
+
+    def __del__(self):
+        os.chdir(self.parentdir)
+
+    def _readline(self,linelist,verbose_i=False):
+        # read the line list appropriate for the user call
+
+        if linelist == 'readall':
+            # read all individual line lists
+            self.SYNTHE.readlines(rtype='readall',verbose=verbose_i)
+
+            # remove the various line files in memory to save resources
+            datfiles = glob.glob('/dev/shm/FAL/{0}/*.dat'.format(self.ID))
+            binfiles = glob.glob('/dev/shm/FAL/{0}/*.bin'.format(self.ID))
+            savefiles = ['he1tables.dat','continua.dat','molecules.dat','mod.dat']
+            addfiles  = ['voax.asc','vobx.asc','vocx.asc']
+            [datfiles.remove('/dev/shm/FAL/{0}/{1}'.format(self.ID,sf)) for sf in savefiles]
+            [datfiles.append('/dev/shm/FAL/{0}/{1}'.format(self.ID,af)) for af in addfiles]
+            [os.remove(dfil) for dfil in datafiles if os.path.isfile(dfil)]
+            [os.remove(bfil) for bfil in binfiles if os.path.isfile(bfil)]
+
+            if self.timeit:
+                print("Pro: {1} --> Read in all line lists -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                self.lasttime = time.time()
+
+        elif linelist == 'readmaster':
+            # read the masterline lists (cargile or kurucz plus H2O+TiO)
+            self.SYNTHE.readlines(rtype='readmaster',verbose=verbose_i)
+            if self.timeit:
+                print("Pro: {1} --> Read in master line list -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                self.lasttime = time.time()
+
+        elif linelist == 'readold':
+            # read the previously created line list in directory
+            self.SYNTHE.readlines(rtype='readold',verbose=verbose_i)
+            if self.timeit:
+                print("Pro: {1} --> Read in lines -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                self.lasttime = time.time()
+
+        else:
+            # linelist equal to a path to user defined line list (NEED TO FIX THIS)
+            if startll != '/dev/shm/FAL/{0}/ll.dat'.format(self.ID):
+                shutil.copy(startll,'/dev/shm/FAL/{0}/ll.dat'.format(self.ID))
+
+    def _adjustpar(self,parr_i,verbose=False):
+        # check to see if parr is one table of parameters (for the whole line list)
+        # or if it is a dictionary of parameters and line indices
+        if isinstance(parr,dict):
+            parr = parr_i['parr']
+            lineind = parr_i['lineind']
+        else:
+            parr = parr_i
+
+        # check to see if line list has been defined in self
+        try:
+            assert self.ll
+        except AssertionError:
+            ll_i = self.glue.readlp_raw('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+            ll = self.glue.con_lptonp_raw(ll_i)
+
+            # copy orginal linelist into a working list
+            self.ll = ll.copy()
+
+        # delete old fort.11 file
+        os.unlink('fort.11')
+        os.remove('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+
+        # define free parameters and stick them into line list
+        # FREE POSIBLE PARS: DWL, DGFLOG, and one or all of DGAMMAR, DGAMMAS, DGAMMAW
+
+        # the case where all lines are free (i.e., no lineind index array)
+        if lineind==None:
+            del self.ll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW']
+            self.ll.add_columns(p.columns.values())
+        else:
+            # else just replace the parameters for the lines that are indictated in lineind
+            for pind,llind in enumerate(lineind):
+                self.ll['DWL'][llind] = p['DWL'][pind]
+                self.ll['DGFLOG'][llind] = p['DGFLOG'][pind]
+                self.ll['DGAMMAR'][llind] = p['DGAMMAR'][pind]
+                self.ll['DGAMMAS'][llind] = p['DGAMMAS'][pind]
+                self.ll['DGAMMAW'][llind] = p['DGAMMAW'][pind]
+
+        # convert the table into the correct string format
+        lpfmttab = self.glue.con_nptolp(self.ll)
+
+        # write out the ascii line list
+        self.glue.writelp(lpfmttab,'/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        os.symlink('/dev/shm/FAL/{0}/fort.11'.format(self.ID),'fort.11')
+
+    def _synthesis(self,verbose=False):
+        # now run the synthe steps
+
+        # -- run xnfpelsyn --
+        if (verbose == True or verbose == 'synthesis:xnfpelsyn'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        self.SYNTHE.xnfpelsyn(verbose=verbose_i)
+        if self.timeit:
+            print("Pro: {1} --> XNFPELSYN -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
+
+        # -- do synthe --
+        if (verbose == True or verbose == 'synthesis:synthe'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        self.SYNTHE.syn(verbose=verbose_i,speed=self.speed)
+        if self.timeit:
+            print("Pro: {1} --> SYNTHE -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
+
+        # -- do spectrv --
+        if (verbose == True or verbose == 'synthesis:spectrv'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        self.SYNTHE.spectrv(verbose=verbose_i,tau=self.tau_i)
+        if self.timeit:
+            print("Pro: {1} --> SPECTRV -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
+
+    def _broaden(self,verbose=False):
+        # -- do rotate --
+        if (verbose == True or verbose == 'broaden:rotate'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        self.SYNTHE.rotate(self.starpars['VROT'],verbose=verbose_i)
+        if self.timeit:
+            print("Pro: {1} --> ROTATE -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
+
+        # -- check if the user wants broadening --
+        if self.starpars['BROADEN'] == -1:
+            # no macrovel applied, just copy rotated spectrum to output
+            self.SYNTHE._makesym('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),'ROT1_mac_inst')
+            print("Pro: {1} --> No Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
+    
+        else:
+            # -- do broaden for macroturblence --
+            if (verbose == True or verbose == 'broaden:broad_mac'):
+                verbose_i = True
+            else:
+                verbose_i = False
+            self.SYNTHE.broaden('ROT1',self.starpars['MACVEL'],broadtype='MAC',verbose=verbose_i)
+            if self.timeit:
+                print("Pro: {1} --> BROADEN MACRO -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                self.lasttime = time.time()
+
+            # -- do broaden for instrumental --
+            if (verbose == True or verbose == 'broaden:broad_inst'):
+                verbose_i = True
+            else:
+                verbose_i = False
+            self.SYNTHE.broaden('ROT1_mac',broadtype='INSTRUMENT',verbose=verbose_i)
+            if self.timeit:
+                print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                self.lasttime = time.time()
+
+    def _specout(self,infile):
+        # read in binary output spectrum
+
+        # pull run info from RUNINFO.dat file
+        runinfo = {}        
+        with open('RUNINFO.dat','r') as runinfoff:
+            runinfoarr = runinfoff.readlines()
+            runinfo_i = runinfoarr[1].split()
+            runinfo['LENGTH'] = int(runinfo_i[0])
+            runinfo['RATIO'] = float(runinfo_i[1])
+            runinfo['WBEGIN'] = float(runinfo_i[2])
+            runinfo['DWLBEG'] = float(runinfo_i[3])
+            runinfo['WLLAST'] = float(runinfo_i[4])
+            runinfo['DWLLAST'] = float(runinfo_i[5])
+
+        outspec = self.glue.readspecbin(infile,N=runinfo['LENGTH'])
+
+        if self.timeit:
+            print("Pro: {1} --> Read in binary spectrum -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
+        return outspec
+
+
+    def _multiplytrans(self,inspec,trans):
+        # multiply inspec you input transmissino spectrum, should be on same wavelength scale (may change this to be more general)
+        outspec = np.multiply(inspec['QMU1'],trans['FLUX'])
+        if self.timeit:
+            print("Pro: {1} --> Multiply Transmission Spectrum -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
+        return outspec
+
+    def _writeout(self,inbinary):
+        # write out ascii version of spectrum, line list, and header file
+        # remove any old ascii output files
+        outfiles = ['headinfo.dat','lineinfo.dat','specfile.dat']
+        for ofile in outfiles:
+            try:
+                os.remove(ofile)
+            except OSError:
+                pass
+
+        self.SYNTHE.writespec(inbinary)
+        if self.timeit:
+            print("Pro: {1} --> Write ASCII files -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
+
+
+
+
+class FALmod(object):
+    """
+    Class to take delta line parameters and return a synthesized
+    spectrum from SYNTHE to use in python
+    """    
     def __init__(self,startll=None,ID=None,indict=None,rlinestop=False,injectlines=None,arct_bool=False,linelistcheck=False):
 
         if ID != None:
