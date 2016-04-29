@@ -131,7 +131,7 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     WRITE(SLABEL,'(A20)')LABEL(1)
+     WRITE(SLABEL,'(A20)') LABEL
      LABELin(I) = SLABEL
      ! EPin(I) = EP
      ! XJPin(I) = XJP
