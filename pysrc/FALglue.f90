@@ -24,10 +24,11 @@ end function c_to_f_string
 subroutine readoutspecbin(&
   s, NWLi, NLINESi,&
   wli, qmu1i, qmu2i,&
-  WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin,LABELin,&
-  EPin,XJPin,LABELPin,GRin,DGAMMARin,GSin,DGAMMASin,GWin,DGAMMAWin,WAVENOin,&
-  REFin,NBLOin,NBUPin,ISO1in,X1in,ISO2in,X2in,OTHER1in,OTHER2in,ISOSHIFTin,&
-  NELIONin,residin) bind(c, name='readoutspecbin')
+  ! WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin,LABELin,&
+  ! EPin,XJPin,LABELPin,GRin,DGAMMARin,GSin,DGAMMASin,GWin,DGAMMAWin,WAVENOin,&
+  ! REFin,NBLOin,NBUPin,ISO1in,X1in,ISO2in,X2in,OTHER1in,OTHER2in,ISOSHIFTin,&
+  ! NELIONin,residin&
+  ) bind(c, name='readoutspecbin')
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
@@ -39,36 +40,36 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: qmu1i(NWLi)
   real(c_double), intent(out) :: qmu2i(NWLi)
 
-  real(c_double), intent(out) :: WLin(NLINESi)
-  real(c_double), intent(out) :: DWLin(NLINESi)
-  real(c_double), intent(out) :: GFLOGin(NLINESi)
-  real(c_double), intent(out) :: DGFLOGin(NLINESi)
-  real(c_double), intent(out) :: CODEin(NLINESi)
-  real(c_double), intent(out) :: Ein(NLINESi)
-  real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(out) :: LABELin(NLINESi)
-  real(c_double), intent(out) :: EPin(NLINESi)
-  real(c_double), intent(out) :: XJPin(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: LABELPin(NLINESi)
-  real(c_double), intent(out) :: GRin(NLINESi)
-  real(c_double), intent(out) :: DGAMMARin(NLINESi)
-  real(c_double), intent(out) :: GSin(NLINESi)
-  real(c_double), intent(out) :: DGAMMASin(NLINESi)
-  real(c_double), intent(out) :: GWin(NLINESi)
-  real(c_double), intent(out) :: DGAMMAWin(NLINESi)
-  real(c_double), intent(out) :: WAVENOin(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: REFin(NLINESi)
-  integer(c_int),    intent(out) :: NBLOin(NLINESi)
-  integer(c_int),    intent(out) :: NBUPin(NLINESi)
-  integer(c_int),    intent(out) :: ISO1in(NLINESi)
-  real(c_double), intent(out) :: X1in(NLINESi)
-  integer(c_int),    intent(out) :: ISO2in(NLINESi)
-  real(c_double), intent(out) :: X2in(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: OTHER1in(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: OTHER2in(NLINESi)
-  integer(c_int),    intent(out) :: ISOSHIFTin(NLINESi)
-  integer(c_int),    intent(out) :: NELIONin(NLINESi)
-  real(c_double), intent(out) :: RESIDin(NLINESi)
+  ! real(c_double), intent(out) :: WLin(NLINESi)
+  ! real(c_double), intent(out) :: DWLin(NLINESi)
+  ! real(c_double), intent(out) :: GFLOGin(NLINESi)
+  ! real(c_double), intent(out) :: DGFLOGin(NLINESi)
+  ! real(c_double), intent(out) :: CODEin(NLINESi)
+  ! real(c_double), intent(out) :: Ein(NLINESi)
+  ! real(c_double), intent(out) :: XJin(NLINESi)
+  ! character(kind=c_char,len=1),  intent(out) :: LABELin(NLINESi)
+  ! real(c_double), intent(out) :: EPin(NLINESi)
+  ! real(c_double), intent(out) :: XJPin(NLINESi)
+  ! character(kind=c_char,len=1),   intent(out) :: LABELPin(NLINESi)
+  ! real(c_double), intent(out) :: GRin(NLINESi)
+  ! real(c_double), intent(out) :: DGAMMARin(NLINESi)
+  ! real(c_double), intent(out) :: GSin(NLINESi)
+  ! real(c_double), intent(out) :: DGAMMASin(NLINESi)
+  ! real(c_double), intent(out) :: GWin(NLINESi)
+  ! real(c_double), intent(out) :: DGAMMAWin(NLINESi)
+  ! real(c_double), intent(out) :: WAVENOin(NLINESi)
+  ! character(kind=c_char,len=1),   intent(out) :: REFin(NLINESi)
+  ! integer(c_int),    intent(out) :: NBLOin(NLINESi)
+  ! integer(c_int),    intent(out) :: NBUPin(NLINESi)
+  ! integer(c_int),    intent(out) :: ISO1in(NLINESi)
+  ! real(c_double), intent(out) :: X1in(NLINESi)
+  ! integer(c_int),    intent(out) :: ISO2in(NLINESi)
+  ! real(c_double), intent(out) :: X2in(NLINESi)
+  ! character(kind=c_char,len=1),   intent(out) :: OTHER1in(NLINESi)
+  ! character(kind=c_char,len=1),   intent(out) :: OTHER2in(NLINESi)
+  ! integer(c_int),    intent(out) :: ISOSHIFTin(NLINESi)
+  ! integer(c_int),    intent(out) :: NELIONin(NLINESi)
+  ! real(c_double), intent(out) :: RESIDin(NLINESi)
 
   COMMON /LINDAT/WL,E,EP,LABEL(2),LABELP(2),OTHER1(2),OTHER2(2),&
         WLVAC,CENTER,CONCEN, NELION,GAMMAR,GAMMAS,GAMMAW,REF,&
