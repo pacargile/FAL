@@ -89,7 +89,7 @@ subroutine readoutspecbin(&
   REAL*4 DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3
   REAL*4 ALINEC, NELION, NBLO, NBUP, ISO1, ISO2, ISOSHIFT
   character(len=1) :: LABEL(*),LABELP(*)
-  character(len=1) :: REF,OTHER1(*,OTHER2(*)
+  character(len=1) :: REF,OTHER1(*),OTHER2(*)
 
   INTEGER IWL, NWL, I, NLINESO
 
