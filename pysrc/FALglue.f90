@@ -89,7 +89,7 @@ subroutine readoutspecbin(&
   REAL*4 DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3,NELION
   REAL*4 ALINEC
 
-  ! character(len=1) :: LABEL(2),LABELP(2)
+  character(len=10) :: SLABEL
   ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
   INTEGER IWL, NWL, I, NLINESO
@@ -131,7 +131,7 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     LABELin(I) = LABEL(2)
+     LABELin(I) = WRITE(SLABEL,A10)LABEL(2)
      ! EPin(I) = EP
      ! XJPin(I) = XJP
      ! LABELPin(I) = LABELP(1)
