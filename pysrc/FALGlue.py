@@ -117,7 +117,7 @@ class glue(object):
 
 		WLin       = np.zeros(NLINES,dtype='double')
 		DWLin      = np.zeros(NLINES,dtype='double')
-		GFLOGin    = np.zeros(NLINES,dtype=np.float32)
+		GFLOGin    = np.zeros(NLINES,dtype='double')
 		DGFLOGin   = np.zeros(NLINES,dtype='double')
 		CODEin     = np.zeros(NLINES,dtype='double')
 		Ein        = np.zeros(NLINES,dtype='double')

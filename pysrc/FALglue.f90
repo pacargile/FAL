@@ -23,7 +23,7 @@ end function c_to_f_string
 
 subroutine readoutspecbin(&
   s, NWLi, NLINESi,&
-  wli, qmu1i, qmu2i) bind(c, name='readoutspecbin')
+  wli, qmu1i, qmu2i, WLin, GFLOGin) bind(c, name='readoutspecbin')
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
@@ -35,9 +35,9 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: qmu1i(NWLi)
   real(c_double), intent(out) :: qmu2i(NWLi)
 
-  ! real(c_double), intent(out) :: WLin(NLINESi)
+  real(c_double), intent(out) :: WLin(NLINESi)
   ! real(c_double), intent(out) :: DWLin(NLINESi)
-  ! real(c_double), intent(out) :: GFLOGin(NLINESi)
+  real(c_double), intent(out) :: GFLOGin(NLINESi)
   ! real(c_double), intent(out) :: DGFLOGin(NLINESi)
   ! real(c_double), intent(out) :: CODEin(NLINESi)
   ! real(c_double), intent(out) :: Ein(NLINESi)
