@@ -120,7 +120,7 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     LABELin(I,*) = LABEL
+     LABELin(I,:) = LABEL
      EPin(I) = EP
      XJPin(I) = XJP
      LABELPin(I) = LABELP
