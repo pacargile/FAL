@@ -70,7 +70,7 @@ subroutine readoutspecbin(&
   integer(c_int),    intent(out) :: NELIONin(NLINESi)
   real(c_double), intent(out) :: RESIDin(NLINESi)
 
-  COMMON /LINDAT/WL,E,EP,LABEL,LABELP,OTHER1,OTHER2,&
+  COMMON /LINDAT/WL,E,EP,LABEL(2),LABELP(2),OTHER1(2),OTHER2(2),&
         WLVAC,CENTER,CONCEN, NELION,GAMMAR,GAMMAS,GAMMAW,REF,&
         NBLO,NBUP,ISO1,X1,ISO2,X2,GFLOG,XJ,XJP,CODE,ELO,GF,GS,GR,GW,&
         DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3,ALINEC
@@ -91,8 +91,8 @@ subroutine readoutspecbin(&
   REAL*4 DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3,NELION
   REAL*4 ALINEC
 
-  character(len=1) :: LABEL(2),LABELP(2)
-  character(len=1) :: REF,OTHER1(2),OTHER2(2)
+  ! character(len=1) :: LABEL(2),LABELP(2)
+  ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
   INTEGER IWL, NWL, I, NLINESO
 
@@ -119,36 +119,36 @@ subroutine readoutspecbin(&
      IF(I.EQ.1)print *, GFLOG
 
      resid=center/concen
-     WLin(I) = WL
-     DWLin(I) = DWL
-     GFLOGin(I) = GFLOG
-     DGFLOGin(I) = DGFLOG
-     CODEin(I) = CODE
-     Ein(I) = E
-     XJin(I) = XJ
-     LABELin(I) = LABEL(1)
-     EPin(I) = EP
-     XJPin(I) = XJP
-     LABELPin(I) = LABELP(1)
-     GRin(I) = GR
-     DGAMMARin(I) = DGAMMAR
-     GSin(I) = GS
-     DGAMMASin(I) = DGAMMAS
-     GWin(I) = GW
-     DGAMMAWin(I) = DGAMMAW
-     WAVENOin(I) = WAVENO
-     REFin(I) = REF
-     NBLOin(I) = NBLO
-     NBUPin(I) = NBUP
-     ISO1in(I) = ISO1
-     X1in(I) = X1
-     ISO2in(I) = ISO2
-     X2in(I) = X2
-     OTHER1in(I) = OTHER1(1)
-     OTHER2in(I) = OTHER2(1)
-     ISOSHIFTin(I) = ISOSHIFT
-     NELIONin(I) = NELION
-     RESIDin(I) = RESID
+     ! WLin(I) = WL
+     ! DWLin(I) = DWL
+     ! GFLOGin(I) = GFLOG
+     ! DGFLOGin(I) = DGFLOG
+     ! CODEin(I) = CODE
+     ! Ein(I) = E
+     ! XJin(I) = XJ
+     ! LABELin(I) = LABEL(1)
+     ! EPin(I) = EP
+     ! XJPin(I) = XJP
+     ! LABELPin(I) = LABELP(1)
+     ! GRin(I) = GR
+     ! DGAMMARin(I) = DGAMMAR
+     ! GSin(I) = GS
+     ! DGAMMASin(I) = DGAMMAS
+     ! GWin(I) = GW
+     ! DGAMMAWin(I) = DGAMMAW
+     ! WAVENOin(I) = WAVENO
+     ! REFin(I) = REF
+     ! NBLOin(I) = NBLO
+     ! NBUPin(I) = NBUP
+     ! ISO1in(I) = ISO1
+     ! X1in(I) = X1
+     ! ISO2in(I) = ISO2
+     ! X2in(I) = X2
+     ! OTHER1in(I) = OTHER1(1)
+     ! OTHER2in(I) = OTHER2(1)
+     ! ISOSHIFTin(I) = ISOSHIFT
+     ! NELIONin(I) = NELION
+     ! RESIDin(I) = RESID
 9 CONTINUE
 
   CLOSE(UNIT=1)
