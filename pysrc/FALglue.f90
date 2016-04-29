@@ -46,7 +46,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=*),   intent(out) :: LABELin(NLINESi)
+  character(kind=c_char,len=15),   intent(out) :: LABELin(NLINESi)
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
   character(kind=c_char,len=*),   intent(out) :: LABELPin(NLINESi)
@@ -88,7 +88,7 @@ subroutine readoutspecbin(&
   REAL*4 X1,X2,ELO,GF,GS,GR,GW
   REAL*4 DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3
   REAL*4 ALINEC, NELION, NBLO, NBUP, ISO1, ISO2, ISOSHIFT
-  character LABEL,LABELP,REF,OTHER1,OTHER2
+  character*15 LABEL,LABELP,REF,OTHER1,OTHER2
 
   INTEGER IWL, NWL, I, NLINESO
 
@@ -120,7 +120,7 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     LABELin(I,:) = LABEL
+     LABELin(I) = LABEL
      EPin(I) = EP
      XJPin(I) = XJP
      LABELPin(I) = LABELP
