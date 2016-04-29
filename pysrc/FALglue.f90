@@ -114,7 +114,7 @@ subroutine readoutspecbin(&
 6 CONTINUE
   READ(1)NLINESO
   DO 9 I=1,NLINESO
-     READ(1)X
+     READ(1)LINDAT8,LINDAT
      IF(I.EQ.1)print *, GFLOG
 
      resid=center/concen
