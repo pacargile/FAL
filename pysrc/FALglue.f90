@@ -90,8 +90,8 @@ subroutine readoutspecbin(&
   REAL*4 DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3
   REAL*4 ALINEC
 
-  character(len=1) :: LABEL(2),LABELP(2)
-  character(len=1) :: REF,OTHER1(2),OTHER2(2)
+  ! character(len=1) :: LABEL(2),LABELP(2)
+  ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
   INTEGER IWL, NWL, I, NLINESO
 
