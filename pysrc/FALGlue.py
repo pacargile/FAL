@@ -143,7 +143,7 @@ class glue(object):
 		OTHER2in   = np.zeros(NLINES,dtype='str')
 		ISOSHIFTin = np.zeros(NLINES,dtype='int')
 		NELIONin   = np.zeros(NLINES,dtype='int')
-		residin    = np.zeros(NLINES,dtype='double')
+		RESIDin    = np.zeros(NLINES,dtype='double')
 
 
 		self.fortran.readoutspecbin(
@@ -182,7 +182,7 @@ class glue(object):
 			OTHER2in.ctypes.data_as(self.c_char_p),  
 			ISOSHIFTin.ctypes.data_as(self.c_int_p),
 			NELIONin.ctypes.data_as(self.c_int_p),  
-			residin.ctypes.data_as(self.c_double_p)  
+			RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
 		# WL = np.trim_zeros(WL,trim='b')
@@ -220,7 +220,7 @@ class glue(object):
 		ll['OTHER2']   = OTHER2in
 		ll['ISOSHIFT'] = ISOSHIFTin
 		ll['NELION']   = NELIONin
-		ll['RESID']    = residin
+		ll['RESID']    = RESIDin
 
 		return (outspec,ll)
 

@@ -68,7 +68,7 @@ subroutine readoutspecbin(&
   character(c_char),   intent(out) :: OTHER2in(NLINESi)
   integer(c_int),    intent(out) :: ISOSHIFTin(NLINESi)
   integer(c_int),    intent(out) :: NELIONin(NLINESi)
-  real(c_double), intent(out) :: residin(NLINESi)
+  real(c_double), intent(out) :: RESIDin(NLINESi)
 
 
   REAL*8 TEFF,GLOG,TITLE(74),WBEGIN,RESOLU,WLEDGE,RATIO,WL
@@ -83,7 +83,7 @@ subroutine readoutspecbin(&
   REAL*4 LINDAT(28)
   EQUIVALENCE (LINDAT8(1),WL),(LINDAT(1),NELION)
   REAL*8 WL,E,EP,WLVAC,CENTER,CONCEN
-  REAL*8 LABEL,LABELP,OTHER1,OTHER2
+  REAL*8 LABEL,LABELP,OTHER1,OTHER2,RESID
   REAL*4 GFLOG,XJ,XJP,CODE,GAMMAR,GAMMAS,GAMMAW
   REAL*4 REF,X1,X2,ELO,GF,GS,GR,GW
   REAL*4 DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3
@@ -142,7 +142,7 @@ subroutine readoutspecbin(&
      OTHER2in(I) = OTHER2
      ISOSHIFTin(I) = ISOSHIFT
      NELIONin(I) = NELION
-     residin(I) = resid
+     RESIDin(I) = RESID
 9 CONTINUE
 
   CLOSE(UNIT=1)
