@@ -836,3 +836,9 @@ class FALmod(object):
 
     def __del__(self):
         os.chdir(self.parentdir)
+
+
+  WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin,LABELin,&
+  EPin,XJPin,LABELPin,GRin,DGAMMARin,GSin,DGAMMASin,GWin,DGAMMAWin,WAVENOin,&
+  REFin,NBLOin,NBUPin,ISO1in,X1in,ISO2in,X2in,OTHER1in,OTHER2in,ISOSHIFTin,&
+  NELIONin,residin
