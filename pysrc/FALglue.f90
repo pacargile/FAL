@@ -82,7 +82,7 @@ subroutine readoutspecbin(&
 
   REAL*8 LINDAT8(14)
   REAL*4 LINDAT(28)
-  ! EQUIVALENCE (LINDAT8(1),WL),(LINDAT(1),NELION)
+  EQUIVALENCE (LINDAT8(1),WL),(LINDAT(1),NELION)
   REAL*8 WL,E,EP,WLVAC,CENTER,CONCEN
   REAL*4 RESID,WAVENO,GFLOG,GAMMAR,GAMMAS,GAMMAW,GF,GS,GR,GW
   REAL*4 XJ,XJP,CODE
@@ -114,7 +114,7 @@ subroutine readoutspecbin(&
   READ(1)NLINESO
   DO 9 I=1,NLINESO
      READ(1)LINDAT8,LINDAT
-     IF(I.EQ.1)print *, LINDAT8
+     IF(I.EQ.1)print *, LINDAT
      resid=center/concen
      WLin(I) = WL
      DWLin(I) = DWL
