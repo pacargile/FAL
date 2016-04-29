@@ -304,7 +304,14 @@ class FALmod(object):
             runinfo['WLLAST'] = float(runinfo_i[4])
             runinfo['DWLLAST'] = float(runinfo_i[5])
 
-        outspec = self.glue.readspecbin(infile,N=runinfo['LENGTH'])
+        # pull line info from LINEINFO.dat file
+        lineinfo = {}
+        with open('LINEINFO.dat','r') as lineinfoff:
+            lineinfoarr = lineinfoff.readlines()
+            lineinfo_i = lineinfoarr[1]
+            lineinfo['NLINES'] = int(lineinfo_i)
+
+        outspec = self.glue.readspecbin(infile,NWL=runinfo['LENGTH'],NLINES=lineinfo['NLINES'])
 
         if self.timeit:
             print("Pro: {1} --> Read in binary spectrum -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))

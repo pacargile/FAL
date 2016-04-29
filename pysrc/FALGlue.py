@@ -107,26 +107,122 @@ class glue(object):
 			self.linedict_raw[lp] = []
 		
 			
-	def readspecbin(self,filename,N=int(12000)):
+	def readspecbin(self,filename,NWL=int(12000),NLINES=int(1000000)):
 
-		s = '{0}'.format(filename)
-		WL = np.zeros(N, dtype="double")
-		QMU1 = np.zeros(N, dtype="double")
-		QMU2 = np.zeros(N, dtype="double")
+		s    = '{0}'.format(filename)
+		WL   = np.zeros(NWL, dtype="double")
+		QMU1 = np.zeros(NWL, dtype="double")
+		QMU2 = np.zeros(NWL, dtype="double")
+
+		WLin       = np.zeros(NLINES,dtype='double')
+		DWLin      = np.zeros(NLINES,dtype='double')
+		GFLOGin    = np.zeros(NLINES,dtype='double')
+		DGFLOGin   = np.zeros(NLINES,dtype='double')
+		CODEin     = np.zeros(NLINES,dtype='double')
+		Ein        = np.zeros(NLINES,dtype='double')
+		XJin       = np.zeros(NLINES,dtype='double')
+		LABELin    = np.zeros(NLINES,dtype='str')
+		EPin       = np.zeros(NLINES,dtype='double')
+		XJPin      = np.zeros(NLINES,dtype='double')
+		LABELPin   = np.zeros(NLINES,dtype='str')
+		GRin       = np.zeros(NLINES,dtype='double')
+		DGAMMARin  = np.zeros(NLINES,dtype='double')
+		GSin       = np.zeros(NLINES,dtype='double')
+		DGAMMASin  = np.zeros(NLINES,dtype='double')
+		GWin       = np.zeros(NLINES,dtype='double')
+		DGAMMAWin  = np.zeros(NLINES,dtype='double')
+		WAVENOin   = np.zeros(NLINES,dtype='double')
+		REFin      = np.zeros(NLINES,dtype='str')
+		NBLOin     = np.zeros(NLINES,dtype='int')
+		NBUPin     = np.zeros(NLINES,dtype='int')
+		ISO1in     = np.zeros(NLINES,dtype='int')
+		X1in       = np.zeros(NLINES,dtype='double')
+		ISO2in     = np.zeros(NLINES,dtype='int')
+		X2in       = np.zeros(NLINES,dtype='double')
+		OTHER1in   = np.zeros(NLINES,dtype='str')
+		OTHER2in   = np.zeros(NLINES,dtype='str')
+		ISOSHIFTin = np.zeros(NLINES,dtype='int')
+		NELIONin   = np.zeros(NLINES,dtype='int')
+		residin    = np.zeros(NLINES,dtype='double')
+
 
 		self.fortran.readoutspecbin(
 			c_char_p(s), 
-			c_int(N),
+			c_int(NWL),
+			c_int(NLINES)
 			WL.ctypes.data_as(self.c_double_p),
 			QMU1.ctypes.data_as(self.c_double_p),
-			QMU2.ctypes.data_as(self.c_double_p)
+			QMU2.ctypes.data_as(self.c_double_p),
+			WLin.ctypes.data_as(self.c_double_p),      
+			DWLin.ctypes.data_as(self.c_double_p),     
+			GFLOGin.ctypes.data_as(self.c_double_p),   
+			DGFLOGin.ctypes.data_as(self.c_double_p),  
+			CODEin.ctypes.data_as(self.c_double_p),    
+			Ein.ctypes.data_as(self.c_double_p),       
+			XJin.ctypes.data_as(self.c_double_p),      
+			LABELin.ctypes.data_as(self.c_char_p),   
+			EPin.ctypes.data_as(self.c_double_p),      
+			XJPin.ctypes.data_as(self.c_double_p),     
+			LABELPin.ctypes.data_as(self.c_char_p),  
+			GRin.ctypes.data_as(self.c_double_p),      
+			DGAMMARin.ctypes.data_as(self.c_double_p), 
+			GSin.ctypes.data_as(self.c_double_p),      
+			DGAMMASin.ctypes.data_as(self.c_double_p), 
+			GWin.ctypes.data_as(self.c_double_p),      
+			DGAMMAWin.ctypes.data_as(self.c_double_p), 
+			WAVENOin.ctypes.data_as(self.c_double_p),  
+			REFin.ctypes.data_as(self.c_char_p),     
+			NBLOin.ctypes.data_as(self.c_int_p),    
+			NBUPin.ctypes.data_as(self.c_int_p),    
+			ISO1in.ctypes.data_as(self.c_int_p),    
+			X1in.ctypes.data_as(self.c_double_p),      
+			ISO2in.ctypes.data_as(self.c_int_p),    
+			X2in.ctypes.data_as(self.c_double_p),      
+			OTHER1in.ctypes.data_as(self.c_char_p),  
+			OTHER2in.ctypes.data_as(self.c_char_p),  
+			ISOSHIFTin.ctypes.data_as(self.c_int_p),
+			NELIONin.ctypes.data_as(self.c_int_p),  
+			residin.ctypes.data_as(self.c_double_p)  
 			)
 
 		# WL = np.trim_zeros(WL,trim='b')
 		# QMU1 = np.trim_zeros(QMU1,trim='b')
 		# QMU2 = np.trim_zeros(QMU2,trim='b')
 
-		return {'WAVE':WL,'QMU1':QMU1,'QMU2':QMU2}
+		outspec = {'WAVE':WL,'QMU1':QMU1,'QMU2':QMU2}
+		ll = {}
+		ll['WL']       = WLin    
+		ll['DWL']      = DWLin
+		ll['GFLOG']    = GFLOGin
+		ll['DGFLOG']   = DGFLOGin
+		ll['CODE']     = CODEin
+		ll['E']        = Ein    
+		ll['XJ']       = XJin    
+		ll['LABEL']    = LABELin
+		ll['EP']       = EPin    
+		ll['XJP']      = XJPin
+		ll['LABELP']   = LABELPin
+		ll['GR']       = GRin    
+		ll['DGAMMAR']  = DGAMMARin
+		ll['GS']       = GSin    
+		ll['DGAMMAS']  = DGAMMASin
+		ll['GW']       = GWin    
+		ll['DGAMMAW']  = DGAMMAWin
+		ll['WAVENO']   = WAVENOin
+		ll['REF']      = REFin
+		ll['NBLO']     = NBLOin
+		ll['NBUP']     = NBUPin
+		ll['ISO1']     = ISO1in
+		ll['X1']       = X1in    
+		ll['ISO2']     = ISO2in
+		ll['X2']       = X2in    
+		ll['OTHER1']   = OTHER1in
+		ll['OTHER2']   = OTHER2in
+		ll['ISOSHIFT'] = ISOSHIFTin
+		ll['NELION']   = NELIONin
+		ll['RESID']    = residin
+
+		return (outspec,ll)
 
 	def readlp(self,filename):
 		"""
