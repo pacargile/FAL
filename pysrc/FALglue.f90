@@ -23,7 +23,7 @@ end function c_to_f_string
 
 subroutine readoutspecbin(&
   s, NWLi, NLINESi,&
-  wli, qmu1i, qmu2i, WLin, GFLOGin) bind(c, name='readoutspecbin')
+  wli, qmu1i, qmu2i, WLin, DWLin, GFLOGin) bind(c, name='readoutspecbin')
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
