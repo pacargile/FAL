@@ -46,7 +46,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(c_char),   intent(out) :: LABELin(NLINESi)
+  character(kind=c_char,len=*),   intent(out) :: LABELin(NLINESi)
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
   character(c_char),   intent(out) :: LABELPin(NLINESi)
@@ -120,7 +120,7 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     LABELin(I) = LABEL(*)
+     LABELin(I) = LABEL
      EPin(I) = EP
      XJPin(I) = XJP
      LABELPin(I) = LABELP
