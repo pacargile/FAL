@@ -14,6 +14,7 @@ class glue(object):
 
 		# define some useful things for later
 		self.c_double_p = POINTER(c_double)
+		self.c_int_p = POINTER(c_int)
 
 		# THE FOLLOWING ARE FOR THE PUNCH500 DEL FILES
 
