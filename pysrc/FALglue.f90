@@ -46,10 +46,10 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char),   intent(out) :: LABELin(NLINESi)
+  character(c_char),   intent(out) :: LABELin(NLINESi)
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
-  character(kind=c_char),   intent(out) :: LABELPin(NLINESi)
+  character(c_char),   intent(out) :: LABELPin(NLINESi)
   real(c_double), intent(out) :: GRin(NLINESi)
   real(c_double), intent(out) :: DGAMMARin(NLINESi)
   real(c_double), intent(out) :: GSin(NLINESi)
@@ -57,15 +57,15 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: GWin(NLINESi)
   real(c_double), intent(out) :: DGAMMAWin(NLINESi)
   real(c_double), intent(out) :: WAVENOin(NLINESi)
-  character(kind=c_char,len=*),   intent(out) :: REFin(NLINESi)
+  character(c_char),   intent(out) :: REFin(NLINESi)
   integer(c_int),    intent(out) :: NBLOin(NLINESi)
   integer(c_int),    intent(out) :: NBUPin(NLINESi)
   integer(c_int),    intent(out) :: ISO1in(NLINESi)
   real(c_double), intent(out) :: X1in(NLINESi)
   integer(c_int),    intent(out) :: ISO2in(NLINESi)
   real(c_double), intent(out) :: X2in(NLINESi)
-  character(kind=c_char),   intent(out) :: OTHER1in(NLINESi)
-  character(kind=c_char),   intent(out) :: OTHER2in(NLINESi)
+  character(c_char),   intent(out) :: OTHER1in(NLINESi)
+  character(c_char),   intent(out) :: OTHER2in(NLINESi)
   integer(c_int),    intent(out) :: ISOSHIFTin(NLINESi)
   integer(c_int),    intent(out) :: NELIONin(NLINESi)
   real(c_double), intent(out) :: RESIDin(NLINESi)
@@ -120,7 +120,7 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     LABELin(I) = LABEL
+     LABELin(I) = LABEL(*)
      EPin(I) = EP
      XJPin(I) = XJP
      LABELPin(I) = LABELP
