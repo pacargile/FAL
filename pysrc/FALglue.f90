@@ -114,7 +114,7 @@ subroutine readoutspecbin(&
   READ(1)NLINESO
   DO 9 I=1,NLINESO
      READ(1)LINDAT8,LINDAT
-     print *, LINDAT8
+     IF(I.EQ.1)print *, LINDAT8
      resid=center/concen
      WLin(I) = WL
      DWLin(I) = DWL
