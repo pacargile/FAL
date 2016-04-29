@@ -36,7 +36,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: qmu2i(NWLi)
 
   real(c_double), intent(out) :: WLin(NLINESi)
-  ! real(c_double), intent(out) :: DWLin(NLINESi)
+  real(c_double), intent(out) :: DWLin(NLINESi)
   real(c_double), intent(out) :: GFLOGin(NLINESi)
   ! real(c_double), intent(out) :: DGFLOGin(NLINESi)
   ! real(c_double), intent(out) :: CODEin(NLINESi)
@@ -123,7 +123,7 @@ subroutine readoutspecbin(&
 
      resid=center/concen
      WLin(I) = WL
-     ! DWLin(I) = DWL
+     DWLin(I) = DWL
      GFLOGin(I) = GFLOG
      ! DGFLOGin(I) = DGFLOG
      ! CODEin(I) = CODE
