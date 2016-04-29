@@ -173,16 +173,16 @@ class glue(object):
 			DGAMMAWin.ctypes.data_as(self.c_double_p), 
 			WAVENOin.ctypes.data_as(self.c_double_p),  
 			REFin.ctypes.data_as(c_char_p),     
-			NBLOin.ctypes.data_as(c_int_p),    
-			NBUPin.ctypes.data_as(c_int_p),    
-			ISO1in.ctypes.data_as(c_int_p),    
+			NBLOin.ctypes.data_as(self.c_int_p),    
+			NBUPin.ctypes.data_as(self.c_int_p),    
+			ISO1in.ctypes.data_as(self.c_int_p),    
 			X1in.ctypes.data_as(self.c_double_p),      
-			ISO2in.ctypes.data_as(c_int_p),    
+			ISO2in.ctypes.data_as(self.c_int_p),    
 			X2in.ctypes.data_as(self.c_double_p),      
 			OTHER1in.ctypes.data_as(c_char_p),  
 			OTHER2in.ctypes.data_as(c_char_p),  
-			ISOSHIFTin.ctypes.data_as(c_int_p),
-			NELIONin.ctypes.data_as(c_int_p),  
+			ISOSHIFTin.ctypes.data_as(self.c_int_p),
+			NELIONin.ctypes.data_as(self.c_int_p),  
 			RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
