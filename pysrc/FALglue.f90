@@ -23,7 +23,8 @@ end function c_to_f_string
 
 subroutine readoutspecbin(&
   s, NWLi, NLINESi,&
-  wli, qmu1i, qmu2i, WLin, DWLin, GFLOGin) bind(c, name='readoutspecbin')
+  wli, qmu1i, qmu2i, &
+  WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin) bind(c, name='readoutspecbin')
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
@@ -38,10 +39,10 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: WLin(NLINESi)
   real(c_double), intent(out) :: DWLin(NLINESi)
   real(c_double), intent(out) :: GFLOGin(NLINESi)
-  ! real(c_double), intent(out) :: DGFLOGin(NLINESi)
-  ! real(c_double), intent(out) :: CODEin(NLINESi)
-  ! real(c_double), intent(out) :: Ein(NLINESi)
-  ! real(c_double), intent(out) :: XJin(NLINESi)
+  real(c_double), intent(out) :: DGFLOGin(NLINESi)
+  real(c_double), intent(out) :: CODEin(NLINESi)
+  real(c_double), intent(out) :: Ein(NLINESi)
+  real(c_double), intent(out) :: XJin(NLINESi)
   ! character(kind=c_char,len=1),  intent(out) :: LABELin(NLINESi)
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
@@ -125,10 +126,10 @@ subroutine readoutspecbin(&
      WLin(I) = WL
      DWLin(I) = DWL
      GFLOGin(I) = GFLOG
-     ! DGFLOGin(I) = DGFLOG
-     ! CODEin(I) = CODE
-     ! Ein(I) = E
-     ! XJin(I) = XJ
+     DGFLOGin(I) = DGFLOG
+     CODEin(I) = CODE
+     Ein(I) = E
+     XJin(I) = XJ
      ! LABELin(I) = LABEL(1)
      ! EPin(I) = EP
      ! XJPin(I) = XJP
