@@ -10,7 +10,7 @@ class glue(object):
 	def __init__(self):
 
 		# read in fortran libraray
-		self.fortran = cdll.LoadLibrary('/home1/02349/cargilpa/FAL/PYTHON/lib/FALglue.so')
+		self.fortran = cdll.LoadLibrary('/home1/02349/cargilpa/GITREPO/FAL/pysrc/FALglue.so')
 
 		# define some useful things for later
 		self.c_double_p = POINTER(c_double)
