@@ -112,7 +112,10 @@ subroutine readoutspecbin(&
   READ(1)NLINESO
   DO 9 I=1,NLINESO
      READ(1)LINDAT8,LINDAT
-     IF(I.EQ.1)print *, GFLOG
+     IF(I.EQ.1)print *, WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,&
+     EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO,&
+     REF,NBLO,NBUP,ISO1,X1,ISO2,X2,OTHER1,OTHER2,ISOSHIFT,&
+     NELION,resid
 
      resid=center/concen
      ! WLin(I) = WL
