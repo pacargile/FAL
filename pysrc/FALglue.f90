@@ -46,10 +46,10 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_double,len=1),  intent(out) :: LABELin(NLINESi)
+  character(kind=c_char,len=1),  intent(out) :: LABELin(NLINESi)
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
-  character(kind=c_double,len=1),   intent(out) :: LABELPin(NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: LABELPin(NLINESi)
   real(c_double), intent(out) :: GRin(NLINESi)
   real(c_double), intent(out) :: DGAMMARin(NLINESi)
   real(c_double), intent(out) :: GSin(NLINESi)
@@ -57,23 +57,23 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: GWin(NLINESi)
   real(c_double), intent(out) :: DGAMMAWin(NLINESi)
   real(c_double), intent(out) :: WAVENOin(NLINESi)
-  character(kind=c_double,len=1),   intent(out) :: REFin(NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: REFin(NLINESi)
   integer(c_int),    intent(out) :: NBLOin(NLINESi)
   integer(c_int),    intent(out) :: NBUPin(NLINESi)
   integer(c_int),    intent(out) :: ISO1in(NLINESi)
   real(c_double), intent(out) :: X1in(NLINESi)
   integer(c_int),    intent(out) :: ISO2in(NLINESi)
   real(c_double), intent(out) :: X2in(NLINESi)
-  character(kind=c_double,len=1),   intent(out) :: OTHER1in(NLINESi)
-  character(kind=c_double,len=1),   intent(out) :: OTHER2in(NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: OTHER1in(NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: OTHER2in(NLINESi)
   integer(c_int),    intent(out) :: ISOSHIFTin(NLINESi)
   integer(c_int),    intent(out) :: NELIONin(NLINESi)
   real(c_double), intent(out) :: RESIDin(NLINESi)
 
-  ! COMMON /LINDAT/WL,E,EP,LABEL,LABELP,OTHER1,OTHER2,&
-  !       WLVAC,CENTER,CONCEN, NELION,GAMMAR,GAMMAS,GAMMAW,REF,&
-  !       NBLO,NBUP,ISO1,X1,ISO2,X2,GFLOG,XJ,XJP,CODE,ELO,GF,GS,GR,GW,&
-  !       DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3,ALINEC
+  COMMON /LINDAT/WL,E,EP,LABEL(2),LABELP(2),OTHER1(2),OTHER2(2),&
+        WLVAC,CENTER,CONCEN, NELION,GAMMAR,GAMMAS,GAMMAW,REF,&
+        NBLO,NBUP,ISO1,X1,ISO2,X2,GFLOG,XJ,XJP,CODE,ELO,GF,GS,GR,GW,&
+        DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3,ALINEC
 
 
   REAL*8 TEFF,GLOG,TITLE(74),WBEGIN,RESOLU,WLEDGE,RATIO,SWL
