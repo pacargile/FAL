@@ -149,7 +149,7 @@ class glue(object):
 		self.fortran.readoutspecbin(
 			c_char_p(s), 
 			c_int(NWL),
-			c_int(NLINES)
+			c_int(NLINES),
 			WL.ctypes.data_as(self.c_double_p),
 			QMU1.ctypes.data_as(self.c_double_p),
 			QMU2.ctypes.data_as(self.c_double_p),
