@@ -111,7 +111,7 @@ class glue(object):
 	def readspecbin(self,filename,NWL=int(12000),NLINES=int(1000000)):
 
 		s    = '{0}'.format(filename)
-		WL   = np.zeros(NWL, dtype="double")
+		SWL   = np.zeros(NWL, dtype="double")
 		QMU1 = np.zeros(NWL, dtype="double")
 		QMU2 = np.zeros(NWL, dtype="double")
 
@@ -151,9 +151,10 @@ class glue(object):
 			c_char_p(s), 
 			c_int(NWL),
 			c_int(NLINES),
-			WL.ctypes.data_as(self.c_double_p),
+			SWL.ctypes.data_as(self.c_double_p),
 			QMU1.ctypes.data_as(self.c_double_p),
 			QMU2.ctypes.data_as(self.c_double_p),
+
 			WLin.ctypes.data_as(self.c_double_p),      
 			DWLin.ctypes.data_as(self.c_double_p),     
 			GFLOGin.ctypes.data_as(self.c_double_p),   
@@ -190,7 +191,7 @@ class glue(object):
 		# QMU1 = np.trim_zeros(QMU1,trim='b')
 		# QMU2 = np.trim_zeros(QMU2,trim='b')
 
-		outspec = {'WAVE':WL,'QMU1':QMU1,'QMU2':QMU2}
+		outspec = {'WAVE':SWL,'QMU1':QMU1,'QMU2':QMU2}
 		ll = {}
 		ll['WL']       = WLin    
 		ll['DWL']      = DWLin
