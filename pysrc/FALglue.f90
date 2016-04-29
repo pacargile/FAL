@@ -113,6 +113,14 @@ subroutine readoutspecbin(&
   READ(1)NLINESO
   DO 9 I=1,NLINESO
      READ(1)LINDAT8,LINDAT
+     WRITE(3,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL, &
+            EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO, &
+            REF,NBLO,NBUP,ISO1,X1,ISO2,X2,OTHER1,OTHER2,ISOSHIFT, &
+            NELION,resid
+  140 FORMAT(F11.4,F7.4,2F7.3,F8.2,F12.3,F5.1,1X,A8,A2, &
+            F12.3,F5.1,1X,A8,A2,6F6.2,F11.3, &
+            1X,A4,I2,I2,I3,F6.3,I3,F6.3,A8,A2,A8,A2,I6,I4,2X,f8.4)
+
      resid=center/concen
      WLin(I) = WL
      DWLin(I) = DWL
