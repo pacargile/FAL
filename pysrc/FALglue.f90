@@ -122,9 +122,9 @@ subroutine readoutspecbin(&
      NELION,resid
 
      resid=center/concen
-     ! WLin(I) = WL
+     WLin(I) = WL
      ! DWLin(I) = DWL
-     ! GFLOGin(I) = GFLOG
+     GFLOGin(I) = GFLOG
      ! DGFLOGin(I) = DGFLOG
      ! CODEin(I) = CODE
      ! Ein(I) = E
