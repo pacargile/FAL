@@ -65,7 +65,7 @@ subroutine readoutspecbin(&
   real(c_int),    intent(out) :: ISO2in(NLINESi)
   real(c_double), intent(out) :: X2in(NLINESi)
   real(c_char),   intent(out) :: OTHER1in(NLINESi)
-  real(c_char,    intent(out) :: OTHER2in(NLINESi)
+  real(c_char),   intent(out) :: OTHER2in(NLINESi)
   real(c_int),    intent(out) :: ISOSHIFTin(NLINESi)
   real(c_int),    intent(out) :: NELIONin(NLINESi)
   real(c_double), intent(out) :: residin(NLINESi)
