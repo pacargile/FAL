@@ -113,7 +113,7 @@ subroutine readoutspecbin(&
   READ(1)NLINESO
   DO 9 I=1,NLINESO
      READ(1)LINDAT8,LINDAT
-     
+
      resid=center/concen
      WLin(I) = WL
      DWLin(I) = DWL
@@ -122,10 +122,10 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     LABELin(I) = LABEL
+     ! LABELin(I) = LABEL(1)
      EPin(I) = EP
      XJPin(I) = XJP
-     LABELPin(I) = LABELP
+     ! LABELPin(I) = LABELP
      GRin(I) = GR
      DGAMMARin(I) = DGAMMAR
      GSin(I) = GS
@@ -140,8 +140,8 @@ subroutine readoutspecbin(&
      X1in(I) = X1
      ISO2in(I) = ISO2
      X2in(I) = X2
-     OTHER1in(I) = OTHER1
-     OTHER2in(I) = OTHER2
+     ! OTHER1in(I) = OTHER1
+     ! OTHER2in(I) = OTHER2
      ISOSHIFTin(I) = ISOSHIFT
      NELIONin(I) = NELION
      RESIDin(I) = RESID
