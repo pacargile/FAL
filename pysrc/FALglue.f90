@@ -134,7 +134,7 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
-     LABELin(I) = transfer(LABELin(:,I), SLABELarr)
+     LABELin(I) = transfer(LABELin(I), SLABELarr)
      LABELin(I) = SLABEL
      IF(I.EQ.1) THEN
      print *, SLABEL
