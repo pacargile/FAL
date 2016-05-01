@@ -96,8 +96,6 @@ subroutine readoutspecbin(&
 
   INTEGER IWL, NWL, I, NLINESO
 
-  LABELin = transfer(LABELin,SLABELarr)
-
   open(UNIT=1,FILE=c_to_f_string(s),STATUS='OLD',FORM='UNFORMATTED',POSITION='REWIND')
   read(1)TEFF,GLOG,TITLE,WBEGIN,RESOLU,NWL,IFSURF,NMU,XMU,NEDGE,WLEDGE
   
@@ -136,10 +134,10 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
-     LABELin(I) = SLABEL
+     SLABELarr(I) = SLABEL
      IF(I.EQ.1) THEN
      print *, SLABEL
-     print *, LABELin(I)
+     print *, SLABELarr(I)
      END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
