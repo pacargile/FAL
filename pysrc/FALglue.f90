@@ -132,7 +132,6 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
-     allocate(LABELin(I),8)
      LABELin(I) = LABELin(I)//SLABEL
      ! EPin(I) = EP
      ! XJPin(I) = XJP
