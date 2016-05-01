@@ -118,7 +118,7 @@ subroutine readoutspecbin(&
   F12.3,F5.1,1X,A8,A2,6F6.2,F11.3,&
   1X,A4,I2,I2,I3,F6.3,I3,F6.3,A8,A2,A8,A2,I6,I4,2X,f8.4)
 
- LABELin = transfer(SLABELarr,LABELin)
+ LABELin = MOVE_ALLOC(SLABELarr,LABELin)
 
   DO 9 I=1,NLINESO
      READ(1)LINDAT8,LINDAT
