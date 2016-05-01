@@ -90,7 +90,7 @@ subroutine readoutspecbin(&
   REAL*4 ALINEC
 
   character(len=8) :: SLABEL
-  character(len=8) :: SLABELarr(NLINESi)
+  character(len=:), allocatable :: SLABELarr
 
   ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
@@ -134,10 +134,11 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
-     SLABELarr(I) = SLABEL
+     LABELin(I) = transfer(LABELin(:,I), SLABELarr)
+     LABELin(I) = SLABEL
      IF(I.EQ.1) THEN
      print *, SLABEL
-     print *, SLABELarr(I)
+     print *, LABELin(I)
      END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
@@ -162,8 +163,6 @@ subroutine readoutspecbin(&
      ! NELIONin(I) = NELION
      ! RESIDin(I) = RESID
 9 CONTINUE
-
-  LABELin = SLABELarr
 
   CLOSE(UNIT=1)
 
