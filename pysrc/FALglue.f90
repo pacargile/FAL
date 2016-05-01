@@ -132,7 +132,7 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
-     allocate(character = 8 :: LABELin(I))
+     allocate(character*8 :: LABELin(I))
      LABELin(I) = SLABEL
      IF(I.EQ.1) THEN
      print *, SLABEL
