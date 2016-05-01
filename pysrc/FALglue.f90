@@ -90,7 +90,7 @@ subroutine readoutspecbin(&
   REAL*4 ALINEC
 
   character(len=8) :: SLABEL
-  character(len=:), allocatable :: SLABELarr
+  character(len=8) :: SLABELarr
 
   ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
