@@ -135,7 +135,6 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
      SLABELarr(I) = SLABEL
-     LABELin(I) = SLABEL
      IF(I.EQ.1) THEN
      print *, SLABEL
      print *, SLABELarr(I)
