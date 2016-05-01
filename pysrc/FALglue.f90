@@ -90,7 +90,7 @@ subroutine readoutspecbin(&
   REAL*4 ALINEC
 
   character(len=8) :: SLABEL
-  character(len=8) :: SLABELarr
+  character(len=8) :: SLABELarr(NLINESi)
 
   ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
@@ -118,6 +118,8 @@ subroutine readoutspecbin(&
   F12.3,F5.1,1X,A8,A2,6F6.2,F11.3,&
   1X,A4,I2,I2,I3,F6.3,I3,F6.3,A8,A2,A8,A2,I6,I4,2X,f8.4)
 
+ LABELin = transfer(SLABELarr,LABELin)
+
   DO 9 I=1,NLINESO
      READ(1)LINDAT8,LINDAT
      ! IF(I.EQ.1)WRITE(6,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,&
@@ -134,8 +136,7 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
-     LABELin(I) = transfer(LABELin(I), SLABELarr)
-     LABELin(I) = SLABEL(:)
+     LABELin(I) = SLABEL
      IF(I.EQ.1) THEN
      print *, LEN(SLABEL)
      print *, LEN(LABELin(I))
