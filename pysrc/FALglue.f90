@@ -44,7 +44,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  allocatable, intent(out) :: LABELin(NLINESi)
+  character(kind=c_char,len=8),  allocatable, intent(out) :: LABELin(NLINESi)
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
   ! character(kind=c_char,len=1),   intent(out) :: LABELPin(NLINESi)
@@ -115,8 +115,6 @@ subroutine readoutspecbin(&
 140     FORMAT(F11.4,F7.4,2F7.3,F8.2,F12.3,F5.1,1X,A8,A2,&
   F12.3,F5.1,1X,A8,A2,6F6.2,F11.3,&
   1X,A4,I2,I2,I3,F6.3,I3,F6.3,A8,A2,A8,A2,I6,I4,2X,f8.4)
-
- allocate(character(8) :: LABELin(NLINESi))
 
   DO 9 I=1,NLINESO
      READ(1)LINDAT8,LINDAT
