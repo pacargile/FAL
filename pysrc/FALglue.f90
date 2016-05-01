@@ -44,7 +44,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=8),  allocatable, intent(out) :: LABELin(NLINESi)
+  character(kind=c_char,len=1),  intent(out) :: LABELin(NLINESi)
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
   ! character(kind=c_char,len=1),   intent(out) :: LABELPin(NLINESi)
@@ -90,9 +90,13 @@ subroutine readoutspecbin(&
   REAL*4 ALINEC
 
   character(len=8) :: SLABEL
+  character(len=8) :: SLABELarr(NLINESi)
+
   ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
   INTEGER IWL, NWL, I, NLINESO
+
+  LABELin = transfer(SLABELarr,LABELin)
 
   open(UNIT=1,FILE=c_to_f_string(s),STATUS='OLD',FORM='UNFORMATTED',POSITION='REWIND')
   read(1)TEFF,GLOG,TITLE,WBEGIN,RESOLU,NWL,IFSURF,NMU,XMU,NEDGE,WLEDGE
