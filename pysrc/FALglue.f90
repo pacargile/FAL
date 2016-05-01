@@ -164,6 +164,8 @@ subroutine readoutspecbin(&
      ! RESIDin(I) = RESID
 9 CONTINUE
 
+  LABELin = SLABELarr
+
   CLOSE(UNIT=1)
 
 end subroutine readoutspecbin
