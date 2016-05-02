@@ -138,7 +138,7 @@ subroutine readoutspecbin(&
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABEL = SLABEL//c_null_char
      DO J=1,11
-     LABELin(J,I) = SLABEL(J:J)
+     LABELin(J,I) = transfer(SLABEL(J:J),LABELin(J,I))
      END DO
      print *, SLABEL
      print *, LABELin(:,I)
