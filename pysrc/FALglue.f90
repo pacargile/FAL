@@ -45,6 +45,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
   character(kind=c_char,len=1),  intent(inout) :: LABELin(NLINESi)
+  allocate(character(len=8)) :: LABELin(NLINESi)
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
   ! character(kind=c_char,len=1),   intent(out) :: LABELPin(NLINESi)
@@ -165,7 +166,7 @@ subroutine readoutspecbin(&
      ! RESIDin(I) = RESID
 9 CONTINUE
   
-  LABELin = transfer(SLABELarr,LABELin)
+  ! LABELin = transfer(SLABELarr,LABELin)
   
   CLOSE(UNIT=1)
 
