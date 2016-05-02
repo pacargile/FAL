@@ -45,6 +45,10 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
   character(kind=c_char,len=1),  intent(inout) :: LABELin(NLINESi)
+
+  character(len=8) :: SLABEL
+  character(len=*) :: SLABELarr
+
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
   ! character(kind=c_char,len=1),   intent(out) :: LABELPin(NLINESi)
@@ -89,8 +93,6 @@ subroutine readoutspecbin(&
   REAL*4 DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3,NELION
   REAL*4 ALINEC
 
-  character(len=8) :: SLABEL
-  character(len=8) :: SLABELarr(NLINESi)
 
   ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
@@ -117,9 +119,9 @@ subroutine readoutspecbin(&
 140     FORMAT(F11.4,F7.4,2F7.3,F8.2,F12.3,F5.1,1X,A8,A2,&
   F12.3,F5.1,1X,A8,A2,6F6.2,F11.3,&
   1X,A4,I2,I2,I3,F6.3,I3,F6.3,A8,A2,A8,A2,I6,I4,2X,f8.4)
-
-  allocate(character(len=8) :: LABELin(NLINESi))
   
+  DO 
+
   DO 9 I=1,NLINESO
      READ(1)LINDAT8,LINDAT
      ! IF(I.EQ.1)WRITE(6,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,&
@@ -137,7 +139,7 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
      SLABELarr(I) = SLABEL
-     LABELin(I) = SLABEL
+     LABELin(I) = SLABEL//c_null_char
      IF(I.EQ.1) THEN
      print *, LABELin(I)
      print *, SLABEL
@@ -166,9 +168,7 @@ subroutine readoutspecbin(&
      ! NELIONin(I) = NELION
      ! RESIDin(I) = RESID
 9 CONTINUE
-  
-  ! LABELin = transfer(SLABELarr,LABELin)
-  
+    
   CLOSE(UNIT=1)
 
 end subroutine readoutspecbin
