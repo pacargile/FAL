@@ -21,6 +21,20 @@ function c_to_f_string(s) result(str)
   str = transfer(s(1:nchars), str)
 end function c_to_f_string
 
+!** Convert a Fortran string to a C string
+function f_to_c_string(f_string) result(c_string)
+    implicit none
+    character(len=*), intent(in) :: f_string
+    character(len=1, kind=c_char) :: c_string(len_trim(f_string)+1)
+    integer :: N, i
+
+    N = len_trim(f_string)
+    do i = 1, N
+        c_string(i) = f_string(i:i)
+    end do
+    c_string(n + 1) = c_null_char
+end function f_to_c_string
+
 subroutine readoutspecbin(&
   s, NWLi, NLINESi,&
   wli, qmu1i, qmu2i, &
@@ -139,7 +153,7 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABELin(I) = SLABEL//c_null_char
-     LABELin(I) = C_PTR(SLABELin(I))
+     LABELin(I) = f_to_c_string(SLABELin(I))
      IF(I.EQ.1)THEN
       print *, SLABEL
       print *, SLABELin(I)
