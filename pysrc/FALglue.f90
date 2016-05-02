@@ -135,7 +135,6 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
      SLABELarr(I) = SLABEL
-     LABELin(I) = 'XXX'
      IF(I.EQ.1) THEN
      print *, LEN(SLABEL)
      print *, LEN(SLABELarr(I))
@@ -163,7 +162,9 @@ subroutine readoutspecbin(&
      ! NELIONin(I) = NELION
      ! RESIDin(I) = RESID
 9 CONTINUE
-
+  
+  LABELin = transfer(SLABELarr,LABELin)
+  
   CLOSE(UNIT=1)
 
 end subroutine readoutspecbin
