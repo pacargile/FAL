@@ -26,7 +26,7 @@ subroutine readoutspecbin(&
   wli, qmu1i, qmu2i, &
   WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin,&
   LABELin) bind(c, name='readoutspecbin')
-  use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC
+  use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
 
