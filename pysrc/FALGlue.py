@@ -1,4 +1,4 @@
-from ctypes import cdll, CDLL, POINTER, ARRAY, c_int, c_double, c_char_p, c_char
+from ctypes import cdll, CDLL, POINTER, ARRAY, c_int, c_double, c_char_p, c_char, c_void_p
 import numpy as np
 import fortranformat
 from astropy.io import ascii
@@ -127,8 +127,8 @@ class glue(object):
 		LABELin    = np.zeros(NLINES,dtype='str')
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
-		LABELPin   = np.zeros(NLINES,dtype='str')
-		# LABELPin   = np.chararray(NLINES,itemsize=8)
+		# LABELPin   = np.zeros(NLINES,dtype='str')
+		LABELPin   = np.chararray(NLINES,itemsize=8)
 		GRin       = np.zeros(NLINES,dtype='double')
 		DGAMMARin  = np.zeros(NLINES,dtype='double')
 		GSin       = np.zeros(NLINES,dtype='double')
@@ -165,7 +165,8 @@ class glue(object):
 			CODEin.ctypes.data_as(self.c_double_p),    
 			Ein.ctypes.data_as(self.c_double_p),       
 			XJin.ctypes.data_as(self.c_double_p),      
-			LABELin.ctypes.data_as(c_char_p),   
+			# LABELin.ctypes.data_as(c_char_p),   
+			ctypes.c_void_p(LABELin.ctypes.data),   
 			EPin.ctypes.data_as(self.c_double_p),      
 			XJPin.ctypes.data_as(self.c_double_p),     
 			LABELPin.ctypes.data_as(c_char_p),  
