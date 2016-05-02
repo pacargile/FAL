@@ -143,7 +143,7 @@ subroutine readoutspecbin(&
      IF(I.EQ.1)THEN
       print *, SLABEL
       print *, SLABELin(I)
-      ! print *, LABELin(I)
+      print *, LABELin(I)
      END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
