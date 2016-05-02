@@ -26,7 +26,7 @@ subroutine readoutspecbin(&
   wli, qmu1i, qmu2i, &
   WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin,&
   LABELin) bind(c, name='readoutspecbin')
-  use iso_c_binding, only: c_double, c_int, c_char, c_null_char
+  use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
 
@@ -45,7 +45,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
   character(kind=c_char,len=1),  intent(inout) :: LABELin(11,NLINESi)
-  character(len=10) :: SLABEL
+  character(len=*) :: SLABEL
 
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
@@ -136,10 +136,10 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A10)') LABEL(1)
-     DO J = 1, 10
-       LABELin(J,I) = SLABEL(J:J)
+     SLABEL = SLABEL//c_null_char
+     DO J = 1, 11
+       LABELin(J,I) = C_LOC(SLABEL(J:J))
      END DO
-     LABELin(11,I) = c_null_char
      IF(I.EQ.1) THEN
      print *, SLABEL
      print *, LABELin(:,I)
