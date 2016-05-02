@@ -45,7 +45,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
   character(kind=c_char,len=1),  intent(inout) :: LABELin(11,NLINESi)
-  character(len=*) :: SLABEL
+  character(len=20) :: SLABEL
 
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
