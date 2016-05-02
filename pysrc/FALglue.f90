@@ -167,7 +167,7 @@ subroutine readoutspecbin(&
      ! NELIONin(I) = NELION
      ! RESIDin(I) = RESID
 9 CONTINUE
-    
+    print *, LABELin
   CLOSE(UNIT=1)
 
 end subroutine readoutspecbin
