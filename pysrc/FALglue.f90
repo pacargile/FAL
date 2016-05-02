@@ -140,6 +140,11 @@ subroutine readoutspecbin(&
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABELin(I) = SLABEL//c_null_char
      LABELin(I) = transfer(SLABELin(I),LABELin(I))
+     IF(I.EQ.1)THEN
+      print *, SLABEL
+      print *, SLABELin(I)
+      print *, LABELin(I)
+     END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
      ! LABELPin(I) = LABELP(1)
