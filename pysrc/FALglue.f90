@@ -134,10 +134,10 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
-     LABELin(I:I) = SLABEL
+     LABELin(I) = transfer(SLABEL,LABELin(I))
      IF(I.EQ.1) THEN
      print *, LEN(SLABEL)
-     print *, LEN(LABELin(I:I))
+     print *, LEN(LABELin(I))
      END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
