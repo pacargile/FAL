@@ -139,7 +139,7 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABELin(I) = SLABEL//c_null_char
-     LABELin(I) = SLABELin(I)
+     LABELin(I) = transfer(SLABELin(I),LABELin(I))
      ! EPin(I) = EP
      ! XJPin(I) = XJP
      ! LABELPin(I) = LABELP(1)
