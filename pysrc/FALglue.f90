@@ -44,8 +44,8 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(inout) :: LABELin(21,NLINESi)
-  character(len=20) :: SLABEL
+  character(kind=c_char,len=1),  intent(inout) :: LABELin(11,NLINESi)
+  character(len=10) :: SLABEL
 
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
@@ -120,7 +120,7 @@ subroutine readoutspecbin(&
 
   
 
-  DO 9 I=1,NLINESO
+  DO 9 I=1,10!NLINESO
      READ(1)LINDAT8,LINDAT
      ! IF(I.EQ.1)WRITE(6,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,&
      ! EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO,&
@@ -135,11 +135,11 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     WRITE(SLABEL,'(A8)') LABEL(1)
-     DO J = 1, 20
+     WRITE(SLABEL,'(A10)') LABEL(1)
+     DO J = 1, 10
        LABELin(J,I) = SLABEL(J:J)
      END DO
-     LABELin(21,I) = c_null_char
+     LABELin(11,I) = c_null_char
      IF(I.EQ.1) THEN
      print *, SLABEL
      print *, LABELin(:,I)
