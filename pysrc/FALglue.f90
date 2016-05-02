@@ -47,7 +47,7 @@ subroutine readoutspecbin(&
   character(kind=c_char,len=1),  intent(inout) :: LABELin(NLINESi)
 
   character(len=8) :: SLABEL
-  character(len=*) :: SLABELarr
+  ! character(len=*) :: SLABELarr
 
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
@@ -138,12 +138,10 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
-     SLABELarr(I) = SLABEL
      LABELin(I) = SLABEL//c_null_char
      IF(I.EQ.1) THEN
      print *, LABELin(I)
      print *, SLABEL
-     print *, SLABELarr(I)
      END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
