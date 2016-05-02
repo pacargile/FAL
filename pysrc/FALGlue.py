@@ -166,7 +166,7 @@ class glue(object):
 			Ein.ctypes.data_as(self.c_double_p),       
 			XJin.ctypes.data_as(self.c_double_p),      
 			# LABELin.ctypes.data_as(c_char_p),   
-			ctypes.c_void_p(LABELin.ctypes.data),   
+			c_void_p(LABELin.ctypes.data),   
 			EPin.ctypes.data_as(self.c_double_p),      
 			XJPin.ctypes.data_as(self.c_double_p),     
 			LABELPin.ctypes.data_as(c_char_p),  
