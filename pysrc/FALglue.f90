@@ -58,8 +58,8 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(inout) :: LABELin(NLINESi)
-  ! TYPE(C_PTR), DIMENSION(NLINESi) :: LABELin
+  ! character(kind=c_char,len=1),  intent(inout) :: LABELin(NLINESi)
+  TYPE(C_PTR), DIMENSION(NLINESi) :: LABELin
   character(len=11), DIMENSION(NLINESi), TARGET :: SLABELin
   character(len=11) :: SLABEL
 
