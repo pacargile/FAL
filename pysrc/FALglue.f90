@@ -58,7 +58,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(inout) :: LABELin(11,NLINESi)
+  character(kind=c_char,len=1),  intent(inout) :: LABELin(NLINESi)
   ! TYPE(C_PTR), DIMENSION(NLINESi) :: LABELin
   character(len=11), DIMENSION(NLINESi), TARGET :: SLABELin
   character(len=11) :: SLABEL
@@ -153,7 +153,7 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABELin(I) = SLABEL//c_null_char
-     LABELin(:,I) = f_to_c_string(SLABEL)
+     LABELin(I) = C_LOC(SLABEL)
      IF(I.EQ.1)THEN
       print *, SLABEL
       print *, SLABELin(I)
