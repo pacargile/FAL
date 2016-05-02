@@ -128,7 +128,6 @@ class glue(object):
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
 		LABELPin   = np.zeros(NLINES,dtype='str')
-		# LABELPin   = np.chararray(NLINES,itemsize=11,order='F')
 		GRin       = np.zeros(NLINES,dtype='double')
 		DGAMMARin  = np.zeros(NLINES,dtype='double')
 		GSin       = np.zeros(NLINES,dtype='double')
@@ -166,28 +165,28 @@ class glue(object):
 			Ein.ctypes.data_as(self.c_double_p),       
 			XJin.ctypes.data_as(self.c_double_p),      
 			LABELin.ctypes.data_as(c_char_p),   
-			EPin.ctypes.data_as(self.c_double_p),      
-			XJPin.ctypes.data_as(self.c_double_p),     
-			LABELPin.ctypes.data_as(c_char_p),  
-			GRin.ctypes.data_as(self.c_double_p),      
-			DGAMMARin.ctypes.data_as(self.c_double_p), 
-			GSin.ctypes.data_as(self.c_double_p),      
-			DGAMMASin.ctypes.data_as(self.c_double_p), 
-			GWin.ctypes.data_as(self.c_double_p),      
-			DGAMMAWin.ctypes.data_as(self.c_double_p), 
-			WAVENOin.ctypes.data_as(self.c_double_p),  
-			REFin.ctypes.data_as(c_char_p),     
-			NBLOin.ctypes.data_as(self.c_int_p),    
-			NBUPin.ctypes.data_as(self.c_int_p),    
-			ISO1in.ctypes.data_as(self.c_int_p),    
-			X1in.ctypes.data_as(self.c_double_p),      
-			ISO2in.ctypes.data_as(self.c_int_p),    
-			X2in.ctypes.data_as(self.c_double_p),      
-			OTHER1in.ctypes.data_as(c_char_p),  
-			OTHER2in.ctypes.data_as(c_char_p),  
-			ISOSHIFTin.ctypes.data_as(self.c_int_p),
-			NELIONin.ctypes.data_as(self.c_int_p),  
-			RESIDin.ctypes.data_as(self.c_double_p)  
+			# EPin.ctypes.data_as(self.c_double_p),      
+			# XJPin.ctypes.data_as(self.c_double_p),     
+			# LABELPin.ctypes.data_as(c_char_p),  
+			# GRin.ctypes.data_as(self.c_double_p),      
+			# DGAMMARin.ctypes.data_as(self.c_double_p), 
+			# GSin.ctypes.data_as(self.c_double_p),      
+			# DGAMMASin.ctypes.data_as(self.c_double_p), 
+			# GWin.ctypes.data_as(self.c_double_p),      
+			# DGAMMAWin.ctypes.data_as(self.c_double_p), 
+			# WAVENOin.ctypes.data_as(self.c_double_p),  
+			# REFin.ctypes.data_as(c_char_p),     
+			# NBLOin.ctypes.data_as(self.c_int_p),    
+			# NBUPin.ctypes.data_as(self.c_int_p),    
+			# ISO1in.ctypes.data_as(self.c_int_p),    
+			# X1in.ctypes.data_as(self.c_double_p),      
+			# ISO2in.ctypes.data_as(self.c_int_p),    
+			# X2in.ctypes.data_as(self.c_double_p),      
+			# OTHER1in.ctypes.data_as(c_char_p),  
+			# OTHER2in.ctypes.data_as(c_char_p),  
+			# ISOSHIFTin.ctypes.data_as(self.c_int_p),
+			# NELIONin.ctypes.data_as(self.c_int_p),  
+			# RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
 		# WL = np.trim_zeros(WL,trim='b')
