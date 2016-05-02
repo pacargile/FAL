@@ -120,7 +120,7 @@ subroutine readoutspecbin(&
 
   
 
-  DO 9 I=1,10!NLINESO
+  DO I=1,10!NLINESO
      READ(1)LINDAT8,LINDAT
      ! IF(I.EQ.1)WRITE(6,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,&
      ! EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO,&
@@ -140,10 +140,8 @@ subroutine readoutspecbin(&
      DO J=1,11
      LABELin(J,I) = SLABEL(J:J)
      END DO
-     IF(I.EQ.1) THEN
      print *, SLABEL
      print *, LABELin(:,I)
-     END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
      ! LABELPin(I) = LABELP(1)
@@ -166,8 +164,8 @@ subroutine readoutspecbin(&
      ! ISOSHIFTin(I) = ISOSHIFT
      ! NELIONin(I) = NELION
      ! RESIDin(I) = RESID
-9 CONTINUE
-    print *, LABELin
+  END DO
+
   CLOSE(UNIT=1)
 
 end subroutine readoutspecbin
