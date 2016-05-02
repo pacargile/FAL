@@ -1,6 +1,6 @@
 module f_wrapper
 
-use iso_c_binding, only: c_double, c_int, c_char, c_null_char
+use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_PTR, C_LOC
 
 implicit none
 
@@ -26,6 +26,7 @@ function f_to_c_string(f_string) result(c_string)
     implicit none
     character(len=*), intent(in) :: f_string
     character(len=1, kind=c_char) :: c_string(len_trim(f_string)+1)
+    type(C_PTR) :: str
     integer :: N, i
 
     N = len_trim(f_string)
@@ -33,6 +34,7 @@ function f_to_c_string(f_string) result(c_string)
         c_string(i) = f_string(i:i)
     end do
     c_string(n + 1) = c_null_char
+    str = transfer(c_string,str)
 end function f_to_c_string
 
 subroutine readoutspecbin(&
@@ -153,7 +155,7 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABELin(I) = SLABEL//c_null_char
-     LABELin(I) = len(f_to_c_string(SLABEL))
+     LABELin(I) = _to_c_string(SLABEL)
      IF(I.EQ.1)THEN
       print *, SLABEL
       print *, SLABELin(I)
