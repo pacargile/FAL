@@ -135,10 +135,10 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A8)') LABEL(1)
      LABELin(1:8,I) = SLABEL
-     IF(I.EQ.1) THEN
-     print *, LEN(SLABEL)
-     print *, LEN(LABELin(I))
-     END IF
+     ! IF(I.EQ.1) THEN
+     ! print *, LEN(SLABEL)
+     ! print *, LEN(LABELin(I))
+     ! END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
      ! LABELPin(I) = LABELP(1)
