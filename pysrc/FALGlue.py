@@ -128,7 +128,7 @@ class glue(object):
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
 		# LABELPin   = np.zeros(NLINES,dtype='str')
-		LABELPin   = np.chararray(NLINES,itemsize=8,order='F')
+		LABELPin   = np.chararray(NLINES,itemsize=21,order='F')
 		GRin       = np.zeros(NLINES,dtype='double')
 		DGAMMARin  = np.zeros(NLINES,dtype='double')
 		GSin       = np.zeros(NLINES,dtype='double')
