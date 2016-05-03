@@ -1,6 +1,6 @@
 module f_wrapper
 
-use iso_c_binding, only: c_double, c_int, c_char, c_null_char
+use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_PTR, C_LOC
 
 implicit none
 
@@ -21,12 +21,28 @@ function c_to_f_string(s) result(str)
   str = transfer(s(1:nchars), str)
 end function c_to_f_string
 
+!** Convert a Fortran string to a C string
+function f_to_c_string(f_string) result(c_string)
+    implicit none
+    character(len=*), intent(in) :: f_string
+    character(len=1, kind=c_char) :: c_string(len_trim(f_string)+1)
+    type(C_PTR) :: str
+    integer :: N, i
+
+    N = len_trim(f_string)
+    do i = 1, N
+        c_string(i) = f_string(i:i)
+    end do
+    c_string(n + 1) = c_null_char
+    str = transfer(c_string,str)
+end function f_to_c_string
+
 subroutine readoutspecbin(&
   s, NWLi, NLINESi,&
   wli, qmu1i, qmu2i, &
   WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin,&
   LABELin) bind(c, name='readoutspecbin')
-  use iso_c_binding, only: c_double, c_int, c_char, c_null_char
+  use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
 
@@ -44,7 +60,11 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(out) :: LABELin(NLINESi)
+  character(kind=c_char,len=1),  intent(inout) :: LABELin(11,NLINESi)
+  ! TYPE(C_PTR), DIMENSION(NLINESi) :: LABELin
+  character(len=11), DIMENSION(NLINESi), TARGET :: SLABELin
+  character(len=11) :: SLABEL
+
   ! real(c_double), intent(out) :: EPin(NLINESi)
   ! real(c_double), intent(out) :: XJPin(NLINESi)
   ! character(kind=c_char,len=1),   intent(out) :: LABELPin(NLINESi)
@@ -89,10 +109,10 @@ subroutine readoutspecbin(&
   REAL*4 DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3,NELION
   REAL*4 ALINEC
 
-  character(len=8) :: SLABEL
+
   ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
-  INTEGER IWL, NWL, I, NLINESO
+  INTEGER IWL, NWL, I, NLINESO, J
 
   open(UNIT=1,FILE=c_to_f_string(s),STATUS='OLD',FORM='UNFORMATTED',POSITION='REWIND')
   read(1)TEFF,GLOG,TITLE,WBEGIN,RESOLU,NWL,IFSURF,NMU,XMU,NEDGE,WLEDGE
@@ -116,12 +136,14 @@ subroutine readoutspecbin(&
   F12.3,F5.1,1X,A8,A2,6F6.2,F11.3,&
   1X,A4,I2,I2,I3,F6.3,I3,F6.3,A8,A2,A8,A2,I6,I4,2X,f8.4)
 
-  DO 9 I=1,NLINESO
+  
+
+  DO I=1,10!NLINESO
      READ(1)LINDAT8,LINDAT
-     IF(I.EQ.1)WRITE(6,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,&
-     EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO,&
-     REF,NBLO,NBUP,ISO1,X1,ISO2,X2,OTHER1,OTHER2,ISOSHIFT,&
-     NELION,resid
+     ! IF(I.EQ.1)WRITE(6,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,&
+     ! EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO,&
+     ! REF,NBLO,NBUP,ISO1,X1,ISO2,X2,OTHER1,OTHER2,ISOSHIFT,&
+     ! NELION,resid
 
      resid=center/concen
      WLin(I) = WL
@@ -131,9 +153,13 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     WRITE(SLABEL,'(A8)') LABEL(1)
-     allocate(LABELin(I),8)
-     LABELin(I) = SLABEL
+     WRITE(SLABEL,'(A10)') LABEL(1)
+     SLABELin(I) = SLABEL//c_null_char
+     LABELin(1:11,I) = f_to_c_string(SLABEL)
+     IF(I.EQ.1)THEN
+      print *, SLABEL
+      print *, SLABELin(I)
+     END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
      ! LABELPin(I) = LABELP(1)
@@ -156,7 +182,7 @@ subroutine readoutspecbin(&
      ! ISOSHIFTin(I) = ISOSHIFT
      ! NELIONin(I) = NELION
      ! RESIDin(I) = RESID
-9 CONTINUE
+  END DO
 
   CLOSE(UNIT=1)
 

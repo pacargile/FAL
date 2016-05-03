@@ -1,4 +1,4 @@
-from ctypes import cdll, CDLL, POINTER, c_int, c_double, c_char_p
+from ctypes import cdll, CDLL, POINTER, ARRAY, c_int, c_double, c_char_p, c_char, c_void_p
 import numpy as np
 import fortranformat
 from astropy.io import ascii
@@ -15,6 +15,8 @@ class glue(object):
 		# define some useful things for later
 		self.c_double_p = POINTER(c_double)
 		self.c_int_p = POINTER(c_int)
+		self.c_char_array = ARRAY(c_char,10)
+		self.c_char_array_p = POINTER(self.c_char_array)
 
 		# THE FOLLOWING ARE FOR THE PUNCH500 DEL FILES
 
@@ -163,28 +165,28 @@ class glue(object):
 			Ein.ctypes.data_as(self.c_double_p),       
 			XJin.ctypes.data_as(self.c_double_p),      
 			LABELin.ctypes.data_as(c_char_p),   
-			EPin.ctypes.data_as(self.c_double_p),      
-			XJPin.ctypes.data_as(self.c_double_p),     
-			LABELPin.ctypes.data_as(c_char_p),  
-			GRin.ctypes.data_as(self.c_double_p),      
-			DGAMMARin.ctypes.data_as(self.c_double_p), 
-			GSin.ctypes.data_as(self.c_double_p),      
-			DGAMMASin.ctypes.data_as(self.c_double_p), 
-			GWin.ctypes.data_as(self.c_double_p),      
-			DGAMMAWin.ctypes.data_as(self.c_double_p), 
-			WAVENOin.ctypes.data_as(self.c_double_p),  
-			REFin.ctypes.data_as(c_char_p),     
-			NBLOin.ctypes.data_as(self.c_int_p),    
-			NBUPin.ctypes.data_as(self.c_int_p),    
-			ISO1in.ctypes.data_as(self.c_int_p),    
-			X1in.ctypes.data_as(self.c_double_p),      
-			ISO2in.ctypes.data_as(self.c_int_p),    
-			X2in.ctypes.data_as(self.c_double_p),      
-			OTHER1in.ctypes.data_as(c_char_p),  
-			OTHER2in.ctypes.data_as(c_char_p),  
-			ISOSHIFTin.ctypes.data_as(self.c_int_p),
-			NELIONin.ctypes.data_as(self.c_int_p),  
-			RESIDin.ctypes.data_as(self.c_double_p)  
+			# EPin.ctypes.data_as(self.c_double_p),      
+			# XJPin.ctypes.data_as(self.c_double_p),     
+			# LABELPin.ctypes.data_as(c_char_p),  
+			# GRin.ctypes.data_as(self.c_double_p),      
+			# DGAMMARin.ctypes.data_as(self.c_double_p), 
+			# GSin.ctypes.data_as(self.c_double_p),      
+			# DGAMMASin.ctypes.data_as(self.c_double_p), 
+			# GWin.ctypes.data_as(self.c_double_p),      
+			# DGAMMAWin.ctypes.data_as(self.c_double_p), 
+			# WAVENOin.ctypes.data_as(self.c_double_p),  
+			# REFin.ctypes.data_as(c_char_p),     
+			# NBLOin.ctypes.data_as(self.c_int_p),    
+			# NBUPin.ctypes.data_as(self.c_int_p),    
+			# ISO1in.ctypes.data_as(self.c_int_p),    
+			# X1in.ctypes.data_as(self.c_double_p),      
+			# ISO2in.ctypes.data_as(self.c_int_p),    
+			# X2in.ctypes.data_as(self.c_double_p),      
+			# OTHER1in.ctypes.data_as(c_char_p),  
+			# OTHER2in.ctypes.data_as(c_char_p),  
+			# ISOSHIFTin.ctypes.data_as(self.c_int_p),
+			# NELIONin.ctypes.data_as(self.c_int_p),  
+			# RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
 		# WL = np.trim_zeros(WL,trim='b')
