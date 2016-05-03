@@ -9,17 +9,13 @@ import shutil
 from scipy import io as spIO
 import numpy as np
 
+from FALselMOD import selmod
+
 __all__ = ["synthepkg"]
 
 
 class synthe(object):
-
-    def __init__(self,ID=None,verbose=False,clobber=False,rline=False,LL=False,rlinedict={},arct_bool=False):
-        super(synthe,self).__init__()
-        
-        # set if working with Arcturus
-        self.arct_bool = arct_bool
-
+    def __init__(self,ID=None,verbose=False,clobber=False,starpars=None):
         # define a unique job ID if not already defined
         # must be equal to or less than 8-digit int/string.
         if ID != None:
@@ -29,7 +25,7 @@ class synthe(object):
             self.ID = uuid.uuid4().hex[:8]
         with open('ID.asc','w') as f:
             f.write(self.ID)
-        
+
         # if clobber=True, then remove all old local and
         # memory files
         if clobber == True:
@@ -44,12 +40,6 @@ class synthe(object):
                     os.stat(lf)
                 except OSError:
                     os.unlink(lf)
-            
-        # Set up exec directory and data directory
-        HOMEDIR = os.path.expandvars("$HOME")
-        self.exedir = HOMEDIR+"/FAL/PYTHON/bin/"
-        self.datadir = HOMEDIR+"/FAL/PYTHON/data/"
-        self.moldatadir = '/work/02349/cargilpa/FAL/DATA/MOLECULES/'
 
         # define if writes to /dev/null or StdOUT
         if verbose == True:
@@ -58,155 +48,35 @@ class synthe(object):
             self.FNULL = open(os.devnull, 'w')
         else:
             raise ValueError('Do not understand verbose flag')
-            
-        # copy input line list and model atm into memory
-        # then set up symbolic links
 
-        # LINELIST ->
-
-        # RLINE MEANS TO RUN A NEW LINE LIST, NOT PUNCH500
-        if rline:
-            self.molefiles = ([
-                'alopatrascu.asc', # AlO
-                'nah.dat', # NaH
-                'voax.asc','vobx.asc','vocx.asc', # VO
-                'fehfx.dat', # FeH
-                'h2bx.dat','h2cx.dat','h2xx.dat', # H2
-                'hdxx.dat', #HD
-                'mgh.dat', #MgH
-                'mgodaily.dat', #MgO
-                'nhax.dat','nhca.dat', # NH
-                'chjorg.dat', #CH
-                # 'cnaxbrooke.dat','cnbxbrooke.dat','cnxx12brooke.dat', # CN
-                'cnax.dat','cnbx.dat', #CN
-                'c2ax.dat','c2ba.dat','c2da.dat','c2ea.dat', #C2
-                'coax.dat','coxx.dat', # CO
-                # 'ohax.dat','ohxx.dat', # OH
-                'ohaxupdate.asc','ohxxgoldman.asc',# OH
-                'sihax.dat', # SiH
-                'sioax.dat','sioex.dat','sioxx.dat', #SiO
-                'crhax.dat', # CrH
-                'cah.dat', # CaH
-                ])
-
-            self.rline = True
-            self.savetomem = False
-            if self.savetomem:
-                if "atoms" in rlinedict.keys():
-                    # RLINE ATOMIC LINE LIST FILE
-                    src1ll = '/work/02349/cargilpa/FAL/DATA/gfall25jul15.dat'
-                    src2ll = '/dev/shm/FAL/{0}/gfall25jul15.dat'.format(self.ID)
-                    distll = '/dev/shm/FAL/{0}/atomicll.dat'.format(self.ID)
-
-                    if os.path.exists(src2ll):
-                        if filecmp.cmp(src1ll,src2ll):
-                            # print('... using old {0}'.format(src2ll))
-                            pass
-                        else:
-                            # print('... copying {0}'.format(src1ll))
-                            self._fastcopy(src1ll,src2ll)
-                    else:
-                        # print('... copying {0}'.format(src1ll))
-                        self._fastcopy(src1ll,src2ll)
-
-                    self._fastcopy(src2ll,distll)
-                    self.atomiclinelist = distll
-
-                if "moles" in rlinedict.keys():
-                    # COPY THE MOLECULE FILES INTO MEMORY
-                    for molf in self.molefiles:
-                        srcpath = self.moldatadir+'{0}'.format(molf)
-                        dstpath = '/dev/shm/FAL/{0}/{1}'.format(self.ID,molf)
-                    
-                        if os.path.isfile(dstpath):
-                            if filecmp.cmp(srcpath,dstpath):
-                                # print('... using old {0}'.format(dstpath))
-                                pass
-                            else:   
-                                # print('... copying {0}'.format(srcpath))
-                                self._fastcopy(srcpath,dstpath)
-                        else:
-                            # print('... copying {0}'.format(srcpath))
-                            self._fastcopy(srcpath,dstpath)
-                if "TiO" in rlinedict.keys():
-                    # COPY THE TiO FILES INTO MEMORY
-                    molefiles = (['schwenke.bin','eschwenke.bin'])
-                    for molf in molefiles:
-                        srcpath = self.moldatadir+'{0}'.format(molf)
-                        dstpath = '/dev/shm/FAL/{0}/{1}'.format(self.ID,molf)
-                        if os.path.isfile(dstpath):
-                            if filecmp.cmp(srcpath,dstpath):
-                                # print('... using old {0}'.format(dstpath))
-                                pass
-                            else:
-                                # print('... copying {0}'.format(srcpath))
-                                self._fastcopy(srcpath,dstpath)
-                        else:
-                            # print('... copying {0}'.format(srcpath))
-                            self._fastcopy(srcpath,dstpath)
-                if "H2O" in rlinedict.keys():
-                    # COPY THE H2O FILES INTO MEMORY
-                    molefiles = (['h2oslowfix.bin','eh2opartridge.bin'])
-                    for molf in molefiles:
-                        srcpath = self.moldatadir+'{0}'.format(molf)
-                        dstpath = '/dev/shm/FAL/{0}/{1}'.format(self.ID,molf)
-                        if os.path.isfile(dstpath):
-                            if filecmp.cmp(srcpath,dstpath):
-                                # print('... using old {0}'.format(dstpath))
-                                pass
-                            else:
-                                # print('... copying {0}'.format(srcpath))
-                                self._fastcopy(srcpath,dstpath)
-                        else:
-                            # print('... copying {0}'.format(srcpath))
-                            self._fastcopy(srcpath,dstpath)
+        if starpars = None:
+            self.starpars = {}
+            self.starpars['VROT'] = -2.02
+            self.starpars['MACVEL'] = 1.5
+            self.starpars['OBJECT'] = 'Sun'
         else:
-            if LL:
-                self.linelist = '/dev/shm/FAL/{0}/ll.dat'.format(self.ID)
-            else:
-                try:
-                    os.remove('/dev/shm/FAL/{0}/ll.dat'.format(self.ID))
-                except OSError:
-                    pass
-                if rlinedict["ll"] == 'punch500':
-                    # BOB's FULL PUNCH500 FILE
-                    self._fastcopy(self.datadir+'punch500_new.del','/dev/shm/FAL/{0}/ll.dat'.format(self.ID))
-                    # Bob's PUNCH500A FILE
-                    # self._fastcopy(self.datadir+'punch500a.del','/dev/shm/FAL/ll.dat_{0}'.format(self.ID)) 
-                    # BOB's PUNCH500B FILE
-                    # self._fastcopy(self.datadir+'punch500b.del','/dev/shm/FAL/ll.dat_{0}'.format(self.ID))
-                    # BOB's PUNCH500C FILE
-                    # self._fastcopy(self.datadir+'punch500c.del','/dev/shm/FAL/ll.dat_{0}'.format(self.ID))
-                    self.linelist = '/dev/shm/FAL/{0}/ll.dat'.format(self.ID)
-                elif rlinedict['ll'] == 'master':
-                    pass
-                else:
-                    self.linelist = '/dev/shm/FAL/{0}/ll.dat'.format(self.ID)
+            self.starpars = starpars
 
-        # MOD ATM ->
-        try:
-            os.remove('/dev/shm/FAL/{0}/mod.dat'.format(self.ID))
-        except OSError:
-            pass
-        if self.arct_bool:
-            # print('Using Arcturus model Atmosphere')
-            # BOB's ARCTURUS MODEL ATM
-            # self._fastcopy(self.datadir+'Arcturus_OLDpars.dat','/dev/shm/FAL/{0}/mod.dat'.format(self.ID))
-            # self._fastcopy(self.datadir+'Arcturus_NEWpars.dat','/dev/shm/FAL/{0}/mod.dat'.format(self.ID))
-            # self._fastcopy(self.datadir+'Arcturus_NEWpars_V2.dat','/dev/shm/FAL/{0}/mod.dat'.format(self.ID))
-            # self._fastcopy(self.datadir+'Arcturus_NEWpars_V3.dat','/dev/shm/FAL/{0}/mod.dat'.format(self.ID))
-            self._fastcopy(self.datadir+'Arcturus_NEWpars_V4.dat','/dev/shm/FAL/{0}/mod.dat'.format(self.ID))
-        else:
-            # BOB's SOL MODEL ATM
-            self._fastcopy(self.datadir+'modcaspf.dat','/dev/shm/FAL/{0}/mod.dat'.format(self.ID))
+        # Set up exec directory and data directory
+        self.HOMEDIR = os.path.expandvars("$HOME")
+        self.WORKDIR = os.path.expandvars("$WORK")
+        self.exedir = HOMEDIR+"/FAL/PYTHON/bin/"
+        self.datadir = HOMEDIR+"/FAL/PYTHON/data/"
+        self.bigdatadir = WORKDIR+"/FAL/DATA/"
 
-        # SET ALL MICROTURB VALUES TO 1.5 km/s
-        # self._fastcopy(self.datadir+'modcaspf_vt15.dat','/dev/shm/FAL/{0}/mod.dat'.format(self.ID))
-        # ORIGINAL MODEL ATM
-        # self._fastcopy(self.datadir+'ksolmod_syn.dat','/dev/shm/FAL/mod.dat_{0}'.format(self.ID))
 
+        # Call selmod to set model atm and other star specific parameters
+        (self.synbegvar,self.instparstr,self.modatm) = selmod(self.starpars)
+
+        # move mod atm into memory
+        self._fastcopy(self.modatm,'/dev/shm/FAL/{0}/mod.dat'.format(self.ID))
         self.atmomod = '/dev/shm/FAL/{0}/mod.dat'.format(self.ID)
-        
+
+        # set up some useful strings
+        self.rotatevar = ("    1\n{VROT:4.3f}")
+        self.macpar = "MACRO     {MACVEL:3.1f}       KM                  COMMENT FIELD"
+
+        # move some static files into memory
         # MOLECULES
         try:
             os.remove('/dev/shm/FAL/{0}/molecules.dat'.format(self.ID))
@@ -214,8 +84,6 @@ class synthe(object):
             pass
         # BOB's MOLECULES FILE
         self._fastcopy(self.datadir+'molecules.dat','/dev/shm/FAL/{0}/molecules.dat'.format(self.ID))
-        # ORIGINAL MOLECULES FILE
-        # self._fastcopy(self.datadir+'molecules.dat_OLD','/dev/shm/FAL/molecules.dat_{0}'.format(self.ID))
         self.molecules = '/dev/shm/FAL/{0}/molecules.dat'.format(self.ID)
         
         # CONTINUA
@@ -225,8 +93,6 @@ class synthe(object):
             pass
         # BOB's CONTINUA FILE
         self._fastcopy(self.datadir+'continua.dat','/dev/shm/FAL/{0}/continua.dat'.format(self.ID))
-        # ORIGINAL CONTINUA FILE
-        # self._fastcopy(self.datadir+'continua.dat_OLD','/dev/shm/FAL/continua.dat_{0}'.format(self.ID))
         self.continua = '/dev/shm/FAL/{0}/continua.dat'.format(self.ID)
         
         # He1Tables
@@ -242,183 +108,8 @@ class synthe(object):
             os.remove('/dev/shm/FAL/{0}/spectrv.input'.format(self.ID))
         except OSError:
             pass
-        self._fastcopy(self.datadir+'spectrv.input','/dev/shm/FAL/{0}/spectrv.input'.format(self.ID))
+        self._fastcopy(self.datadir+'spectrv_std.input','/dev/shm/FAL/{0}/spectrv.input'.format(self.ID))
         self.spectrvin = '/dev/shm/FAL/{0}/spectrv.input'.format(self.ID)
-        
-        # Define variables
-        if self.arct_bool:
-            # print('Using Arcturus model paramters')
-
-            # self.synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
-            #     "0.          0   {LINOUT:3.0f}  {TOL:7.5f}     {PRED}    00\n"
-            #     "AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF  IFPREDNREAD")
-            self.synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
-                "0.          0   {LINOUT:3.0f}{TOL:7.5f}     {PRED}    00\n"
-                "AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD")
-
-
-            self.rotatevar = ("    1\n{VROT:4.3f}")
-
-            self.macpar = "MACRO     {MACVEL:3.1f}       KM                  COMMENT FIELD"
-
-            self.gausspar_opt = ("GAUSSIAN  130000.   RESOLUTION\n"
-                             "1234567890123456789012345678901234567890")
-
-            self.gausspar_hband = ("GAUSSIAN  130000.   RESOLUTION\n"
-                             "1234567890123456789012345678901234567890")
-
-        else:
-
-            self.synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
-                "0.          0   {LINOUT:3.0f}{TOL:7.5f}     {PRED}    72\n"
-                "AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD\n"
-                "  1           -0.000\n"
-                "  2           -0.000\n"
-                "  3           -0.000\n"
-                "  4           -0.000\n"
-                "  5           -0.000\n"
-                "  6           -0.000\n"
-                "  7           -0.000\n"
-                "  8           -0.000\n"
-                "  9           -0.000\n"
-                " 10           -0.000\n"
-                " 11           -0.000\n"
-                " 12           -0.000\n"
-                " 13           -0.000\n"
-                " 14           -0.000\n"
-                " 15           -0.000\n"
-                " 16           -0.000\n"
-                " 17           -0.000\n"
-                " 18           -0.000\n"
-                " 19           -0.000\n"
-                " 20           -0.000\n"
-                " 21           -0.000\n"
-                " 22           -0.000\n"
-                " 23           -0.000\n"
-                " 24           -0.000\n"
-                " 25           -0.000\n"
-                " 26           -0.000\n"
-                " 27           -0.000\n"
-                " 28           -0.000\n"
-                " 29           -0.000\n"
-                " 30           -0.000\n"
-                " 31           -0.000\n"
-                " 32           -0.000\n"
-                " 33           -0.000\n"
-                " 34           -0.000\n"
-                " 35           -0.000\n"
-                " 36           -0.000\n"
-                " 37           -0.000\n"
-                " 38           -0.000\n"
-                " 39           -0.000\n"
-                " 40           -0.000\n"
-                " 41           -0.000\n"
-                " 42           -0.000\n"
-                " 43           -0.000\n"
-                " 44           -0.000\n"
-                " 45           -0.000\n"
-                " 46           -0.000\n"
-                " 47           -0.000\n"
-                " 48           -0.000\n"
-                " 49           -0.005\n"
-                " 50           -0.036\n"
-                " 51           -0.173\n"
-                " 52           -0.355\n"
-                " 53           -0.456\n"
-                " 54           -0.562\n"
-                " 55           -0.679\n"
-                " 56           -0.804\n"
-                " 57           -0.930\n"
-                " 58           -1.070\n"
-                " 59           -1.152\n"
-                " 60           -1.228\n"
-                " 61           -1.274\n"
-                " 62           -1.316\n"
-                " 63           -1.356\n"
-                " 64           -1.398\n"
-                " 65           -1.451\n"
-                " 66           -1.485\n"
-                " 67           -1.519\n"
-                " 68           -1.545\n"
-                " 69           -1.579\n"
-                " 70           -1.615\n"
-                " 71           -1.662\n"
-                " 72           -1.662")
-
-            self.rotatevar = ("    1\n{VROT:4.3f}")
-
-            self.macpar = "MACRO     {MACVEL:3.1f}       KM                  COMMENT FIELD"
-
-            self.sincpar_opt = ("SINX/X    .047628472CM-1      .047628472   COMMENT FIELD\n"
-                            "1234567890123456789012345678901234567890")
-
-            self.gausspar_opt = ("GAUSSIAN  .071442708CM-1      .071442708   COMMENT FIELD\n"
-                             "1234567890123456789012345678901234567890")
-
-            self.sincpar_hband = ("SINX/X    .008140581CM-1      .008140581   COMMENT FIELD\n"
-                            "1234567896012345678960123456789601234567890")
-
-            self.gausspar_hband = ("GAUSSIAN  .012210871CM-1      .012210871   COMMENT FIELD\n"
-                             "123456789012345678960123456789601234567890")
-
-    def __call__(self,indict):
-        """
-        Function to allow a call to the class to run everything in order
-        """
-        # start a timer
-        start_time = time.time()
-        print('START CODE')
-        self.synbeg(indict,verbose=False)
-        synbeg_t = time.time()-start_time
-        print(synbeg_t,synbeg_t)
-        
-        if self.rline == True:
-            rlinedict = {}
-            rlinedict['atoms'] = True
-            rlinedict['moles'] = True
-            rlinedict['TiO'] = True
-            rlinedict['H2O'] = True
-            rlinedict['predict'] = True
-            rtype = 'rline'
-        else:
-            rlinedict = {}
-            rtype = 'punch500'
-
-        self.readlines(rtype=rtype,rlinedict=rlinedict,verbose=False,reuse_ll=True)
-        readlines_t = time.time()-start_time
-        print(readlines_t,readlines_t-synbeg_t)
-
-        self.xnfpelsyn(verbose=False)
-        xnfpelsyn_t = time.time()-start_time
-        print(xnfpelsyn_t,xnfpelsyn_t-readlines_t)
-
-        self.syn(verbose=False)
-        synthe_t = time.time()-start_time
-        print(synthe_t,synthe_t-xnfpelsyn_t)
-
-        self.spectrv(verbose=False)
-        spectrv_t = time.time()-start_time
-        print(spectrv_t,spectrv_t-synthe_t)
-
-        self.rotate(indict,verbose=False)
-        rotate_t = time.time()-start_time
-        print(rotate_t,rotate_t-spectrv_t)        
-
-        """
-        self.cleandir()
-        cleandir_t = time.time()-start_time
-        print(cleandir_t,cleandir_t-rotate_t)
-        """
-
-        self.broaden('ROT1',indict,broadtype='MAC')
-        brdmac_t = time.time()-start_time
-        # print(brdmac_t,brdmac_t-cleandir_t)
-
-        self.broaden('ROT1_mac',indict,broadtype='INSTRUMENT')
-        brdins_t = time.time()-start_time
-        print(brdins_t,brdins_t-brdmac_t)
-
-        print('END CODE')       
 
     def __delete_(self):
         pass
@@ -608,16 +299,28 @@ class synthe(object):
             fort.93 (bin)
         """
         # read in information from input dictionary
-        WSTART = indict['WSTART']
-        WEND = indict['WEND']
-        RESOL = indict['RESOL']
-        PRED = indict['PRED']
-        if 'LINOUT' in indict.keys():
-            LINOUT = indict['LINOUT']
+        WSTART = self.starpars['WSTART']
+        WEND = self.starpars['WEND']
+        if 'RESOL' in self.starpars.keys():
+            RESOL = self.starpars['RESOL']
+        else:
+            RESOL = 3000000.0
+        if 'PRED' in self.starpars.keys():
+            PRED = self.starpars['PRED']
+        else:
+            PRED = 1
+        if 'LINOUT' in self.starpars.keys():
+            LINOUT = self.starpars['LINOUT']
         else:
             LINOUT = 10
-        TOL = 1e-3
-        # TOL = 0.0
+        if 'TOL' in self.starpars.keys():
+            TOL = self.starpars['TOL']
+        else:
+            TOL = 1e-3
+        if 'OUTRES' in self.starpars.keys():
+            OUTRES = self.starpars['OUTRES']
+        else:
+            OUTRES = None
         
         # remove any extant RUNINFO.dat
         try:
@@ -642,39 +345,27 @@ class synthe(object):
         # write in information into input string
         if verbose:
             print("Running SynBeg")
-        synbegvar_i = self.synbegvar.format(WSTART=WSTART,WEND=WEND,RESOL=RESOL,PRED=PRED,TOL=TOL,LINOUT=LINOUT)
+        synbegvar_i = self.synbegvar.format(WSTART=WSTART,WEND=WEND,RESOL=RESOL,PRED=PRED,TOL=TOL,LINOUT=LINOUT,OUTRES=OUTRES)
         self.synbegout = self._callpro("synbeg",synbegvar_i,verbose=verbose)
         if verbose:
             print("Finished SynBeg")
 
-        # make copy of files in INT directory so that everything can be restarted fresh
-        if not os.path.exists('/dev/shm/FAL/{0}/INT'.format(self.ID)):
-            os.makedirs('/dev/shm/FAL/{0}/INT'.format(self.ID))
-        fortlist = glob.glob('fort.*')
-        for ft in fortlist:
-            self._fastcopy('/dev/shm/FAL/{0}/{1}'.format(self.ID,ft),
-                           '/dev/shm/FAL/{0}/INT/{1}'.format(self.ID,ft))
-
         return (self.synbegout,self.ID)
 
-    def readlines(self,rtype=None,rlinedict={},verbose=None,reuse_ll=True):
+    def readlines(self,rtype=None,verbose=None):
         """
         function that determines if you should use a punch500 or 
         read in all the individual lines
-        
-        rtype = None defaults to using the punch500_new.del file
-              = 'punch500' -> punch500_new.del
-              = 'rline' -> read in all of the lines
         """
 
-        if (rtype == None or rtype == "readold"):
-            self.rgfalldel(verbose=verbose,reuse_ll=reuse_ll)
+        if (rtype == "readlast"):
+            self.rgfalldel(verbose=verbose,reuse_ll=True)
         elif (rtype == 'readmaster'):
-            self.rmaster(rlinedict['MASTERLL'],verbose=verbose)
+            self.rmaster(verbose=verbose)
         elif (rtype == 'readall'):
             self.rlinefunc(rlinedict,verbose=verbose)
         else:
-            raise IOError('Did not understand read line type rtype={0}'.format(rtype))
+            self.rgfalldel(verbose=verbose,reuse_ll=False,userll=rtype)
 
     def rmaster(self,MASTERLL=None,MASTERMOLLL=None,verbose=None):
         """
@@ -719,27 +410,13 @@ class synthe(object):
         # run read master list program
         self.rmasterout = self._callpro("rpunchbin",verbose=verbose)
 
-
-        # # check to make sure all input/output files are right
-        # filesdict = {}
-        # filesdict['infiles'] = {'fort.11':'bin'}
-        # filesdict['writeto'] = ({'fort.12':'bin','fort.14':'bin','fort.19':'bin',
-        #                           'fort.20':'bin','fort.93':'bin'})
-        # filesdict['newfiles'] = {}
-        # try:
-        #     assert self._fileprep(filesdict) == None
-        #     pass
-        # except AssertionError:
-        #     raise IOError("Something wrong with Input/Output files")
-
-
         # move fort.14 to fort.99 and clean up
         self._mvsym('fort.14','fort.99')
         
         return (self.rmasterout,self.ID)
 
 
-    def rgfalldel(self,verbose=None,reuse_ll=False):
+    def rgfalldel(self,verbose=None,reuse_ll=True,userll=None):
         """
         Run RMOLECASC codes
         
@@ -762,7 +439,7 @@ class synthe(object):
             # write line list into fort.11
             if os.path.isfile("fort.11"):
                 self._rmsym('fort.11',verbose=verbose)
-            self._makesym(self.linelist,'fort.11')
+            self._makesym(userll,'fort.11')
         
         # check to make sure all input/output files are right
         filesdict = {}
@@ -806,26 +483,28 @@ class synthe(object):
             pass
         try:
             if rlinedict['moles']==True:
-                # molefiles = ([
-                #         'alopatrascu.asc', # AlO
-                #         'nah.dat', # NaH
-                #         'voax.asc','vobx.asc','vocx.asc', # VO
-                #         'fehfx.dat', # FeH
-                #         'h2bx.dat','h2cx.dat','h2xx.dat', # H2
-                #         'hdxx.dat', #HD
-                #         'mgh.dat', #MgH
-                #         'mgodaily.dat', #MgO
-                #         'nhax.dat','nhca.dat', # NH
-                #         'chjorg.dat', #CH
-                #         'cnaxbrooke.dat','cnbxbrooke.dat','cnxx12brooke.dat', # CN
-                #         'c2ax.dat','c2ba.dat','c2da.dat','c2ea.dat', #C2
-                #         'coax.dat','coxx.dat', # CO
-                #         'ohax.dat','ohxx.dat', # OH
-                #         'sihax.dat', # SiH
-                #         'sioax.dat','sioex.dat','sioxx.dat', #SiO
-                #         'crhax.dat', # CrH
-                #         'cah.dat', # CaH
-                #     ])
+                self.molefiles = ([
+                    'alopatrascu.asc', # AlO
+                    'nah.dat', # NaH
+                    'voax.asc','vobx.asc','vocx.asc', # VO
+                    'fehfx.dat', # FeH
+                    'h2bx.dat','h2cx.dat','h2xx.dat', # H2
+                    'hdxx.dat', #HD
+                    'mgh.dat', #MgH
+                    'mgodaily.dat', #MgO
+                    'nhax.dat','nhca.dat', # NH
+                    'chjorg.dat', #CH
+                    # 'cnaxbrooke.dat','cnbxbrooke.dat','cnxx12brooke.dat', # CN
+                    'cnax.dat','cnbx.dat', #CN
+                    'c2ax.dat','c2ba.dat','c2da.dat','c2ea.dat', #C2
+                    'coax.dat','coxx.dat', # CO
+                    # 'ohax.dat','ohxx.dat', # OH
+                    'ohaxupdate.asc','ohxxgoldman.asc',# OH
+                    'sihax.dat', # SiH
+                    'sioax.dat','sioex.dat','sioxx.dat', #SiO
+                    'crhax.dat', # CrH
+                    'cah.dat', # CaH
+                    ])
                 # read molecular files
                 self.rmolecascout = {}
                 [self.readmol(mf,verbose=verbose) for mf in self.molefiles]
@@ -879,22 +558,15 @@ class synthe(object):
         # write TiO line list files into fort.11 and fort.48
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
-        if self.savetomem:
-            self._makesym('/dev/shm/FAL/{0}/schwenke.bin'.format(self.ID),'fort.11')
-        else:
-            os.symlink(self.moldatadir+'schwenke.bin','fort.11')
-            os.symlink(self.moldatadir+'schwenke.bin','/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
+        os.symlink(self.bigdatadir+'schwenke.bin','fort.11')
+        os.symlink(self.bigdatadir+'schwenke.bin','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+
         if os.path.isfile("fort.48"):
             self._rmsym('fort.48',verbose=verbose)
-        if self.savetomem:
-            self._makesym('/dev/shm/FAL/{0}/eschwenke.bin'.format(self.ID),'fort.48')
-        else:
-            os.symlink(self.moldatadir+'eschwenke.bin','fort.48')
-            os.symlink(self.moldatadir+'eschwenke.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
+        os.symlink(self.bigdatadir+'eschwenke.bin','fort.48')
+        os.symlink(self.bigdatadir+'eschwenke.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
 
-        # print("Running RSchwenk on TiO")
         self.rmoleout_tio = self._callpro("rschwenk",verbose=verbose)
-        # print("Finished RSchwenk")
 
         if os.path.isfile("fort.48"):
             os.unlink('fort.48')
@@ -907,21 +579,15 @@ class synthe(object):
         """
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
-        if self.savetomem:
-            self._makesym('/dev/shm/FAL/{0}/h2oslowfix.bin'.format(self.ID),'fort.11')
-        else:
-            os.symlink(self.moldatadir+'h2oslowfix.bin','fort.11')
-            os.symlink(self.moldatadir+'h2oslowfix.bin','/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
+        os.symlink(self.bigdatadir+'h2oslowfix.bin','fort.11')
+        os.symlink(self.bigdatadir+'h2oslowfix.bin','/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
+
         if os.path.isfile("fort.48"):
             self._rmsym('fort.48',verbose=verbose)
-        if self.savetomem:
-            self._makesym('/dev/shm/FAL/{0}/eh2opartridge.bin'.format(self.ID),'fort.48')
-        else:
-            os.symlink(self.moldatadir+'eh2opartridge.bin','fort.48')
-            os.symlink(self.moldatadir+'eh2opartridge.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
-        # print("Running RH2OFast on H2O")
+        os.symlink(self.bigdatadir+'eh2opartridge.bin','fort.48')
+        os.symlink(self.bigdatadir+'eh2opartridge.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
+
         self.rmoleout_h2o = self._callpro("rh2oslow",verbose=verbose)
-        # print("Finished RH2OFast")
 
         if os.path.isfile("fort.48"):
             os.unlink('fort.48')
@@ -935,11 +601,8 @@ class synthe(object):
         # write molfile line list into fort.11
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
-        if self.savetomem:
-            self._makesym('/dev/shm/FAL/{0}/{1}'.format(self.ID,molfile),'fort.11')
-        else:
-            os.symlink(self.moldatadir+'{0}'.format(molfile),'fort.11')
-            os.symlink(self.moldatadir+'{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
+        os.symlink(self.bigdatadir+'{0}'.format(molfile),'fort.11')
+        os.symlink(self.bigdatadir+'{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
         
         # check to make sure all input/output files are right
         filesdict = {}
@@ -967,11 +630,10 @@ class synthe(object):
             self._rmsym('fort.11',verbose=verbose)
 
         # Predicted lines file is gigantic, so don't copy into memory just sym link it
-        # os.symlink('/work/02349/cargilpa/FAL/DATA/gfpred29dec2014.bin','fort.11')
-        os.symlink('/work/02349/cargilpa/FAL/DATA/gfpred27sep15.bin','fort.11')
-        # print("Running RPredict")
+        if os.path.isfile("fort.11"):
+            self._rmsym('fort.11',verbose=verbose)
+        os.symlink(self.bigdatadir+'/gfpred27sep15.bin','fort.11')
         self.rmoleout = self._callpro("rpredict",verbose=verbose)
-        # print("Finished RPredict")
 
     def ratomic(self,verbose=None):
         """
@@ -980,11 +642,8 @@ class synthe(object):
         # write atomic line list into fort.11
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
-        if self.savetomem:
-            self._makesym(self.atomiclinelist,'fort.11')
-        else:            
-            os.symlink('/work/02349/cargilpa/FAL/DATA/gfall25jul15.dat','fort.11')
-            os.symlink('/work/02349/cargilpa/FAL/DATA/gfall25jul15.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        os.symlink(self.bigdatadir+'/gfall25jul15.dat','fort.11')
+        os.symlink(self.bigdatadir+'/gfall25jul15.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
 
         # check to make sure all input/output files are right
         filesdict = {}
@@ -1316,55 +975,29 @@ class synthe(object):
     def transmit(self):
         pass
 
-    def writespec(self,inspec,local=False,verbose=None):
+    def writespec(self,inspec,verbose=None):
         """
         Function to write out binary spectrum to ascii
         """
         
-        # mv input file into fort.21
-        try:
-            os.remove('/dev/shm/FAL/fort.1_'+self.ID)
-        except OSError:
-            pass
-        try:
-            os.remove('fort.1_'+self.ID)
-        except OSError:
-            pass
+        # remove any old ascii output files
+        outfiles = ['headinfo.dat','lineinfo.dat','specfile.dat']
+        for ofile in outfiles:
+            try:
+                os.remove(ofile)
+            except OSError:
+                pass
 
-        try:
-            os.remove('/dev/shm/FAL/fort.2_'+self.ID)
-        except OSError:
-            pass
-        try:
-            os.remove('fort.2_'+self.ID)
-        except OSError:
-            pass
-
-        try:
-            os.remove('/dev/shm/FAL/fort.3_'+self.ID)
-        except OSError:
-            pass
-        try:
-            os.remove('fort.3_'+self.ID)
-        except OSError:
-            pass
-
-        try:
-            os.remove('/dev/shm/FAL/fort.4_'+self.ID)
-        except OSError:
-            pass
-        try:
-            os.remove('fort.4_'+self.ID)
-        except OSError:
-            pass
-
-        self._makesym('/dev/shm/FAL/'+inspec+'_'+self.ID,'fort.1_'+self.ID)
+        # remove any old fort.1 and copy binary file to fort.1
+        if os.path.exists('fort.1'):
+            os.unlink('fort.1')
+        shutil.copy(inspec,'fort.1')
 
         # check to make sure all input/output files are right
         filesdict = {}
         filesdict['infiles'] = {'fort.1':'bin'}
         filesdict['writeto'] = {}
-        filesdict['newfiles'] = {'fort.2':'ascii','fort.3':'ascii','fort.4':'ascii'}
+        filesdict['newfiles'] = {}
 
         try:
             assert self._fileprep(filesdict) == None
@@ -1372,22 +1005,23 @@ class synthe(object):
         except AssertionError:
             raise IOError("Something wrong with Input/Output files")
 
-        print('Writing Spectrum {0} ...'.format(inspec+'_'+self.ID))
         self.writespecout = self._callpro('syntoascanga',verbose=verbose)
-        self._mvsym('fort.2_'+self.ID,'spec_'+inspec+'_'+self.ID+'.asc') 
-        self._mvsym('fort.3_'+self.ID,'line_'+inspec+'_'+self.ID+'.asc')
-        self._mvsym('fort.4_'+self.ID,'head_'+inspec+'_'+self.ID+'.asc')
 
-        if local:
-            subprocess.check_call(
-                'mv /dev/shm/FAL/spec_'+inspec+'_'+self.ID+'.asc ./spec_'+inspec+'_'+self.ID+'.asc',shell=True)
-            subprocess.check_call(
-                'mv /dev/shm/FAL/head_'+inspec+'_'+self.ID+'.asc ./head_'+inspec+'_'+self.ID+'.asc',shell=True)
-            subprocess.check_call(
-                'mv /dev/shm/FAL/line_'+inspec+'_'+self.ID+'.asc ./line_'+inspec+'_'+self.ID+'.asc',shell=True)
         
     def at12tosyn(self):
         pass
+
+    def archive(self):
+        """
+        Archive Button
+        """
+        # make copy of files in INT directory so that everything can be restarted fresh
+        if not os.path.exists('/dev/shm/FAL/{0}/INT'.format(self.ID)):
+            os.makedirs('/dev/shm/FAL/{0}/INT'.format(self.ID))
+        fortlist = ['fort.11','fort.10','fort.12','fort.14','fort.19','fort.20','fort.93']
+        for ft in fortlist:
+            self._fastcopy('/dev/shm/FAL/{0}/{1}'.format(self.ID,ft),
+                           '/dev/shm/FAL/{0}/INT/{1}'.format(self.ID,ft))
 
     def reset(self):
         """
@@ -1395,23 +1029,18 @@ class synthe(object):
         """
         # remove all all old files except fort.11
         fortlist = glob.glob('fort.*') + glob.glob('ROT*')
-        if 'fort.11' in fortlist:
-            fortlist.remove('fort.11')
-
         for ft in fortlist:
             self._rmsym(ft)
 
-        ## remove any ascii output files
-        # outfiles = ['headinfo.dat','lineinfo.dat','specfile.dat']
-        # for ofile in outfiles:
-        #   os.remove(ofile)
-
         # copy files for INT back into memory and link them
-        fortlist = ['fort.10','fort.12','fort.14','fort.19','fort.20','fort.93']
+        fortlist = ['fort.11','fort.10','fort.12','fort.14','fort.19','fort.20','fort.93']
         for ft in fortlist:
             self._fastcopy('/dev/shm/FAL/{0}/INT/{1}'.format(self.ID,ft),
                 '/dev/shm/FAL/{0}/{1}'.format(self.ID,ft))
             os.symlink('/dev/shm/FAL/{0}/{1}'.format(self.ID,ft),ft)
+
+
+
 
     @property
     def atmomod(self):
