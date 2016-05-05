@@ -84,7 +84,7 @@ subroutine readoutspecbin(&
   character(kind=c_char,len=1),   intent(out) :: OTHER1in(11,NLINESi)
   character(kind=c_char,len=1),   intent(out) :: OTHER2in(11,NLINESi)
   integer(c_int), intent(out) :: ISOSHIFTin(NLINESi)
-  integer(c_double), intent(out) :: NELIONin(NLINESi)
+  integer(c_int), intent(out) :: NELIONin(NLINESi)
   real(c_double), intent(out) :: RESIDin(NLINESi)
 
   REAL*8 TEFF,GLOG,TITLE(74),WBEGIN,RESOLU,WLEDGE,RATIO,SWL
