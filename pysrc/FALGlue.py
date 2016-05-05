@@ -145,7 +145,7 @@ class glue(object):
 		OTHER1in   = np.zeros((NLINES,11),dtype='str')
 		OTHER2in   = np.zeros((NLINES,11),dtype='str')
 		ISOSHIFTin = np.zeros(NLINES,dtype='int')
-		NELIONin   = np.zeros(NLINES,dtype='double')
+		NELIONin   = np.zeros(NLINES,dtype='int')
 		RESIDin    = np.zeros(NLINES,dtype='double')
 
 
@@ -185,7 +185,7 @@ class glue(object):
 			OTHER1in.ctypes.data_as(c_char_p),  
 			OTHER2in.ctypes.data_as(c_char_p),  
 			ISOSHIFTin.ctypes.data_as(self.c_int_p),
-			NELIONin.ctypes.data_as(self.c_double_p),  
+			NELIONin.ctypes.data_as(self.c_int_p),  
 			RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
