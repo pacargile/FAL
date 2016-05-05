@@ -154,8 +154,10 @@ subroutine readoutspecbin(&
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A10)') LABEL(1)
-     SLABELin(I) = SLABEL//c_null_char
-     LABELin(1:11,I) = f_to_c_string(SLABEL)
+     SLABEL = SLABEL//c_null_char
+     DO J=1,len(SLABEL)
+      LABELin(J,I) = f_to_c_string(SLABEL(K:K))
+     END DO
      IF(I.EQ.1)THEN
       print *, SLABEL
       print *, SLABELin(I)
