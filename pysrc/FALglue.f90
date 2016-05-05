@@ -156,7 +156,7 @@ subroutine readoutspecbin(&
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABEL = SLABEL//c_null_char
      DO J=1,len(SLABEL)
-      LABELin(J,I) = f_to_c_string(SLABEL(K:K))
+      LABELin(J,I) = f_to_c_string(SLABEL(J:J))
      END DO
      IF(I.EQ.1)THEN
       print *, SLABEL
