@@ -172,7 +172,7 @@ subroutine readoutspecbin(&
      GWin(I) = GW
      DGAMMAWin(I) = DGAMMAW
      WAVENOin(I) = WAVENO
-     WRITE(SLABEL,'(A6)') REF(1)
+     WRITE(SLABEL,'(A10)') REF(1)
      SLABEL = SLABEL//c_null_char
      DO J=1,6
        REFin(J,I) = SLABEL(J:J)
