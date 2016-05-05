@@ -48,6 +48,7 @@ subroutine readoutspecbin(&
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
+  character(len=11) :: SLABEL
 
   integer(c_int), intent(in), value :: NWLi
   integer(c_int), intent(in), value :: NLINESi
@@ -64,7 +65,6 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
   character(kind=c_char,len=1),  intent(inout) :: LABELin(11,NLINESi)
-  character(len=11) :: SLABEL
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
   character(kind=c_char,len=1),   intent(out) :: LABELPin(11,NLINESi)
@@ -76,16 +76,16 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: DGAMMAWin(NLINESi)
   real(c_double), intent(out) :: WAVENOin(NLINESi)
   character(kind=c_char,len=1),   intent(out) :: REFin(6,NLINESi)
-  integer(c_int),    intent(out) :: NBLOin(NLINESi)
-  integer(c_int),    intent(out) :: NBUPin(NLINESi)
-  integer(c_int),    intent(out) :: ISO1in(NLINESi)
+  integer(c_int), intent(out) :: NBLOin(NLINESi)
+  integer(c_int), intent(out) :: NBUPin(NLINESi)
+  integer(c_int), intent(out) :: ISO1in(NLINESi)
   real(c_double), intent(out) :: X1in(NLINESi)
-  integer(c_int),    intent(out) :: ISO2in(NLINESi)
+  integer(c_int), intent(out) :: ISO2in(NLINESi)
   real(c_double), intent(out) :: X2in(NLINESi)
   character(kind=c_char,len=1),   intent(out) :: OTHER1in(11,NLINESi)
   character(kind=c_char,len=1),   intent(out) :: OTHER2in(11,NLINESi)
-  integer(c_int),    intent(out) :: ISOSHIFTin(NLINESi)
-  integer(c_int),    intent(out) :: NELIONin(NLINESi)
+  integer(c_int), intent(out) :: ISOSHIFTin(NLINESi)
+  integer(c_int), intent(out) :: NELIONin(NLINESi)
   real(c_double), intent(out) :: RESIDin(NLINESi)
 
   COMMON /LINDAT/WL,E,EP,LABEL(2),LABELP(2),OTHER1(2),OTHER2(2),&
