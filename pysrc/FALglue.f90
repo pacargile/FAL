@@ -41,7 +41,7 @@ subroutine readoutspecbin(&
   s, NWLi, NLINESi,&
   wli, qmu1i, qmu2i, &
   WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin,&
-  LABELin) bind(c, name='readoutspecbin')
+  LABELin,EPin,XJPin,LABELPin) bind(c, name='readoutspecbin')
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
@@ -105,9 +105,6 @@ subroutine readoutspecbin(&
   REAL*4 NBLO, NBUP, ISO1, ISO2, ISOSHIFT
   REAL*4 DWL,DGFLOG,DGAMMAR,DGAMMAS,DGAMMAW,EXTRA1,EXTRA2,EXTRA3,NELION
   REAL*4 ALINEC
-
-
-  ! character(len=1) :: REF,OTHER1(2),OTHER2(2)
 
   INTEGER IWL, NWL, I, NLINESO, J
 
