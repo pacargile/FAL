@@ -203,7 +203,7 @@ subroutine readoutspecbin(&
      END DO
      ISOSHIFTin(I) = INT(ISOSHIFT)
      print *, NELION
-     NELIONin(I) = INT(NELION)
+     NELIONin(I) = NELION
      RESIDin(I) = RESID
   END DO
 
