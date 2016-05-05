@@ -177,8 +177,8 @@ subroutine readoutspecbin(&
      DO J=1,6
        REFin(J,I) = SLABEL(J:J)
      END DO
-     NBLOin(I) = NBLO
-     NBUPin(I) = NBUP
+     NBLOin(I) = INTEGER(NBLO)
+     NBUPin(I) = INTEGER(NBUP)
      ISO1in(I) = ISO1
      X1in(I) = X1
      ISO2in(I) = ISO2
