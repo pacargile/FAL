@@ -62,7 +62,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: XJin(NLINESi)
   character(kind=c_char,len=1),  intent(inout) :: LABELin(11,NLINESi)
   ! TYPE(C_PTR), DIMENSION(NLINESi) :: LABELin
-  character(len=11), DIMENSION(NLINESi), TARGET :: SLABELin
+  character(len=*), DIMENSION(:), allocatable :: SLABELin
   character(len=11) :: SLABEL
 
   ! real(c_double), intent(out) :: EPin(NLINESi)
@@ -136,7 +136,10 @@ subroutine readoutspecbin(&
   F12.3,F5.1,1X,A8,A2,6F6.2,F11.3,&
   1X,A4,I2,I2,I3,F6.3,I3,F6.3,A8,A2,A8,A2,I6,I4,2X,f8.4)
 
-  
+  allocate(character(len=11) :: SLABELin(NLINESi))
+  call move_alloc(FROM=SLABELin,TO=LABELin)
+
+
 
   DO I=1,10!NLINESO
      READ(1)LINDAT8,LINDAT
@@ -155,12 +158,11 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABEL = SLABEL//c_null_char
-     DO J=1,11
-      LABELin(J,I) = SLABEL(J:J)
+     LABELin(I) = SLABEL
      END DO
      IF(I.EQ.1)THEN
       print *, SLABEL
-      print *, LABELin(:,J)
+      print *, LABELin(I)
      END IF
      ! EPin(I) = EP
      ! XJPin(I) = XJP
