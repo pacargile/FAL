@@ -135,15 +135,15 @@ class glue(object):
 		GWin       = np.zeros(NLINES,dtype='double')
 		DGAMMAWin  = np.zeros(NLINES,dtype='double')
 		WAVENOin   = np.zeros(NLINES,dtype='double')
-		REFin      = np.zeros(NLINES,dtype='str')
+		REFin      = np.zeros((NLINES,6),dtype='str')
 		NBLOin     = np.zeros(NLINES,dtype='int')
 		NBUPin     = np.zeros(NLINES,dtype='int')
 		ISO1in     = np.zeros(NLINES,dtype='int')
 		X1in       = np.zeros(NLINES,dtype='double')
 		ISO2in     = np.zeros(NLINES,dtype='int')
 		X2in       = np.zeros(NLINES,dtype='double')
-		OTHER1in   = np.zeros(NLINES,dtype='str')
-		OTHER2in   = np.zeros(NLINES,dtype='str')
+		OTHER1in   = np.zeros((NLINES,11),dtype='str')
+		OTHER2in   = np.zeros((NLINES,11),dtype='str')
 		ISOSHIFTin = np.zeros(NLINES,dtype='int')
 		NELIONin   = np.zeros(NLINES,dtype='int')
 		RESIDin    = np.zeros(NLINES,dtype='double')
@@ -168,25 +168,25 @@ class glue(object):
 			EPin.ctypes.data_as(self.c_double_p),      
 			XJPin.ctypes.data_as(self.c_double_p),     
 			LABELPin.ctypes.data_as(c_char_p),  
-			# GRin.ctypes.data_as(self.c_double_p),      
-			# DGAMMARin.ctypes.data_as(self.c_double_p), 
-			# GSin.ctypes.data_as(self.c_double_p),      
-			# DGAMMASin.ctypes.data_as(self.c_double_p), 
-			# GWin.ctypes.data_as(self.c_double_p),      
-			# DGAMMAWin.ctypes.data_as(self.c_double_p), 
-			# WAVENOin.ctypes.data_as(self.c_double_p),  
-			# REFin.ctypes.data_as(c_char_p),     
-			# NBLOin.ctypes.data_as(self.c_int_p),    
-			# NBUPin.ctypes.data_as(self.c_int_p),    
-			# ISO1in.ctypes.data_as(self.c_int_p),    
-			# X1in.ctypes.data_as(self.c_double_p),      
-			# ISO2in.ctypes.data_as(self.c_int_p),    
-			# X2in.ctypes.data_as(self.c_double_p),      
-			# OTHER1in.ctypes.data_as(c_char_p),  
-			# OTHER2in.ctypes.data_as(c_char_p),  
-			# ISOSHIFTin.ctypes.data_as(self.c_int_p),
-			# NELIONin.ctypes.data_as(self.c_int_p),  
-			# RESIDin.ctypes.data_as(self.c_double_p)  
+			GRin.ctypes.data_as(self.c_double_p),      
+			DGAMMARin.ctypes.data_as(self.c_double_p), 
+			GSin.ctypes.data_as(self.c_double_p),      
+			DGAMMASin.ctypes.data_as(self.c_double_p), 
+			GWin.ctypes.data_as(self.c_double_p),      
+			DGAMMAWin.ctypes.data_as(self.c_double_p), 
+			WAVENOin.ctypes.data_as(self.c_double_p),  
+			REFin.ctypes.data_as(c_char_p),     
+			NBLOin.ctypes.data_as(self.c_int_p),    
+			NBUPin.ctypes.data_as(self.c_int_p),    
+			ISO1in.ctypes.data_as(self.c_int_p),    
+			X1in.ctypes.data_as(self.c_double_p),      
+			ISO2in.ctypes.data_as(self.c_int_p),    
+			X2in.ctypes.data_as(self.c_double_p),      
+			OTHER1in.ctypes.data_as(c_char_p),  
+			OTHER2in.ctypes.data_as(c_char_p),  
+			ISOSHIFTin.ctypes.data_as(self.c_int_p),
+			NELIONin.ctypes.data_as(self.c_int_p),  
+			RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
 		# WL = np.trim_zeros(WL,trim='b')
@@ -213,15 +213,15 @@ class glue(object):
 		ll['GW']       = GWin    
 		ll['DGAMMAW']  = DGAMMAWin
 		ll['WAVENO']   = WAVENOin
-		ll['REF']      = REFin
+		ll['REF']      = np.array([''.join(REFin[i,:]) for i in range(NLINES)])
 		ll['NBLO']     = NBLOin
 		ll['NBUP']     = NBUPin
 		ll['ISO1']     = ISO1in
 		ll['X1']       = X1in    
 		ll['ISO2']     = ISO2in
 		ll['X2']       = X2in    
-		ll['OTHER1']   = OTHER1in
-		ll['OTHER2']   = OTHER2in
+		ll['OTHER1']   = np.array([''.join(OTHER1in[i,:]) for i in range(NLINES)])
+		ll['OTHER2']   = np.array([''.join(OTHER2in[i,:]) for i in range(NLINES)])
 		ll['ISOSHIFT'] = ISOSHIFTin
 		ll['NELION']   = NELIONin
 		ll['RESID']    = RESIDin

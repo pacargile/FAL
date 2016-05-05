@@ -41,7 +41,10 @@ subroutine readoutspecbin(&
   s, NWLi, NLINESi,&
   wli, qmu1i, qmu2i, &
   WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin,&
-  LABELin,EPin,XJPin,LABELPin) bind(c, name='readoutspecbin')
+  LABELin,EPin,XJPin,LABELPin,&
+  GRin,DGAMMARin,GSin,DGAMMASin,GWin,DGAMMAWin,&
+  WAVENOin,REFin,NBLO,NBUP,ISO1in,X1in,ISO2in,X2in,&
+  OTHER1in,OTHER2in,ISOSHIFTin,NELIONin,RESIDin) bind(c, name='readoutspecbin')
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
@@ -65,25 +68,25 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
   character(kind=c_char,len=1),   intent(out) :: LABELPin(11,NLINESi)
-  ! real(c_double), intent(out) :: GRin(NLINESi)
-  ! real(c_double), intent(out) :: DGAMMARin(NLINESi)
-  ! real(c_double), intent(out) :: GSin(NLINESi)
-  ! real(c_double), intent(out) :: DGAMMASin(NLINESi)
-  ! real(c_double), intent(out) :: GWin(NLINESi)
-  ! real(c_double), intent(out) :: DGAMMAWin(NLINESi)
-  ! real(c_double), intent(out) :: WAVENOin(NLINESi)
-  ! character(kind=c_char,len=1),   intent(out) :: REFin(NLINESi)
-  ! integer(c_int),    intent(out) :: NBLOin(NLINESi)
-  ! integer(c_int),    intent(out) :: NBUPin(NLINESi)
-  ! integer(c_int),    intent(out) :: ISO1in(NLINESi)
-  ! real(c_double), intent(out) :: X1in(NLINESi)
-  ! integer(c_int),    intent(out) :: ISO2in(NLINESi)
-  ! real(c_double), intent(out) :: X2in(NLINESi)
-  ! character(kind=c_char,len=1),   intent(out) :: OTHER1in(NLINESi)
-  ! character(kind=c_char,len=1),   intent(out) :: OTHER2in(NLINESi)
-  ! integer(c_int),    intent(out) :: ISOSHIFTin(NLINESi)
-  ! integer(c_int),    intent(out) :: NELIONin(NLINESi)
-  ! real(c_double), intent(out) :: RESIDin(NLINESi)
+  real(c_double), intent(out) :: GRin(NLINESi)
+  real(c_double), intent(out) :: DGAMMARin(NLINESi)
+  real(c_double), intent(out) :: GSin(NLINESi)
+  real(c_double), intent(out) :: DGAMMASin(NLINESi)
+  real(c_double), intent(out) :: GWin(NLINESi)
+  real(c_double), intent(out) :: DGAMMAWin(NLINESi)
+  real(c_double), intent(out) :: WAVENOin(NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: REFin(6,NLINESi)
+  integer(c_int),    intent(out) :: NBLOin(NLINESi)
+  integer(c_int),    intent(out) :: NBUPin(NLINESi)
+  integer(c_int),    intent(out) :: ISO1in(NLINESi)
+  real(c_double), intent(out) :: X1in(NLINESi)
+  integer(c_int),    intent(out) :: ISO2in(NLINESi)
+  real(c_double), intent(out) :: X2in(NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: OTHER1in(11,NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: OTHER2in(11,NLINESi)
+  integer(c_int),    intent(out) :: ISOSHIFTin(NLINESi)
+  integer(c_int),    intent(out) :: NELIONin(NLINESi)
+  real(c_double), intent(out) :: RESIDin(NLINESi)
 
   COMMON /LINDAT/WL,E,EP,LABEL(2),LABELP(2),OTHER1(2),OTHER2(2),&
         WLVAC,CENTER,CONCEN, NELION,GAMMAR,GAMMAS,GAMMAW,REF,&
@@ -150,41 +153,49 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABEL = SLABEL//c_null_char
      DO J=1,11
        LABELin(J,I) = SLABEL(J:J)
      END DO
-
      EPin(I) = EP
      XJPin(I) = XJP
-
      WRITE(SLABEL,'(A10)') LABELP(1)
      SLABEL = SLABEL//c_null_char
      DO J=1,11
        LABELPin(J,I) = SLABEL(J:J)
      END DO
-
-     ! GRin(I) = GR
-     ! DGAMMARin(I) = DGAMMAR
-     ! GSin(I) = GS
-     ! DGAMMASin(I) = DGAMMAS
-     ! GWin(I) = GW
-     ! DGAMMAWin(I) = DGAMMAW
-     ! WAVENOin(I) = WAVENO
-     ! REFin(I) = REF
-     ! NBLOin(I) = NBLO
-     ! NBUPin(I) = NBUP
-     ! ISO1in(I) = ISO1
-     ! X1in(I) = X1
-     ! ISO2in(I) = ISO2
-     ! X2in(I) = X2
-     ! OTHER1in(I) = OTHER1(1)
-     ! OTHER2in(I) = OTHER2(1)
-     ! ISOSHIFTin(I) = ISOSHIFT
-     ! NELIONin(I) = NELION
-     ! RESIDin(I) = RESID
+     GRin(I) = GR
+     DGAMMARin(I) = DGAMMAR
+     GSin(I) = GS
+     DGAMMASin(I) = DGAMMAS
+     GWin(I) = GW
+     DGAMMAWin(I) = DGAMMAW
+     WAVENOin(I) = WAVENO
+     WRITE(SLABEL,'(A6)') REF(1)
+     SLABEL = SLABEL//c_null_char
+     DO J=1,6
+       REFin(J,I) = SLABEL(J:J)
+     END DO
+     NBLOin(I) = NBLO
+     NBUPin(I) = NBUP
+     ISO1in(I) = ISO1
+     X1in(I) = X1
+     ISO2in(I) = ISO2
+     X2in(I) = X2
+     WRITE(SLABEL,'(A11)') OTHER1(1)
+     SLABEL = SLABEL//c_null_char
+     DO J=1,11
+       OTHER1in(J,I) = SLABEL(J:J)
+     END DO
+     WRITE(SLABEL,'(A11)') OTHER2(1)
+     SLABEL = SLABEL//c_null_char
+     DO J=1,11
+       OTHER2in(J,I) = SLABEL(J:J)
+     END DO
+     ISOSHIFTin(I) = ISOSHIFT
+     NELIONin(I) = NELION
+     RESIDin(I) = RESID
   END DO
 
   CLOSE(UNIT=1)
