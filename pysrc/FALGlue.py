@@ -127,7 +127,7 @@ class glue(object):
 		LABELin    = np.zeros((NLINES,11),dtype='str')
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
-		LABELPin   = np.zeros(NLINES,dtype='str')
+		LABELPin   = np.zeros((NLINES,11),dtype='str')
 		GRin       = np.zeros(NLINES,dtype='double')
 		DGAMMARin  = np.zeros(NLINES,dtype='double')
 		GSin       = np.zeros(NLINES,dtype='double')
@@ -165,9 +165,9 @@ class glue(object):
 			Ein.ctypes.data_as(self.c_double_p),       
 			XJin.ctypes.data_as(self.c_double_p),      
 			LABELin.ctypes.data_as(c_char_p),   
-			# EPin.ctypes.data_as(self.c_double_p),      
-			# XJPin.ctypes.data_as(self.c_double_p),     
-			# LABELPin.ctypes.data_as(c_char_p),  
+			EPin.ctypes.data_as(self.c_double_p),      
+			XJPin.ctypes.data_as(self.c_double_p),     
+			LABELPin.ctypes.data_as(c_char_p),  
 			# GRin.ctypes.data_as(self.c_double_p),      
 			# DGAMMARin.ctypes.data_as(self.c_double_p), 
 			# GSin.ctypes.data_as(self.c_double_p),      
@@ -202,10 +202,10 @@ class glue(object):
 		ll['CODE']     = CODEin
 		ll['E']        = Ein    
 		ll['XJ']       = XJin    
-		ll['LABEL']    = LABELin
+		ll['LABEL']    = np.array([''.join(LABELin[i,:]) for i in range(NLINES)])
 		ll['EP']       = EPin    
 		ll['XJP']      = XJPin
-		ll['LABELP']   = LABELPin
+		ll['LABELP']   = np.array([''.join(LABELPin[i,:]) for i in range(NLINES)])
 		ll['GR']       = GRin    
 		ll['DGAMMAR']  = DGAMMARin
 		ll['GS']       = GSin    
