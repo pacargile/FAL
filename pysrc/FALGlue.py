@@ -1,4 +1,4 @@
-from ctypes import cdll, CDLL, POINTER, ARRAY, c_int, c_double, c_char_p, c_char, c_void_p, c_float
+from ctypes import cdll, CDLL, POINTER, ARRAY, c_int, c_double, c_char_p, c_char, c_void_p, c_float, c_long
 import numpy as np
 import fortranformat
 from astropy.io import ascii
