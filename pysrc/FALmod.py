@@ -200,7 +200,7 @@ class FALmod(object):
                 self.lasttime = time.time()
 
 
-    def _adjustpar(self,parr_i,verbose=False):
+    def _adjustpar(self,parr_i,ll=None,verbose=False):
         # check to see if parr is one table of parameters (for the whole line list)
         # or if it is a dictionary of parameters and line indices
         if isinstance(parr,dict):
@@ -210,14 +210,12 @@ class FALmod(object):
             parr = parr_i
 
         # check to see if line list has been defined in self
-        try:
-            assert self.ll
-        except AssertionError:
+        if ll == None:
             ll_i = self.glue.readlp_raw('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
             ll = self.glue.con_lptonp_raw(ll_i)
-
-            # copy orginal linelist into a working list
-            self.ll = ll.copy()
+        
+        # copy orginal linelist into a working list
+        self.ll = ll.copy()
 
         # delete old fort.11 file
         os.unlink('fort.11')

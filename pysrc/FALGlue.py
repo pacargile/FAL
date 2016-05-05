@@ -16,6 +16,7 @@ class glue(object):
 		self.c_double_p = POINTER(c_double)
 		self.c_float_p = POINTER(c_float)
 		self.c_int_p = POINTER(c_int)
+		self.c_long_p = POINTER(c_long)
 		self.c_char_array = ARRAY(c_char,11)
 		self.c_char_array_p = POINTER(self.c_char_array)
 
@@ -145,8 +146,8 @@ class glue(object):
 		X2in       = np.zeros(NLINES,dtype='double')
 		OTHER1in   = np.zeros((NLINES,11),dtype='str')
 		OTHER2in   = np.zeros((NLINES,11),dtype='str')
-		ISOSHIFTin = np.zeros(NLINES,dtype='int')
-		NELIONin   = np.zeros(NLINES,dtype='float')
+		ISOSHIFTin = np.zeros(NLINES,dtype=np.int64)
+		NELIONin   = np.zeros(NLINES,dtype=np.int64)
 		RESIDin    = np.zeros(NLINES,dtype='double')
 
 
@@ -185,8 +186,8 @@ class glue(object):
 			X2in.ctypes.data_as(self.c_double_p),      
 			OTHER1in.ctypes.data_as(c_char_p),  
 			OTHER2in.ctypes.data_as(c_char_p),  
-			ISOSHIFTin.ctypes.data_as(self.c_int_p),
-			NELIONin.ctypes.data_as(self.c_float_p),  
+			ISOSHIFTin.ctypes.data_as(self.c_long_p),
+			NELIONin.ctypes.data_as(self.c_long_p),  
 			RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 

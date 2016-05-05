@@ -1,6 +1,6 @@
 module f_wrapper
 
-use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_PTR, C_LOC, c_float
+use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_PTR, C_LOC, c_float, c_long
 
 ! implicit none
 
@@ -44,7 +44,7 @@ subroutine readoutspecbin(&
   GRin,DGAMMARin,GSin,DGAMMASin,GWin,DGAMMAWin,&
   WAVENOin,REFin,NBLOin,NBUPin,ISO1in,X1in,ISO2in,X2in,&
   OTHER1in,OTHER2in,ISOSHIFTin,NELIONin,RESIDin) bind(c, name='readoutspecbin')
-  use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR, c_float
+  use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR, c_float, c_long
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
   character(len=11) :: SLABEL
@@ -83,8 +83,8 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: X2in(NLINESi)
   character(kind=c_char,len=1),   intent(out) :: OTHER1in(11,NLINESi)
   character(kind=c_char,len=1),   intent(out) :: OTHER2in(11,NLINESi)
-  integer(c_int), intent(out) :: ISOSHIFTin(NLINESi)
-  integer(c_float), intent(out) :: NELIONin(NLINESi)
+  integer(c_long), intent(out) :: ISOSHIFTin(NLINESi)
+  integer(c_long), intent(out) :: NELIONin(NLINESi)
   real(c_double), intent(out) :: RESIDin(NLINESi)
 
   REAL*8 TEFF,GLOG,TITLE(74),WBEGIN,RESOLU,WLEDGE,RATIO,SWL
@@ -202,7 +202,7 @@ subroutine readoutspecbin(&
        OTHER2in(J,I) = SLABEL(J:J)
      END DO
      ISOSHIFTin(I) = INT(ISOSHIFT)
-     NELIONin(I) = NELION
+     NELIONin(I) = INT(NELION)
      RESIDin(I) = RESID
   END DO
 
