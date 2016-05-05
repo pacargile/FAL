@@ -2,7 +2,7 @@ module f_wrapper
 
 use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_PTR, C_LOC
 
-implicit none
+! implicit none
 
 contains
 
@@ -23,7 +23,6 @@ end function c_to_f_string
 
 !** Convert a Fortran string to a C string
 function f_to_c_string(f_string) result(c_string)
-    implicit none
     character(len=*), intent(in) :: f_string
     character(len=1, kind=c_char) :: c_string(len_trim(f_string)+1)
     type(C_PTR) :: str
