@@ -185,7 +185,7 @@ class glue(object):
 			OTHER1in.ctypes.data_as(c_char_p),  
 			OTHER2in.ctypes.data_as(c_char_p),  
 			ISOSHIFTin.ctypes.data_as(self.c_int_p),
-			NELIONin.ctypes.data_as(c_int),  
+			NELIONin.ctypes.data_as(self.c_int_p),  
 			RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
