@@ -15,7 +15,7 @@ class glue(object):
 		# define some useful things for later
 		self.c_double_p = POINTER(c_double)
 		self.c_int_p = POINTER(c_int)
-		self.c_char_array = ARRAY(c_char,10)
+		self.c_char_array = ARRAY(c_char,11)
 		self.c_char_array_p = POINTER(self.c_char_array)
 
 		# THE FOLLOWING ARE FOR THE PUNCH500 DEL FILES
@@ -164,7 +164,7 @@ class glue(object):
 			CODEin.ctypes.data_as(self.c_double_p),    
 			Ein.ctypes.data_as(self.c_double_p),       
 			XJin.ctypes.data_as(self.c_double_p),      
-			LABELin.ctypes.data_as(c_char_p),   
+			LABELin.ctypes.data_as(self.c_char_array),   
 			# EPin.ctypes.data_as(self.c_double_p),      
 			# XJPin.ctypes.data_as(self.c_double_p),     
 			# LABELPin.ctypes.data_as(c_char_p),  
