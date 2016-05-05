@@ -177,11 +177,11 @@ subroutine readoutspecbin(&
      DO J=1,6
        REFin(J,I) = SLABEL(J:J)
      END DO
-     NBLOin(I) = NBLO
-     NBUPin(I) = NBUP
-     ISO1in(I) = ISO1
+     NBLOin(I) = INT(NBLO)
+     NBUPin(I) = INT(NBUP)
+     ISO1in(I) = INT(ISO1)
      X1in(I) = X1
-     ISO2in(I) = ISO2
+     ISO2in(I) = INT(ISO2)
      X2in(I) = X2
      WRITE(SLABEL,'(A11)') OTHER1(1)
      SLABEL = SLABEL//c_null_char
@@ -193,8 +193,8 @@ subroutine readoutspecbin(&
      DO J=1,11
        OTHER2in(J,I) = SLABEL(J:J)
      END DO
-     ISOSHIFTin(I) = ISOSHIFT
-     NELIONin(I) = NELION
+     ISOSHIFTin(I) = INT(ISOSHIFT)
+     NELIONin(I) = INT(NELION)
      RESIDin(I) = RESID
   END DO
 
