@@ -43,7 +43,7 @@ subroutine readoutspecbin(&
   WLin,DWLin,GFLOGin,DGFLOGin,CODEin,Ein,XJin,&
   LABELin,EPin,XJPin,LABELPin,&
   GRin,DGAMMARin,GSin,DGAMMASin,GWin,DGAMMAWin,&
-  WAVENOin,REFin,NBLO,NBUP,ISO1in,X1in,ISO2in,X2in,&
+  WAVENOin,REFin,NBLOin,NBUPin,ISO1in,X1in,ISO2in,X2in,&
   OTHER1in,OTHER2in,ISOSHIFTin,NELIONin,RESIDin) bind(c, name='readoutspecbin')
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR
   character(kind=c_char,len=1), intent(in) :: s(*)
@@ -177,8 +177,8 @@ subroutine readoutspecbin(&
      DO J=1,6
        REFin(J,I) = SLABEL(J:J)
      END DO
-     NBLOin(I) = INTEGER(NBLO)
-     NBUPin(I) = INTEGER(NBUP)
+     NBLOin(I) = NBLO
+     NBUPin(I) = NBUP
      ISO1in(I) = ISO1
      X1in(I) = X1
      ISO2in(I) = ISO2
