@@ -1,4 +1,4 @@
-from ctypes import cdll, CDLL, POINTER, ARRAY, c_int, c_double, c_char_p, c_char, c_void_p
+from ctypes import cdll, CDLL, POINTER, ARRAY, c_int, c_double, c_char_p, c_char, c_void_p, c_float
 import numpy as np
 import fortranformat
 from astropy.io import ascii
@@ -14,6 +14,7 @@ class glue(object):
 
 		# define some useful things for later
 		self.c_double_p = POINTER(c_double)
+		self.c_float_p = POINTER(c_float)
 		self.c_int_p = POINTER(c_int)
 		self.c_char_array = ARRAY(c_char,11)
 		self.c_char_array_p = POINTER(self.c_char_array)
@@ -145,7 +146,7 @@ class glue(object):
 		OTHER1in   = np.zeros((NLINES,11),dtype='str')
 		OTHER2in   = np.zeros((NLINES,11),dtype='str')
 		ISOSHIFTin = np.zeros(NLINES,dtype='int')
-		NELIONin   = np.zeros(NLINES,dtype='int',order='fortran')
+		NELIONin   = np.zeros(NLINES,dtype='float')
 		RESIDin    = np.zeros(NLINES,dtype='double')
 
 
@@ -185,7 +186,7 @@ class glue(object):
 			OTHER1in.ctypes.data_as(c_char_p),  
 			OTHER2in.ctypes.data_as(c_char_p),  
 			ISOSHIFTin.ctypes.data_as(self.c_int_p),
-			NELIONin.ctypes.data_as(self.c_int_p),  
+			NELIONin.ctypes.data_as(self.c_float_p),  
 			RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
