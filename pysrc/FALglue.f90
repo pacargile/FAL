@@ -202,8 +202,8 @@ subroutine readoutspecbin(&
        OTHER2in(J,I) = SLABEL(J:J)
      END DO
      ISOSHIFTin(I) = INT(ISOSHIFT)
-     IF(I.eq.1) print *, INT(NELION), NELION
      NELIONin(I) = INT(NELION)
+     IF(I.eq.1) print *, INT(NELION), NELION,NELIONin(I)
      RESIDin(I) = RESID
   END DO
 
