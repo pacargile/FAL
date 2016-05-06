@@ -277,7 +277,7 @@ class glue(object):
 		for ii,fmt in enumerate(self.lpars):
 			if 's' in self.fmtstr[ii]:
 				temparr = ([('{0:'+self.fmtstr[ii]+'}').format(
-							xx) for xx in nptab[fmt]])
+							str(xx)) for xx in nptab[fmt]])
 				outtab_arr.append(temparr)
 			else:
 				temparr = ([('{0:'+self.fmtstr[ii]+'}').format(
