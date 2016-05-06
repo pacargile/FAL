@@ -105,7 +105,7 @@ class synthe(object):
             os.remove('/dev/shm/FAL/{0}/spectrv.input'.format(self.ID))
         except OSError:
             pass
-        self._fastcopy(self.datadir+'spectrv_std.input','/dev/shm/FAL/{0}/spectrv.input'.format(self.ID))
+        self._fastcopy(self.datadir+'spectrv.input','/dev/shm/FAL/{0}/spectrv.input'.format(self.ID))
         self.spectrvin = '/dev/shm/FAL/{0}/spectrv.input'.format(self.ID)
 
     def __delete_(self):
