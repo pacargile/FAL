@@ -201,7 +201,7 @@ class glue(object):
 		ll['DWL']      = DWLin
 		ll['GFLOG']    = np.array(['{0:7.3f}'.format(x) for x in GFLOGin],dtype='float')
 		ll['DGFLOG']   = DGFLOGin
-		ll['CODE']     = ['{0:8.2f}'.format(x) for x in CODEin]
+		ll['CODE']     = np.around(np.array(['{0:8.2f}'.format(x) for x in CODEin]),decimals=2)
 		ll['E']        = Ein    
 		ll['XJ']       = XJin    
 		ll['LABEL']    = np.array([''.join(LABELin[i,:]) for i in range(NLINES)])
