@@ -197,6 +197,8 @@ class FALmod(object):
             rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":True} # atoms, molecules + H2O & TiO
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
 
+            self.speed = 'slow'
+
             # # remove the various line files in memory to save resources
             # datfiles = glob.glob('/dev/shm/FAL/{0}/*.dat'.format(self.ID))
             # binfiles = glob.glob('/dev/shm/FAL/{0}/*.bin'.format(self.ID))
@@ -214,6 +216,7 @@ class FALmod(object):
         elif linelist == 'readmaster':
             # read the masterline lists (cargile or kurucz plus H2O+TiO)
             self.SYNTHE.readlines(rtype='readmaster',verbose=verbose_i)
+            self.speed = 'slow'
             if self.timeit:
                 print("Pro: {1} --> Read in master line list -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
