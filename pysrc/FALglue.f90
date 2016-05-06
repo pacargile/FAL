@@ -161,14 +161,14 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     WRITE(SLABEL,'(A10)') LABEL(1)
+     WRITE(SLABEL,'(A15)') LABEL(1)
      SLABEL = SLABEL//c_null_char
      DO J=1,15
        LABELin(J,I) = SLABEL(J:J)
      END DO
      EPin(I) = EP
      XJPin(I) = XJP
-     WRITE(SLABEL,'(A10)') LABELP(1)
+     WRITE(SLABEL,'(A15)') LABELP(1)
      SLABEL = SLABEL//c_null_char
      DO J=1,15
        LABELPin(J,I) = SLABEL(J:J)
