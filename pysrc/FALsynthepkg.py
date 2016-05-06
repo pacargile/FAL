@@ -49,7 +49,7 @@ class synthe(object):
         else:
             raise ValueError('Do not understand verbose flag')
 
-        if starpars = None:
+        if starpars == None:
             raise ValueError('Must provide a starpars dictionary')
 
         # Set up exec directory and data directory
