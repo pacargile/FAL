@@ -352,6 +352,7 @@ class FALmod(object):
             if self.timeit:
                 print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
+        return 'ROT1_mac_inst'
 
     def _specout(self,infile,verbose=False):
         # read in binary output spectrum
