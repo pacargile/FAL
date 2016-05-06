@@ -87,7 +87,8 @@ class FALmod(object):
         writespec = kwargs.get('writespec',False)
         # do work verbosely
         verbose = kwargs.get('verbose',False)
-
+        # print out the optical depth information
+        self.tau_i = kwargs.get('tau_i',False)
 
         # change into working directory
         os.chdir('{0}'.format(self.ID))
