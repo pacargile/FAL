@@ -24,12 +24,12 @@ class FALmod(object):
             self.IDraw = None
 
         # set starpars if starpars='Sun' or starpars='Arcturus'
-        if starpars = 'Sun':
+        if starpars == 'Sun':
             self.starpars = {}
             self.starpars['VROT'] = -2.02
             self.starpars['MACVEL'] = 1.5
             self.starpars['OBJECT'] = 'Sun'
-        elif starpars = 'Arcturus':
+        elif starpars == 'Arcturus':
             self.starpars = {}
             self.starpars['VROT'] = 1.0
             self.starpars['MACVEL'] = 3.0
