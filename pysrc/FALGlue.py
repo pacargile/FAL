@@ -201,7 +201,7 @@ class glue(object):
 		ll['DWL']      = DWLin
 		ll['GFLOG']    = np.array(['{0:7.3f}'.format(x) for x in GFLOGin],dtype='float')
 		ll['DGFLOG']   = DGFLOGin
-		ll['CODE']     = np.array(CODEin,dtype='d')
+		ll['CODE']     = np.array(['{0:8.2f}'.format(x) for x in CODEin],dtype='str')
 		ll['E']        = Ein    
 		ll['XJ']       = XJin    
 		ll['LABEL']    = np.array([''.join(LABELin[i,:]) for i in range(NLINES)])
@@ -277,7 +277,7 @@ class glue(object):
 		for ii,fmt in enumerate(self.lpars):
 			if 's' in self.fmtstr[ii]:
 				temparr = ([('{0:'+self.fmtstr[ii]+'}').format(
-							'{0:g}'.format(xx)) for xx in nptab[fmt]])
+							'{0}'.format(xx)) for xx in nptab[fmt]])
 				outtab_arr.append(temparr)
 			else:
 				temparr = ([('{0:'+self.fmtstr[ii]+'}').format(
