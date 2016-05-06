@@ -12,7 +12,7 @@ class FALmod(object):
     Class to take delta line parameters and return a synthesized
     spectrum from SYNTHE to use in python
     """    
-    def __init__(self,ID=None,starpars='Sun'):
+    def __init__(self,ID=None,starpars='Sun',waverange=None):
 
         # set ID
         if ID != None:
@@ -36,6 +36,13 @@ class FALmod(object):
             self.starpars['OBJECT'] = 'Arcturus'
         else:
             self.starpars = starpars
+
+        if waverange == None:
+            self.starpars['WSTART'] = 600.0
+            self.starpars['WEND'] = 601.0
+        else:
+            self.starpars['WSTART'] = waverange[0]
+            self.starpars['WEND'] = waverange[1]
 
         # create the glue  
         self.glue = FALGlue.glue()
@@ -133,9 +140,16 @@ class FALmod(object):
             verbose_i = False
         outspec,newll = self._specout(binspecname,verbose_i)
 
-        # write newll into INT/ for archiving purposes
         if archive:
-            self.SYNTHE.archive()            
+            # write newll into INT/ for archiving purposes
+            if os.path.exists('fort.11'):
+                os.unlink('fort.11')
+            if os.path.exists('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+                os.remove('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+            newll_st = self.glue.con_nptolp(newll)
+            self.glue.writelp(newll_st,'/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+            os.symlink('/dev/shm/FAL/{0}/fort.11'.format(self.ID),'fort.11')
+            self.SYNTHE.archive()
 
         if transspec != False:
             # do multiply transmission spectrum
@@ -213,7 +227,7 @@ class FALmod(object):
         if ll == None:
             ll_i = self.glue.readlp_raw('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
             ll = self.glue.con_lptonp_raw(ll_i)
-        
+
         # copy orginal linelist into a working list
         self.ll = ll.copy()
 
@@ -338,12 +352,15 @@ class FALmod(object):
             lineinfo_i = lineinfoarr[1]
             lineinfo['NLINES'] = int(lineinfo_i)
 
-        outspec = self.glue.readspecbin(infile,NWL=runinfo['LENGTH'],NLINES=lineinfo['NLINES'])
+        outspec,newll = self.glue.readspecbin(infile,NWL=runinfo['LENGTH'],NLINES=lineinfo['NLINES'])
+        # turn these dictionaries into Table for ease of use
+        outspec = Table(outspec)
+        newll = Table(newll)
 
         if self.timeit:
             print("Pro: {1} --> Read in binary spectrum -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
-        return outspec
+        return (outspec,newll)
 
 
     def _multiplytrans(self,inspec,trans):

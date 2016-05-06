@@ -50,12 +50,7 @@ class synthe(object):
             raise ValueError('Do not understand verbose flag')
 
         if starpars = None:
-            self.starpars = {}
-            self.starpars['VROT'] = -2.02
-            self.starpars['MACVEL'] = 1.5
-            self.starpars['OBJECT'] = 'Sun'
-        else:
-            self.starpars = starpars
+            raise ValueError('Must provide a starpars dictionary')
 
         # Set up exec directory and data directory
         self.HOMEDIR = os.path.expandvars("$HOME")
