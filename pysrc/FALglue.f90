@@ -162,18 +162,18 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     WRITE(SLABEL1,'(A15)') LABEL(1)
-     WRITE(SLABEL2,'(A5)') LABEL(2)
+     WRITE(SLABEL1,'(A8)') LABEL(1)
+     WRITE(SLABEL2,'(A2)') LABEL(2)
      SLABEL2 = SLABEL1//SLABEL2//c_null_char
-     DO J=1,15
+     DO J=1,10
        LABELin(J,I) = SLABEL2(J:J)
      END DO
      EPin(I) = EP
      XJPin(I) = XJP
-     WRITE(SLABEL1,'(A15)') LABELP(1)
-     WRITE(SLABEL2,'(A5)') LABELP(2)
+     WRITE(SLABEL1,'(A8)') LABELP(1)
+     WRITE(SLABEL2,'(A2)') LABELP(2)
      SLABEL2 = SLABEL1//SLABEL2//c_null_char
-     DO J=1,15
+     DO J=1,10
        LABELPin(J,I) = SLABEL2(J:J)
      END DO
      GRin(I) = GR
