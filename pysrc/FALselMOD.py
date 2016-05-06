@@ -14,7 +14,7 @@ def selmod(starpars):
 
 		modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/Arcturus_NEWpars_V4.dat"
 
-	elif starpars['OBJECT'] = 'Sun'
+	elif starpars['OBJECT'] == 'Sun'
 		# set synbeg string to use
 		synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
 			"0.          0   {LINOUT:3.0f}{TOL:7.5f}     {PRED}    72\n"
