@@ -47,7 +47,8 @@ subroutine readoutspecbin(&
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR, c_float, c_long
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
-  character(len=25) :: SLABEL
+  character(len=25) :: SLABEL1
+  character(len=25) :: SLABEL2
 
   integer(c_int), intent(in), value :: NWLi
   integer(c_int), intent(in), value :: NLINESi
@@ -161,17 +162,19 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     WRITE(SLABEL,'(A15)') LABEL(1)
-     SLABEL = SLABEL//c_null_char
+     WRITE(SLABEL1,'(A11)') LABEL(1)
+     WRITE(SLABEL2,'(A5)') LABEL(2)
+     SLABEL2 = SLABEL1//SLABEL2//c_null_char
      DO J=1,15
-       LABELin(J,I) = SLABEL(J:J)
+       LABELin(J,I) = SLABEL2(J:J)
      END DO
      EPin(I) = EP
      XJPin(I) = XJP
-     WRITE(SLABEL,'(A15)') LABELP(1)
-     SLABEL = SLABEL//c_null_char
+     WRITE(SLABEL1,'(A11)') LABELP(1)
+     WRITE(SLABEL2,'(A5)') LABELP(2)
+     SLABEL2 = SLABEL1//SLABEL2//c_null_char
      DO J=1,15
-       LABELPin(J,I) = SLABEL(J:J)
+       LABELPin(J,I) = SLABEL2(J:J)
      END DO
      GRin(I) = GR
      DGAMMARin(I) = DGAMMAR
@@ -180,10 +183,10 @@ subroutine readoutspecbin(&
      GWin(I) = GW
      DGAMMAWin(I) = DGAMMAW
      WAVENOin(I) = WAVENO
-     WRITE(SLABEL,'(A10)') REF
-     SLABEL = SLABEL//c_null_char
+     WRITE(SLABEL1,'(A10)') REF
+     SLABEL1 = SLABEL1//c_null_char
      DO J=1,6
-       REFin(J,I) = SLABEL(J:J)
+       REFin(J,I) = SLABEL1(J:J)
      END DO
      NBLOin(I) = INT(NBLO)
      NBUPin(I) = INT(NBUP)
