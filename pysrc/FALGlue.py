@@ -199,7 +199,7 @@ class glue(object):
 		ll = {}
 		ll['WL']       = np.array(WLin,dtype='11.4f')
 		ll['DWL']      = DWLin
-		ll['GFLOG']    = np.array(GFLOGin,dtype='f7')
+		ll['GFLOG']    = np.array(GFLOGin,dtype='7f')
 		ll['DGFLOG']   = DGFLOGin
 		ll['CODE']     = np.array(CODEin,dtype=float)
 		ll['E']        = Ein    
