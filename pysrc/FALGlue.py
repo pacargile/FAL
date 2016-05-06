@@ -198,9 +198,9 @@ class glue(object):
 		outspec = {'WAVE':SWL,'QMU1':QMU1,'QMU2':QMU2}
 		ll = {}
 		ll['WL']       = np.array(['{0:11.4f}'.format(x) for x in WLin],dtype='float')
-		ll['DWL']      = DWLin
+		ll['DWL']      = np.array(['{0:7.4f}'.format(x) for x in DWLin],dtype='float')
 		ll['GFLOG']    = np.array(['{0:7.3f}'.format(x) for x in GFLOGin],dtype='float')
-		ll['DGFLOG']   = DGFLOGin
+		ll['DGFLOG']   = np.array(['{0:7.3f}'.format(x) for x in DGFLOGin],dtype='float')
 		ll['CODE']     = np.array(['{0:8.2f}'.format(x) for x in CODEin],dtype='str')
 		ll['E']        = Ein    
 		ll['XJ']       = XJin    
