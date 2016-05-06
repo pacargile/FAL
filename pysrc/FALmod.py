@@ -127,7 +127,7 @@ class FALmod(object):
         self._synthesis(verbose_i)
 
         # do broadening
-        if (verbose == True or ('broaden' in verbose):
+        if (verbose == True) or ('broaden' in verbose):
             verbose_i = verbose
         else:
             verbose_i = False
