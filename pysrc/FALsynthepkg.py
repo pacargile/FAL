@@ -956,8 +956,8 @@ class synthe(object):
                 ff.close()
                 os.symlink('/dev/shm/FAL/{0}/fort.22'.format(self.ID),'fort.22')
                 self.broadout2 = self._callpro("broadenx",inputstr=intpars_2,verbose=verbose)
-            else:
-                raise ValueError("Did not understand broadening type (MAC/INSTRUMENT)")
+        else:
+            raise ValueError("Did not understand broadening type (MAC/INSTRUMENT)")
         
         # move final fort.22 into an output file with the right tag
         if os.path.exists(inspec+'_{0}'.format(tag)):
