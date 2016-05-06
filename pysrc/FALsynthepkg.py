@@ -857,7 +857,7 @@ class synthe(object):
 
         return (self.spectrvout,self.ID)
 
-    def rotate(self,indict,verbose=None):
+    def rotate(self,VROT=0.0,verbose=None):
         """
         Run ROTATE code
 
@@ -887,13 +887,13 @@ class synthe(object):
 
         # write in information into input string
         # print("Running Rotate")
-        rotatestr = self.rotatevar.format(VROT=indict['VROT'])
+        rotatestr = self.rotatevar.format(VROT=VROT)
         self.rotateout = self._callpro("rotate",rotatestr,verbose=verbose)
         # print("Finished Rotate")
 
         return (self.rotateout,self.ID)
     
-    def broaden(self,inspec,indict,broadtype=None,WLreg=None,write=False,verbose=None):
+    def broaden(self,inspec,VMAC=0.0,broadtype=None,WLreg=None,write=False,verbose=None):
         if broadtype==None:
             raise ValueError('Must define broadening type')
 
@@ -922,7 +922,7 @@ class synthe(object):
         if broadtype=="MAC":
             tag = 'mac'
             self.broadout = self._callpro(
-                "broadenx",inputstr=self.macpar.format(MACVEL=indict['MACVEL']),
+                "broadenx",inputstr=self.macpar.format(MACVEL=VMAC),
                 verbose=verbose)
 
         elif broadtype=="INSTRUMENT":
