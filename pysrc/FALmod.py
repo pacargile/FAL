@@ -38,8 +38,8 @@ class FALmod(object):
             self.starpars = starpars
 
         if waverange == None:
-            self.starpars['WSTART'] = 600.0
-            self.starpars['WEND'] = 601.0
+            self.starpars['WSTART'] = 1500.0
+            self.starpars['WEND'] = 1501.0
         else:
             self.starpars['WSTART'] = waverange[0]
             self.starpars['WEND'] = waverange[1]

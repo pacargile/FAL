@@ -399,7 +399,7 @@ class synthe(object):
             self._rmsym('fort.11',verbose=verbose)
 
         if MASTERMOLLL == None:
-            MASTERMOLLL = '/work/02349/cargilpa/FAL/MASTERLL/HBAND/H2OLL_1400_1900.bin'
+            MASTERMOLLL = '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczH2OLL_1400_1900.bin'
 
         # H2O+TiO lines file is gigantic, so don't copy into memory just sym link it
         os.symlink(MASTERMOLLL,'fort.11')
