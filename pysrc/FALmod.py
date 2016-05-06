@@ -43,12 +43,6 @@ class FALmod(object):
         else:
             self.starpars['WSTART'] = waverange[0]
             self.starpars['WEND'] = waverange[1]
-        
-        # create the glue  
-        self.glue = FALGlue.glue()
-
-        # initialize SYNTHE package
-        self.SYNTHE = FALsynthepkg.synthe(ID=ID,verbose=verbose,clobber=True,starpars=self.starpars)
 
         # make dir in memory if not already there
         if not os.path.exists('/dev/shm/FAL/{0}'.format(self.ID)):
@@ -60,6 +54,19 @@ class FALmod(object):
 
         # define parent directory
         self.parentdir = os.getcwd()
+
+        # change into working directory
+        os.chdir('{0}'.format(self.ID))
+
+        # create the glue  
+        self.glue = FALGlue.glue()
+
+        # initialize SYNTHE package
+        self.SYNTHE = FALsynthepkg.synthe(ID=ID,verbose=verbose,clobber=True,starpars=self.starpars)
+
+        # cd back into parent directory
+        os.chdir(self.parentdir)
+
 
     def runsynthe(self,**kwargs):
         """
