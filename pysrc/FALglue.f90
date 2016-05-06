@@ -162,6 +162,7 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
+     IF(I.eq.NLINESO)print *, LABEL
      WRITE(SLABEL1,'(A8)') LABEL(1)
      WRITE(SLABEL2,'(A2)') LABEL(2)
      SLABEL2 = SLABEL1//SLABEL2//c_null_char
