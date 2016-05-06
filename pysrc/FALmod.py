@@ -326,7 +326,7 @@ class FALmod(object):
             self.lasttime = time.time()
 
         # -- check if the user wants broadening --
-        if self.starpars['BROADEN'] == -1:
+        if self.starpars['MACVEL'] == -1:
             # no macrovel applied, just copy rotated spectrum to output
             self.SYNTHE._makesym('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),'ROT1_mac_inst')
             print("Pro: {1} --> No Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
