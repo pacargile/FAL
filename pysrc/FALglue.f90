@@ -194,15 +194,15 @@ subroutine readoutspecbin(&
      X1in(I) = X1
      ISO2in(I) = INT(ISO2)
      X2in(I) = X2
-     WRITE(SLABEL,'(A11)') OTHER1(1)
-     SLABEL = SLABEL//c_null_char
+     WRITE(SLABEL1,'(A11)') OTHER1(1)
+     SLABEL1 = SLABEL1//c_null_char
      DO J=1,11
-       OTHER1in(J,I) = SLABEL(J:J)
+       OTHER1in(J,I) = SLABEL1(J:J)
      END DO
-     WRITE(SLABEL,'(A11)') OTHER2(1)
-     SLABEL = SLABEL//c_null_char
+     WRITE(SLABEL1,'(A11)') OTHER2(1)
+     SLABEL1 = SLABEL1//c_null_char
      DO J=1,11
-       OTHER2in(J,I) = SLABEL(J:J)
+       OTHER2in(J,I) = SLABEL1(J:J)
      END DO
      ISOSHIFTin(I) = INT(ISOSHIFT)
      NELIONin(I) = INT(NELION)
