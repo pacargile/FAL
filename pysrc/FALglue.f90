@@ -47,8 +47,7 @@ subroutine readoutspecbin(&
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR, c_float, c_long
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
-  character(len=25) :: SLABEL1
-  character(len=25) :: SLABEL2
+  character(len=25) :: SLABEL
 
   integer(c_int), intent(in), value :: NWLi
   integer(c_int), intent(in), value :: NLINESi
