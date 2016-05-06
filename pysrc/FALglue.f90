@@ -47,7 +47,7 @@ subroutine readoutspecbin(&
   use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_LOC, C_PTR, c_float, c_long
   character(kind=c_char,len=1), intent(in) :: s(*)
   character(len=:), allocatable :: str
-  character(len=11) :: SLABEL
+  character(len=25) :: SLABEL
 
   integer(c_int), intent(in), value :: NWLi
   integer(c_int), intent(in), value :: NLINESi
@@ -63,10 +63,10 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(inout) :: LABELin(11,NLINESi)
+  character(kind=c_char,len=1),  intent(inout) :: LABELin(12,NLINESi)
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: LABELPin(11,NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: LABELPin(12,NLINESi)
   real(c_double), intent(out) :: GRin(NLINESi)
   real(c_double), intent(out) :: DGAMMARin(NLINESi)
   real(c_double), intent(out) :: GSin(NLINESi)
@@ -163,14 +163,14 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABEL = SLABEL//c_null_char
-     DO J=1,11
+     DO J=1,12
        LABELin(J,I) = SLABEL(J:J)
      END DO
      EPin(I) = EP
      XJPin(I) = XJP
      WRITE(SLABEL,'(A10)') LABELP(1)
      SLABEL = SLABEL//c_null_char
-     DO J=1,11
+     DO J=1,12
        LABELPin(J,I) = SLABEL(J:J)
      END DO
      GRin(I) = GR
