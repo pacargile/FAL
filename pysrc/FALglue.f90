@@ -63,10 +63,10 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(inout) :: LABELin(12,NLINESi)
+  character(kind=c_char,len=1),  intent(inout) :: LABELin(15,NLINESi)
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: LABELPin(12,NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: LABELPin(15,NLINESi)
   real(c_double), intent(out) :: GRin(NLINESi)
   real(c_double), intent(out) :: DGAMMARin(NLINESi)
   real(c_double), intent(out) :: GSin(NLINESi)
@@ -163,14 +163,14 @@ subroutine readoutspecbin(&
      XJin(I) = XJ
      WRITE(SLABEL,'(A10)') LABEL(1)
      SLABEL = SLABEL//c_null_char
-     DO J=1,12
+     DO J=1,15
        LABELin(J,I) = SLABEL(J:J)
      END DO
      EPin(I) = EP
      XJPin(I) = XJP
      WRITE(SLABEL,'(A10)') LABELP(1)
      SLABEL = SLABEL//c_null_char
-     DO J=1,12
+     DO J=1,15
        LABELPin(J,I) = SLABEL(J:J)
      END DO
      GRin(I) = GR
