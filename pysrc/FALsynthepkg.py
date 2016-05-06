@@ -930,7 +930,6 @@ class synthe(object):
         elif broadtype=="INSTRUMENT":
             tag = 'inst'
             # determine which instrument settings should be used
-            # determine which instrument settings should be used
             if WLreg=='OPT':
                 intpars = self.instparstr['OPT']
             elif WLreg=='HBAND':
