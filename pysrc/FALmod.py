@@ -12,7 +12,7 @@ class FALmod(object):
     Class to take delta line parameters and return a synthesized
     spectrum from SYNTHE to use in python
     """    
-    def __init__(self,ID=None,starpars='Sun',waverange=None):
+    def __init__(self,ID=None,starpars='Sun',waverange=None,verbose=False):
 
         # set ID
         if ID != None:
@@ -43,7 +43,7 @@ class FALmod(object):
         else:
             self.starpars['WSTART'] = waverange[0]
             self.starpars['WEND'] = waverange[1]
-
+        
         # create the glue  
         self.glue = FALGlue.glue()
 
