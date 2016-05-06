@@ -51,6 +51,8 @@ class synthe(object):
 
         if starpars == None:
             raise ValueError('Must provide a starpars dictionary')
+        else:
+            self.starpars = starpars
 
         # Set up exec directory and data directory
         self.HOMEDIR = os.path.expandvars("$HOME")
