@@ -226,7 +226,7 @@ class glue(object):
 		ll['OTHER2']   = np.array([''.join(OTHER2in[i,:]) for i in range(NLINES)])
 		ll['ISOSHIFT'] = ISOSHIFTin
 		ll['NELION']   = NELIONin
-		ll['OTHER'] = np.array(['{0}{1}{2:5.0f}{3:5.0f}'.format(x1,x2,x3,x4) for x1,x2,x3,x4 in zip(ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
+		ll['OTHER'] = np.array(['{0}{1}{2:6.0f}{3:4.0f}'.format(x1,x2,x3,x4) for x1,x2,x3,x4 in zip(ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
 		ll['RESID']    = np.array(['{0:6.3}'.format(x) for x in RESIDin],dtype='float')
 
 		return (outspec,ll)
