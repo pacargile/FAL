@@ -214,7 +214,7 @@ class glue(object):
 		ll['DGAMMAS']  = DGAMMASin
 		ll['GW']       = np.array(['{0:6.2f}'.format(x) for x in GWin],dtype='float')
 		ll['DGAMMAW']  = DGAMMAWin
-		ll['WAVENO']   = WAVENOin
+		ll['WAVENO']   = np.array(['{0:11.3f}'.format(x) for x in WAVENOin],dtype='str')
 		ll['REF']      = np.array([''.join(REFin[i,:]) for i in range(NLINES)])
 		ll['NBLO']     = NBLOin
 		ll['NBUP']     = NBUPin
