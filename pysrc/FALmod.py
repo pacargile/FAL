@@ -183,7 +183,7 @@ class FALmod(object):
         # cd back into parent directory
         os.chdir(self.parentdir)
 
-        if timeit:
+        if self.timeit:
             print("Pro: {1} --> FINISHED FALmod -- Full time: {0:7.5f} s".format(time.time()-self.starttime,self.IDraw))
 
         return (outspec,newll)
