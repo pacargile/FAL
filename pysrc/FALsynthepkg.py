@@ -927,31 +927,26 @@ class synthe(object):
 
         elif broadtype=="INSTRUMENT":
             tag = 'inst'
-            # determine if arcturus or not
-            if self.arct_bool:
-                # determine which instrument settings should be used
-                if WLreg=='OPT':
-                    gausspar = self.gausspar_opt
-                elif WLreg=='HBAND':
-                    gausspar = self.gausspar_hband
-                else:
-                    gausspar = self.gausspar_opt
-
-                self.broadout2 = self._callpro("broadenx",inputstr=gausspar,verbose=verbose)
+            # determine which instrument settings should be used
+            # determine which instrument settings should be used
+            if WLreg=='OPT':
+                intpars = self.instparstr['OPT']
+            elif WLreg=='HBAND':
+                intpars = self.instparstr['HBAND']
             else:
-                # determine which instrument settings should be used
-                if WLreg=='OPT':
-                    sincpar = self.sincpar_opt
-                    gausspar = self.gausspar_opt
-                elif WLreg=='HBAND':
-                    sincpar = self.sincpar_hband
-                    gausspar = self.gausspar_hband
-                else:
-                    sincpar = self.sincpar_opt
-                    gausspar = self.gausspar_opt
+                intpars = self.instparstr['HBAND']
+
+            parset = intpars.keys()
+            if len(intpars.keys()) == 1:
+                # the case with only one instrumental broadening (likely just a gaussian)
+                self.broadout = self._callpro("broadenx",inputstr=intpars[parset[0]],verbose=verbose)
+            else:
+                # the special case of the solar line profile with a SINC and a gaussian
+                intpars_1 = intpars[parset[0]]
+                intpars_2 = intpars[parset[1]]
 
                 # first run sinc
-                self.broadout1 = self._callpro("broadenx",inputstr=sincpar,verbose=verbose)
+                self.broadout1 = self._callpro("broadenx",inputstr=intpars_1,verbose=verbose)
                 # mv fort.22 into fort.21 as into into gauss
                 os.unlink('fort.21')
                 os.remove('/dev/shm/FAL/{0}/fort.21'.format(self.ID))
@@ -960,9 +955,9 @@ class synthe(object):
                 f = np.fromfile(ff,count=0)
                 ff.close()
                 os.symlink('/dev/shm/FAL/{0}/fort.22'.format(self.ID),'fort.22')
-                self.broadout2 = self._callpro("broadenx",inputstr=gausspar,verbose=verbose)
-        else:
-            raise ValueError("Did not understand broadening type (MAC/INSTRUMENT)")
+                self.broadout2 = self._callpro("broadenx",inputstr=intpars_2,verbose=verbose)
+            else:
+                raise ValueError("Did not understand broadening type (MAC/INSTRUMENT)")
         
         # move final fort.22 into an output file with the right tag
         if os.path.exists(inspec+'_{0}'.format(tag)):
