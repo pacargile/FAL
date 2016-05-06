@@ -48,7 +48,7 @@ class glue(object):
 				'6.2f','+6.2f',
 				'11s','5s','2s','2s',
 				'3s','6s','3s','6s',
-				'32s',
+				'30s',
 				])
 
 		self.fmtnp = ([np.float64,np.float64,
