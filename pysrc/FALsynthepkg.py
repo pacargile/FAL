@@ -921,8 +921,10 @@ class synthe(object):
         # now decide which type of broadening and run
         if broadtype=="MAC":
             tag = 'mac'
+            macstr = self.macpar.format(MACVEL=VMAC)
+            print(macstr)
             self.broadout = self._callpro(
-                "broadenx",inputstr=self.macpar.format(MACVEL=VMAC),
+                "broadenx",inputstr=macstr,
                 verbose=verbose)
 
         elif broadtype=="INSTRUMENT":
