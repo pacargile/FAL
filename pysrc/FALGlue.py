@@ -197,11 +197,11 @@ class glue(object):
 
 		outspec = {'WAVE':SWL,'QMU1':QMU1,'QMU2':QMU2}
 		ll = {}
-		ll['WL']       = np.around(WLin,decimal=4)
+		ll['WL']       = np.around(WLin,decimals=4)
 		ll['DWL']      = DWLin
-		ll['GFLOG']    = np.around(GFLOGin,decimal=3)
+		ll['GFLOG']    = np.around(GFLOGin,decimals=3)
 		ll['DGFLOG']   = DGFLOGin
-		ll['CODE']     = np.around(CODEin,decimal=2)
+		ll['CODE']     = np.around(CODEin,decimals=2)
 		ll['E']        = Ein    
 		ll['XJ']       = XJin    
 		ll['LABEL']    = np.array([''.join(LABELin[i,:]) for i in range(NLINES)])
