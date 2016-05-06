@@ -344,16 +344,16 @@ class FALmod(object):
                 print("Pro: {1} --> BROADEN MACRO -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
 
-            # -- do broaden for instrumental --
-            if (verbose == True or verbose == 'broaden:broad_inst'):
-                verbose_i = True
-            else:
-                verbose_i = False
-            self.SYNTHE.broaden('ROT1_mac',broadtype='INSTRUMENT',verbose=verbose_i)
-            if self.timeit:
-                print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
-                self.lasttime = time.time()
-        return 'ROT1_mac_inst'
+            # # -- do broaden for instrumental --
+            # if (verbose == True or verbose == 'broaden:broad_inst'):
+            #     verbose_i = True
+            # else:
+            #     verbose_i = False
+            # self.SYNTHE.broaden('ROT1_mac',broadtype='INSTRUMENT',verbose=verbose_i)
+            # if self.timeit:
+            #     print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            #     self.lasttime = time.time()
+        return 'ROT1_mac'
 
     def _specout(self,infile,verbose=False):
         # read in binary output spectrum
