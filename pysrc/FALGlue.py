@@ -208,11 +208,11 @@ class glue(object):
 		ll['EP']       = EPin    
 		ll['XJP']      = XJPin
 		ll['LABELP']   = np.array([''.join(LABELPin[i,:]) for i in range(NLINES)])
-		ll['GR']       = GRin    
+		ll['GR']       = np.array(['{0:6.2f}'.format(x) for x in GRin],dtype='float')
 		ll['DGAMMAR']  = DGAMMARin
-		ll['GS']       = GSin    
+		ll['GS']       = np.array(['{0:6.2f}'.format(x) for x in GSin],dtype='float')
 		ll['DGAMMAS']  = DGAMMASin
-		ll['GW']       = GWin    
+		ll['GW']       = np.array(['{0:6.2f}'.format(x) for x in GWin],dtype='float')
 		ll['DGAMMAW']  = DGAMMAWin
 		ll['WAVENO']   = WAVENOin
 		ll['REF']      = np.array([''.join(REFin[i,:]) for i in range(NLINES)])
