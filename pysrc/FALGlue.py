@@ -137,7 +137,7 @@ class glue(object):
 		GWin       = np.zeros(NLINES,dtype='double')
 		DGAMMAWin  = np.zeros(NLINES,dtype='double')
 		WAVENOin   = np.zeros(NLINES,dtype='double')
-		REFin      = np.zeros((NLINES,5),dtype='str')
+		REFin      = np.zeros((NLINES,4),dtype='str')
 		NBLOin     = np.zeros(NLINES,dtype=np.int64)
 		NBUPin     = np.zeros(NLINES,dtype=np.int64)
 		ISO1in     = np.zeros(NLINES,dtype=np.int64)
