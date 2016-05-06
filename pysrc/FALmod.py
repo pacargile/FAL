@@ -76,7 +76,7 @@ class FALmod(object):
         # timing information printed out
         self.timeit = kwargs.get('timeit',False)
         # type of line list reader
-        linelist = kwargs.get('linelist','master')
+        linelist = kwargs.get('linelist','readmaster')
         # set any offsets in line list
         parr = kwargs.get('parr',None)
         # copy synbeg files into INT/ so that they can be reused
