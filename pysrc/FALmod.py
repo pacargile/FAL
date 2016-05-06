@@ -144,7 +144,7 @@ class FALmod(object):
             # write newll into INT/ for archiving purposes
             if os.path.exists('fort.11'):
                 os.unlink('fort.11')
-            if os.path.exists('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+            if os.path.exists('/dev/shm/FAL/{0}/fort.11'.format(self.ID)):
                 os.remove('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
             newll_st = self.glue.con_nptolp(newll)
             self.glue.writelp(newll_st,'/dev/shm/FAL/{0}/fort.11'.format(self.ID))
