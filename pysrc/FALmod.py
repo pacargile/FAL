@@ -27,8 +27,8 @@ class FALmod(object):
         if starpars == 'Sun':
             self.starpars = {}
             self.starpars['VROT'] = -2.02
-            # self.starpars['MACVEL'] = 1.5
-            self.starpars['MACVEL'] = -1
+            self.starpars['MACVEL'] = 1.5
+            # self.starpars['MACVEL'] = -1
             self.starpars['OBJECT'] = 'Sun'
         elif starpars == 'Arcturus':
             self.starpars = {}
