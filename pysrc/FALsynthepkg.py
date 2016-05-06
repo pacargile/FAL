@@ -55,9 +55,9 @@ class synthe(object):
         # Set up exec directory and data directory
         self.HOMEDIR = os.path.expandvars("$HOME")
         self.WORKDIR = os.path.expandvars("$WORK")
-        self.exedir = HOMEDIR+"/FAL/PYTHON/bin/"
-        self.datadir = HOMEDIR+"/FAL/PYTHON/data/"
-        self.bigdatadir = WORKDIR+"/FAL/DATA/"
+        self.exedir = self.HOMEDIR+"/FAL/PYTHON/bin/"
+        self.datadir = self.HOMEDIR+"/FAL/PYTHON/data/"
+        self.bigdatadir = self.WORKDIR+"/FAL/DATA/"
 
 
         # Call selmod to set model atm and other star specific parameters
