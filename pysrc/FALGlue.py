@@ -219,9 +219,9 @@ class glue(object):
 		ll['NBLO']     = NBLOin
 		ll['NBUP']     = NBUPin
 		ll['ISO1']     = ISO1in
-		ll['X1']       = X1in    
+		ll['X1']       = np.array(['{0:6.3}'.format(x) for x in X1in],dtype='float')
 		ll['ISO2']     = ISO2in
-		ll['X2']       = X2in    
+		ll['X2']       = np.array(['{0:6.3}'.format(x) for x in X2in],dtype='float')  
 		ll['OTHER1']   = np.array([''.join(OTHER1in[i,:]) for i in range(NLINES)])
 		ll['OTHER2']   = np.array([''.join(OTHER2in[i,:]) for i in range(NLINES)])
 		ll['ISOSHIFT'] = ISOSHIFTin
