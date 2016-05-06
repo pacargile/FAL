@@ -162,21 +162,17 @@ subroutine readoutspecbin(&
      CODEin(I) = CODE
      Ein(I) = E
      XJin(I) = XJ
-     ! IF(I.eq.NLINESO-5) WRITE(6,'(A8,A2)'), LABEL
-     ! WRITE(SLABEL1,'(A8,A2)') LABEL
-     WRITE(SLABEL2,'(A8,A2)') LABEL
-     ! SLABEL2 = SLABEL1//SLABEL2//c_null_char
-     SLABEL2 = SLABEL2//c_null_char
-     DO J=1,15
-       LABELin(J,I) = SLABEL2(J:J)
+     WRITE(SLABEL,'(A8,A2)') LABEL
+     SLABEL = SLABEL//c_null_char
+     DO J=1,10
+       LABELin(J,I) = SLABEL(J:J)
      END DO
      EPin(I) = EP
      XJPin(I) = XJP
-     WRITE(SLABEL1,'(A8)') LABELP(1)
-     WRITE(SLABEL2,'(A2)') LABELP(2)
-     SLABEL2 = SLABEL1//SLABEL2//c_null_char
+     WRITE(SLABEL,'(A8,A2)') LABELP
+     SLABEL = SLABEL//c_null_char
      DO J=1,10
-       LABELPin(J,I) = SLABEL2(J:J)
+       LABELPin(J,I) = SLABEL(J:J)
      END DO
      GRin(I) = GR
      DGAMMARin(I) = DGAMMAR
@@ -185,10 +181,10 @@ subroutine readoutspecbin(&
      GWin(I) = GW
      DGAMMAWin(I) = DGAMMAW
      WAVENOin(I) = WAVENO
-     WRITE(SLABEL1,'(A10)') REF
-     SLABEL1 = SLABEL1//c_null_char
+     WRITE(SLABEL,'(A6)') REF
+     SLABEL = SLABEL//c_null_char
      DO J=1,6
-       REFin(J,I) = SLABEL1(J:J)
+       REFin(J,I) = SLABEL(J:J)
      END DO
      NBLOin(I) = INT(NBLO)
      NBUPin(I) = INT(NBUP)
@@ -196,17 +192,15 @@ subroutine readoutspecbin(&
      X1in(I) = X1
      ISO2in(I) = INT(ISO2)
      X2in(I) = X2
-     WRITE(SLABEL1,'(A8)') OTHER1(1)
-     WRITE(SLABEL2,'(A2)') OTHER1(2)
-     SLABEL2 = SLABEL1//SLABEL2//c_null_char
+     WRITE(SLABEL,'(A8,A2)') OTHER1
+     SLABEL = SLABEL//c_null_char
      DO J=1,10
-       OTHER1in(J,I) = SLABEL2(J:J)
+       OTHER1in(J,I) = SLABEL(J:J)
      END DO
-     WRITE(SLABEL1,'(A8)') OTHER2(1)
-     WRITE(SLABEL2,'(A2)') OTHER2(2)
-     SLABEL2 = SLABEL1//SLABEL2//c_null_char
+     WRITE(SLABEL,'(A8,A2)') OTHER2
+     SLABEL = SLABEL//c_null_char
      DO J=1,10
-       OTHER2in(J,I) = SLABEL2(J:J)
+       OTHER2in(J,I) = SLABEL(J:J)
      END DO
      ISOSHIFTin(I) = INT(ISOSHIFT)
      NELIONin(I) = INT(NELION)
