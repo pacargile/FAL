@@ -132,7 +132,7 @@ subroutine readoutspecbin(&
      SWL=WBEGIN*RATIO**(IWL-1)
      FREQTOWAVE=2.99792458D17/SWL**2
      wli(IWL) = SWL
-     READ(1)(QMU(INMU),I=1,NMU2)
+     READ(1)(QMU(INMU),INMU=1,NMU2)
      qmu1i(IWL) = QMU(1)*FREQTOWAVE
      qmu2i(IWL) = QMU(2)*FREQTOWAVE
 6 CONTINUE
