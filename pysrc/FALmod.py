@@ -349,7 +349,7 @@ class FALmod(object):
                 verbose_i = False
             # self.SYNTHE.broaden('ROT1',self.starpars['MACVEL'],broadtype='MAC',verbose=verbose_i)
             vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
-            QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],self.SYNTHE.RESOL,vmacdict)
+            QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],vmacdict)
             # QMU2 = self.brd.broaden(outspec['WAVE'],outspec['QMU2'],self.SYNTHE.RESOL,vmacdict)
             outspec['QMU1'] = QMU1['FLUX']
             # outspec['QMU2'] = QMU2['FLUX']
