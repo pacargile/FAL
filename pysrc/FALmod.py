@@ -357,16 +357,44 @@ class FALmod(object):
                 print("Pro: {1} --> BROADEN MACRO -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
 
-            # # -- do broaden for instrumental --
-            # if (verbose == True or verbose == 'broaden:broad_inst'):
-            #     verbose_i = True
-            # else:
-            #     verbose_i = False
+            # -- do broaden for instrumental --
+            if (verbose == True or verbose == 'broaden:broad_inst'):
+                verbose_i = True
+            else:
+                verbose_i = False
             # self.SYNTHE.broaden('ROT1_mac',broadtype='INSTRUMENT',verbose=verbose_i)
-            # if self.timeit:
-            #     print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
-            #     self.lasttime = time.time()
-        return (outspec,newll,'ROT1_mac')
+            # determine which instrument settings should be used
+            # if WLreg=='OPT':
+            #     intpars = self.SYNTHE.instparstr['OPT']
+            # elif WLreg=='HBAND':
+            #     intpars = self.SYNTHE.instparstr['HBAND']
+            # else:
+            intpars = self.SYNTHE.instparstr['HBAND']
+
+            parset = intpars.keys()
+            if len(intpars.keys()) == 1:
+                # the case with only one instrumental broadening (likely just a gaussian)
+                # self.broadout = self._callpro("broadenx",inputstr=intpars[parset[0]],verbose=verbose)
+                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':'130000'}
+                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],self.SYNTHE.RESOL,instdict)
+                QMU2 = self.brd.broaden(outspec['WAVE'],outspec['QMU2'],self.SYNTHE.RESOL,instdict)
+                outspec['QMU1'] = QMU1['FLUX']
+                outspec['QMU2'] = QMU2['FLUX']                
+            else:
+                # the special case of the solar line profile with a SINC and a gaussian
+                instdict1 = {'type':'SINX/X','val':0.008140581,'units':'CM-1'}
+                instdict2 = {'type':'GAUSSIAN','val':0.012210871,'units':'CM-1'}
+
+                for instdict_i in [instdict1,instdict2]:
+                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],self.SYNTHE.RESOL,instdict_i)
+                    QMU2 = self.brd.broaden(outspec['WAVE'],outspec['QMU2'],self.SYNTHE.RESOL,instdict_i)
+                    outspec['QMU1'] = QMU1['FLUX']
+                    outspec['QMU2'] = QMU2['FLUX']
+
+            if self.timeit:
+                print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                self.lasttime = time.time()
+        return (outspec,newll,'ROT1_mac_inst')
 
     def _specout(self,infile,verbose=False):
         # read in binary output spectrum
