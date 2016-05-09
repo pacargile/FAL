@@ -6,6 +6,7 @@ import FALGlue
 import shutil, os, subprocess
 import numpy as np
 import sys,glob,time,shutil
+import broaden
 
 class FALmod(object):
     """
@@ -61,6 +62,9 @@ class FALmod(object):
 
         # create the glue  
         self.glue = FALGlue.glue()
+
+        # create broadening class
+        self.brd = broaden.broaden()
 
         # initialize SYNTHE package
         self.SYNTHE = FALsynthepkg.synthe(ID=ID,verbose=verbose,clobber=True,starpars=self.starpars)
@@ -152,14 +156,14 @@ class FALmod(object):
                 verbose_i = verbose
             else:
                 verbose_i = False
-        binspecname = self._broaden(verbose_i)
+        outspec,newll = self._broaden(verbose_i)
 
         # do specout to get final spectrum
-        if (verbose == True or verbose == 'specout'):
-            verbose_i = True
-        else:
-            verbose_i = False
-        outspec,newll = self._specout(binspecname,verbose_i)
+        # if (verbose == True or verbose == 'specout'):
+        #     verbose_i = True
+        # else:
+        #     verbose_i = False
+        # outspec,newll = self._specout(binspecname,verbose_i)
 
         if archive:
             # write newll into INT/ for archiving purposes
@@ -326,12 +330,16 @@ class FALmod(object):
             print("Pro: {1} --> ROTATE -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
 
+        # pull outspec and newll from rotate.for code
+        outspec,newll = self._specout('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'))
+
         # -- check if the user wants broadening --
         if self.starpars['MACVEL'] == -1:
-            # no macrovel applied, just copy rotated spectrum to output
-            self.SYNTHE._makesym('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),'ROT1_mac_inst')
+            # no macrovel applied, just return rotated spectrum to output
+            # self.SYNTHE._makesym('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),'ROT1_mac_inst')
             print("Pro: {1} --> No Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
+            return (outspec,newll)
     
         else:
             # -- do broaden for macroturblence --
@@ -339,7 +347,12 @@ class FALmod(object):
                 verbose_i = True
             else:
                 verbose_i = False
-            self.SYNTHE.broaden('ROT1',self.starpars['MACVEL'],broadtype='MAC',verbose=verbose_i)
+            # self.SYNTHE.broaden('ROT1',self.starpars['MACVEL'],broadtype='MAC',verbose=verbose_i)
+            vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
+            QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],self.SYNTHE.RESOL,vmacdict)
+            QMU2 = self.brd.broaden(outspec['WAVE'],outspec['QMU2'],self.SYNTHE.RESOL,vmacdict)
+            outspec['QMU1'] = QMU1
+            outspec['QMU2'] = QMU2
             if self.timeit:
                 print("Pro: {1} --> BROADEN MACRO -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
@@ -353,7 +366,7 @@ class FALmod(object):
             # if self.timeit:
             #     print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             #     self.lasttime = time.time()
-        return 'ROT1_mac'
+        return (outspec,newll)
 
     def _specout(self,infile,verbose=False):
         # read in binary output spectrum

@@ -296,28 +296,28 @@ class synthe(object):
             fort.93 (bin)
         """
         # read in information from input dictionary
-        WSTART = self.starpars['WSTART']
-        WEND = self.starpars['WEND']
+        self.WSTART = self.starpars['WSTART']
+        self.WEND = self.starpars['WEND']
         if 'RESOL' in self.starpars.keys():
-            RESOL = self.starpars['RESOL']
+            self.RESOL = self.starpars['RESOL']
         else:
-            RESOL = 3000000.0
+            self.RESOL = 3000000.0
         if 'PRED' in self.starpars.keys():
-            PRED = self.starpars['PRED']
+            self.PRED = self.starpars['PRED']
         else:
-            PRED = 1
+            self.PRED = 1
         if 'LINOUT' in self.starpars.keys():
-            LINOUT = self.starpars['LINOUT']
+            self.LINOUT = self.starpars['LINOUT']
         else:
-            LINOUT = 10
+            self.LINOUT = 10
         if 'TOL' in self.starpars.keys():
-            TOL = self.starpars['TOL']
+            self.TOL = self.starpars['TOL']
         else:
-            TOL = 1e-3
+            self.TOL = 1e-3
         if 'OUTRES' in self.starpars.keys():
-            OUTRES = self.starpars['OUTRES']
+            self.OUTRES = self.starpars['OUTRES']
         else:
-            OUTRES = None
+            self.OUTRES = None
         
         # remove any extant RUNINFO.dat
         try:
@@ -342,7 +342,7 @@ class synthe(object):
         # write in information into input string
         if verbose:
             print("Running SynBeg")
-        synbegvar_i = self.synbegvar.format(WSTART=WSTART,WEND=WEND,RESOL=RESOL,PRED=PRED,TOL=TOL,LINOUT=LINOUT,OUTRES=OUTRES)
+        synbegvar_i = self.synbegvar.format(WSTART=self.WSTART,WEND=self.WEND,RESOL=self.RESOL,PRED=self.PRED,TOL=self.TOL,LINOUT=self.LINOUT,OUTRES=self.OUTRES)
         self.synbegout = self._callpro("synbeg",synbegvar_i,verbose=verbose)
         if verbose:
             print("Finished SynBeg")
