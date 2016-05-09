@@ -222,7 +222,7 @@ class FALmod(object):
         elif linelist == 'readmaster':
             # read the masterline lists (cargile or kurucz plus H2O+TiO)
             self.SYNTHE.readlines(rtype='readmaster',verbose=verbose_i)
-            self.speed = 'fast'
+            self.speed = 'slow'
             if self.timeit:
                 print("Pro: {1} --> Read in master line list -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
