@@ -222,7 +222,7 @@ class FALmod(object):
         elif linelist == 'readmaster':
             # read the masterline lists (cargile or kurucz plus H2O+TiO)
             self.SYNTHE.readlines(rtype='readmaster',verbose=verbose_i)
-            self.speed = 'slow'
+            self.speed = 'fast'
             if self.timeit:
                 print("Pro: {1} --> Read in master line list -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
@@ -351,6 +351,7 @@ class FALmod(object):
             vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
             QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],self.SYNTHE.RESOL,vmacdict)
             QMU2 = self.brd.broaden(outspec['WAVE'],outspec['QMU2'],self.SYNTHE.RESOL,vmacdict)
+            print QMU1
             outspec['QMU1'] = QMU1
             outspec['QMU2'] = QMU2
             if self.timeit:
