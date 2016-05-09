@@ -351,9 +351,8 @@ class FALmod(object):
             vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
             QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],self.SYNTHE.RESOL,vmacdict)
             QMU2 = self.brd.broaden(outspec['WAVE'],outspec['QMU2'],self.SYNTHE.RESOL,vmacdict)
-            print QMU1
-            outspec['QMU1'] = QMU1
-            outspec['QMU2'] = QMU2
+            outspec['QMU1'] = QMU1['FLUX']
+            outspec['QMU2'] = QMU2['FLUX']
             if self.timeit:
                 print("Pro: {1} --> BROADEN MACRO -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
