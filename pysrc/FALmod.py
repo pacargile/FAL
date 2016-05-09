@@ -156,7 +156,7 @@ class FALmod(object):
                 verbose_i = verbose
             else:
                 verbose_i = False
-        outspec,newll = self._broaden(verbose_i)
+        outspec,newll,binspecname = self._broaden(verbose_i)
 
         # do specout to get final spectrum
         # if (verbose == True or verbose == 'specout'):
@@ -182,7 +182,7 @@ class FALmod(object):
 
         if writespec:
             # write out spec, line list, and header to ascii
-            self._write(binspecname)
+            self._writeout(binspecname)
 
         # cd back into parent directory
         os.chdir(self.parentdir)
@@ -339,7 +339,7 @@ class FALmod(object):
             # self.SYNTHE._makesym('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),'ROT1_mac_inst')
             print("Pro: {1} --> No Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
-            return (outspec,newll)
+            return (outspec,newll,'ROT1')
     
         else:
             # -- do broaden for macroturblence --
@@ -366,7 +366,7 @@ class FALmod(object):
             # if self.timeit:
             #     print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             #     self.lasttime = time.time()
-        return (outspec,newll)
+        return (outspec,newll,'ROT1_mac')
 
     def _specout(self,infile,verbose=False):
         # read in binary output spectrum
