@@ -114,17 +114,16 @@ class FALmod(object):
             self.lasttime = self.starttime
 
         # call synbeg if readline != readold
-        if (verbose == True or verbose == 'synbeg'):
-            verbose_i = True
-        else:
-            verbose_i = False
-
         if linelist == 'readlast':
             if not os.path.exists('/dev/shm/FAL/{0}/INT'.format(self.ID)):
                 raise IOError("Pro: {1} --> WARNING: COULD NOT FIND INITIAL FILES!!!! {0:7.5f} s".format(time.time()-self.starttime,self.IDraw))
             else:
                 self.SYNTHE.reset()
         else:
+            if (verbose == True or verbose == 'synbeg'):
+                verbose_i = True
+            else:
+                verbose_i = False
             self.SYNTHE.synbeg(self.starpars,verbose=verbose_i)
 
         if archive:
