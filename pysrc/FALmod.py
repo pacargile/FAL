@@ -127,6 +127,9 @@ class FALmod(object):
         else:
             self.SYNTHE.synbeg(self.starpars,verbose=verbose_i)
 
+        if archive:
+            self.SYNTHE.archive()
+
         # read in line list
         if (verbose == True or verbose == 'readlines'):
             verbose_i = True
@@ -175,9 +178,8 @@ class FALmod(object):
             if os.path.exists('/dev/shm/FAL/{0}/fort.11'.format(self.ID)):
                 os.remove('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
             newll_st = self.glue.con_nptolp(newll)
-            self.glue.writelp(newll_st,'/dev/shm/FAL/{0}/fort.11'.format(self.ID))
-            os.symlink('/dev/shm/FAL/{0}/fort.11'.format(self.ID),'fort.11')
-            self.SYNTHE.archive()
+            self.glue.writelp(newll_st,'/dev/shm/FAL/{0}/INT/fort.11'.format(self.ID))
+            # os.symlink('/dev/shm/FAL/{0}/fort.11'.format(self.ID),'fort.11')
 
         if transspec != False:
             # do multiply transmission spectrum
@@ -206,7 +208,7 @@ class FALmod(object):
             rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":True} # atoms, molecules + H2O & TiO
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
             self.speed = 'slow'
-            
+
             if self.timeit:
                 print("Pro: {1} --> Read in all line lists -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()

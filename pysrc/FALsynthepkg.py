@@ -1011,7 +1011,7 @@ class synthe(object):
         # make copy of files in INT directory so that everything can be restarted fresh
         if not os.path.exists('/dev/shm/FAL/{0}/INT'.format(self.ID)):
             os.makedirs('/dev/shm/FAL/{0}/INT'.format(self.ID))
-        fortlist = ['fort.11','fort.10','fort.12','fort.14','fort.19','fort.20','fort.93']
+        fortlist = ['fort.10','fort.12','fort.14','fort.19','fort.20','fort.93']
         for ft in fortlist:
             self._fastcopy('/dev/shm/FAL/{0}/{1}'.format(self.ID,ft),
                            '/dev/shm/FAL/{0}/INT/{1}'.format(self.ID,ft))
