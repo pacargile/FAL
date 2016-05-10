@@ -134,7 +134,7 @@ class FALmod(object):
             verbose_i = True
         else:
             verbose_i = False
-        ll = self._readline(linelist,verbose_i)
+        self._readline(linelist,verbose_i)
 
         # adjust any delta values if parr has been provided
         if (verbose == True or verbose == 'adjustlines'):
@@ -142,7 +142,10 @@ class FALmod(object):
         else:
             verbose_i = False
         if parr != None:
-            self._adjustpar(parr,verbose_i)
+            if linelist == 'readlast':
+                self._adjustpar(parr,ll=self.orgll,verbose_i)
+            else:
+                self._adjustpar(parr,verbose_i)
 
         # do synthesis calc
         if type(verbose) == type(True):
@@ -178,7 +181,7 @@ class FALmod(object):
                 os.remove('/dev/shm/FAL/{0}/fort.11'.format(self.ID))
             newll_st = self.glue.con_nptolp(newll)
             self.glue.writelp(newll_st,'/dev/shm/FAL/{0}/INT/fort.11'.format(self.ID))
-            # os.symlink('/dev/shm/FAL/{0}/fort.11'.format(self.ID),'fort.11')
+            self.orgll = newll.copy()
 
         if transspec != False:
             # do multiply transmission spectrum
