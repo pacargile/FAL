@@ -555,13 +555,13 @@ class synthe(object):
         # write TiO line list files into fort.11 and fort.48
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
-        os.symlink(self.bigdatadir+'schwenke.bin','fort.11')
-        os.symlink(self.bigdatadir+'schwenke.bin','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        os.symlink(self.bigdatadir+'MOLECULES/schwenke.bin','fort.11')
+        os.symlink(self.bigdatadir+'MOLECULES/schwenke.bin','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
 
         if os.path.isfile("fort.48"):
             self._rmsym('fort.48',verbose=verbose)
-        os.symlink(self.bigdatadir+'eschwenke.bin','fort.48')
-        os.symlink(self.bigdatadir+'eschwenke.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
+        os.symlink(self.bigdatadir+'MOLECULES/eschwenke.bin','fort.48')
+        os.symlink(self.bigdatadir+'MOLECULES/eschwenke.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
 
         self.rmoleout_tio = self._callpro("rschwenk",verbose=verbose)
 
@@ -576,13 +576,13 @@ class synthe(object):
         """
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
-        os.symlink(self.bigdatadir+'h2oslowfix.bin','fort.11')
-        os.symlink(self.bigdatadir+'h2oslowfix.bin','/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
+        os.symlink(self.bigdatadir+'MOLECULES/h2oslowfix.bin','fort.11')
+        os.symlink(self.bigdatadir+'MOLECULES/h2oslowfix.bin','/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
 
         if os.path.isfile("fort.48"):
             self._rmsym('fort.48',verbose=verbose)
-        os.symlink(self.bigdatadir+'eh2opartridge.bin','fort.48')
-        os.symlink(self.bigdatadir+'eh2opartridge.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
+        os.symlink(self.bigdatadir+'MOLECULES/eh2opartridge.bin','fort.48')
+        os.symlink(self.bigdatadir+'MOLECULES/eh2opartridge.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
 
         self.rmoleout_h2o = self._callpro("rh2oslow",verbose=verbose)
 
@@ -598,8 +598,8 @@ class synthe(object):
         # write molfile line list into fort.11
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
-        os.symlink(self.bigdatadir+'{0}'.format(molfile),'fort.11')
-        os.symlink(self.bigdatadir+'{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
+        os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'fort.11')
+        os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
         
         # check to make sure all input/output files are right
         filesdict = {}
@@ -639,8 +639,8 @@ class synthe(object):
         # write atomic line list into fort.11
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
-        os.symlink(self.bigdatadir+'/gfall25jul15.dat','fort.11')
-        os.symlink(self.bigdatadir+'/gfall25jul15.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
+        os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
 
         # check to make sure all input/output files are right
         filesdict = {}
