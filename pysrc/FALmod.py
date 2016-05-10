@@ -374,7 +374,7 @@ class FALmod(object):
                 # the case with only one instrumental broadening (likely just a gaussian)
                 # self.broadout = self._callpro("broadenx",inputstr=intpars[parset[0]],verbose=verbose)
                 instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':'130000'}
-                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],self.SYNTHE.RESOL,instdict)
+                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
                 outspec['QMU1'] = QMU1['FLUX']
             else:
                 # the special case of the solar line profile with a SINC and a gaussian
@@ -382,7 +382,7 @@ class FALmod(object):
                 instdict2 = {'type':'GAUSSIAN','val':0.012210871,'units':'CM-1'}
 
                 for instdict_i in [instdict1,instdict2]:
-                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],self.SYNTHE.RESOL,instdict_i)
+                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict_i)
                     outspec['QMU1'] = QMU1['FLUX']
 
             if self.timeit:
