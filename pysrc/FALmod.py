@@ -206,17 +206,7 @@ class FALmod(object):
             rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":True} # atoms, molecules + H2O & TiO
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
             self.speed = 'slow'
-
-            # # remove the various line files in memory to save resources
-            # datfiles = glob.glob('/dev/shm/FAL/{0}/*.dat'.format(self.ID))
-            # binfiles = glob.glob('/dev/shm/FAL/{0}/*.bin'.format(self.ID))
-            # savefiles = ['he1tables.dat','continua.dat','molecules.dat','mod.dat']
-            # addfiles  = ['voax.asc','vobx.asc','vocx.asc']
-            # [datfiles.remove('/dev/shm/FAL/{0}/{1}'.format(self.ID,sf)) for sf in savefiles]
-            # [datfiles.append('/dev/shm/FAL/{0}/{1}'.format(self.ID,af)) for af in addfiles]
-            # [os.remove(dfil) for dfil in datafiles if os.path.isfile(dfil)]
-            # [os.remove(bfil) for bfil in binfiles if os.path.isfile(bfil)]
-
+            
             if self.timeit:
                 print("Pro: {1} --> Read in all line lists -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
