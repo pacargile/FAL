@@ -15,6 +15,8 @@ synthe:
 	$(FC) $(LDFLAGS)  -o rgfall.exe  rgfall.o
 	$(FC) $(FFLAGS) -o rpunchbin.o rpunchbin.for
 	$(FC) $(LDFLAGS) -o rpunchbin.exe rpunchbin.o
+	$(FC) $(FFLAGS) -o rpunchxx.o rpunchxx.for
+	$(FC) $(LDFLAGS) -o rpunchxx.exe rpunchxx.o
 	$(FC) $(FFLAGS) -o  rschwenk.o rschwenk.for
 	$(FC) $(LDFLAGS) -o  rschwenk.exe rschwenk.o
 	$(FC) $(FFLAGS) -o rh2oslow.o rh2oslow.for
@@ -35,10 +37,8 @@ synthe:
 	$(FC) $(LDFLAGS)  -o syntoascanga.exe syntoascanga.o
 
 testing:
-	$(FC) $(FFLAGS)  -o rschwenk.o rschwenk.for 
-	$(FC) $(LDFLAGS) -o rschwenk.exe rschwenk.o
-	$(FC) $(FFLAGS) -o rh2oslow.o rh2oslow.for
-	$(FC) $(LDFLAGS) -o rh2oslow.exe rh2oslow.o
+	$(FC) $(FFLAGS)  -o rpunchxx.o rpunchxx.for  
+	$(FC) $(LDFLAGS) -o rpunchxx.exe rpunchxx.o
 install:
 	/bin/mv *.exe ../bin
 
