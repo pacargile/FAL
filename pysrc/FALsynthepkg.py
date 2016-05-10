@@ -349,7 +349,7 @@ class synthe(object):
 
         return (self.synbegout,self.ID)
 
-    def readlines(self,rtype=None,verbose=None):
+    def readlines(self,rtype=None,rlinedict=None,verbose=None):
         """
         function that determines if you should use a punch500 or 
         read in all the individual lines
