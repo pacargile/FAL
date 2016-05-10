@@ -1024,6 +1024,8 @@ class synthe(object):
         fortlist = glob.glob('fort.*') + glob.glob('ROT*')
         for ft in fortlist:
             self._rmsym(ft)
+        if os.path.exists('LINEINFO.dat'):
+            os.remove('LINEINFO.dat')
 
         # copy files for INT back into memory and link them
         fortlist = ['fort.11','fort.10','fort.12','fort.14','fort.19','fort.20','fort.93']
@@ -1031,9 +1033,6 @@ class synthe(object):
             self._fastcopy('/dev/shm/FAL/{0}/INT/{1}'.format(self.ID,ft),
                 '/dev/shm/FAL/{0}/{1}'.format(self.ID,ft))
             os.symlink('/dev/shm/FAL/{0}/{1}'.format(self.ID,ft),ft)
-
-
-
 
     @property
     def atmomod(self):
