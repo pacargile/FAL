@@ -8,8 +8,7 @@ def selmod(starpars):
 		synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
 			"0.          0   {LINOUT:3.0f}{TOL:7.5f}     {PRED}    00\n"
 			"AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD")
-		gausspar = ("GAUSSIAN  130000.   RESOLUTION\n"
-			"1234567890123456789012345678901234567890")
+		gausspar = 130000.0
 		instparstr = {"OPT":{"GAUSSIAN":gausspar},"HBAND":{"GAUSSIAN":gausspar}}
 
 		modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/Arcturus_NEWpars_V4.dat"
@@ -94,14 +93,10 @@ def selmod(starpars):
 
 		# set instrument profile pars
 		instparstr = {"OPT":{},"HBAND":{}}
-		sincpar_opt = ("SINX/X    .047628472CM-1      .047628472   COMMENT FIELD\n"
-			"1234567890123456789012345678901234567890")
-		gausspar_opt = ("GAUSSIAN  .071442708CM-1      .071442708   COMMENT FIELD\n"
-			 "1234567890123456789012345678901234567890")
-		sincpar_hband = ("SINX/X    .008140581CM-1      .008140581   COMMENT FIELD\n"
-			"1234567896012345678960123456789601234567890")
-		gausspar_hband = ("GAUSSIAN  .012210871CM-1      .012210871   COMMENT FIELD\n"
-			"123456789012345678960123456789601234567890")
+		sincpar_opt = 0.047628472
+		gausspar_opt = 0.071442708
+		sincpar_hband = 0.008140581
+		gausspar_hband = 0.012210871
 		instparstr['OPT'] = {"SINC":sincpar_opt,"GAUSSIAN":gausspar_opt}
 		instparstr['HBAND'] = {"SINC":sincpar_hband,"GAUSSIAN":gausspar_hband}
 
@@ -113,9 +108,8 @@ def selmod(starpars):
 		synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
 			"0.          0   {LINOUT:3.0f}{TOL:7.5f}     {PRED}    00\n"
 			"AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD")
-		gausspar = ("GAUSSIAN  {OUTRES:10.1f}   RESOLUTION\n"
-			"1234567890123456789012345678901234567890")
-		instparstr = {"OPT":{"GAUSSIAN":gausspar},"HBAND":{"GAUSSIAN":gausspar}}
+		instparstr['OPT']   = None
+		instparstr['HBAND'] = None
 
 		# set model atmosphere to use **USING SOLAR BECAUSE THIS WILL CHANGE TO AN INTERPOLATOR**
 		modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"

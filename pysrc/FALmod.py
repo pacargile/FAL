@@ -14,6 +14,16 @@ class FALmod(object):
     spectrum from SYNTHE to use in python
     """    
     def __init__(self,ID=None,starpars='Sun',waverange=None,verbose=False):
+        '''
+        FALmod -> Python wrapper around SYNTHE
+
+        starpars dictionary can hold:
+            - OBJECT: Sun or Arcturus
+            - VROT: Rotation velocity (negative to turn on projection)
+            - MACVEL: Macroturbulent velocity
+            - OUTRES: Output resolution of spectrum (if OBJECT not Sun or Arcturs)
+        '''
+
 
         # set ID
         if ID != None:
@@ -158,13 +168,6 @@ class FALmod(object):
                 verbose_i = False
         outspec,newll,binspecname = self._broaden(verbose_i)
 
-        # do specout to get final spectrum
-        # if (verbose == True or verbose == 'specout'):
-        #     verbose_i = True
-        # else:
-        #     verbose_i = False
-        # outspec,newll = self._specout(binspecname,verbose_i)
-
         if archive:
             # write newll into INT/ for archiving purposes
             if os.path.exists('fort.11'):
@@ -202,7 +205,6 @@ class FALmod(object):
             # read all individual line lists
             rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":True} # atoms, molecules + H2O & TiO
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
-
             self.speed = 'slow'
 
             # # remove the various line files in memory to save resources
@@ -230,6 +232,7 @@ class FALmod(object):
         elif linelist == 'readlast':
             # read the previously created line list in directory
             self.SYNTHE.readlines(rtype='readlast',verbose=verbose_i)
+            self.speed = 'fast'
             if self.timeit:
                 print("Pro: {1} --> Read in lines -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
@@ -237,6 +240,7 @@ class FALmod(object):
         else:
             # linelist equal to a path to user defined line list 
             self.SYNTHE.readlines(rtype=linelist,verbose=verbose_i)
+            self.speed = 'fast'
             if self.timeit:
                 print("Pro: {1} --> Read in user defined line list {2} -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw,linelist))
                 self.lasttime = time.time()
@@ -336,7 +340,6 @@ class FALmod(object):
         # -- check if the user wants broadening --
         if self.starpars['MACVEL'] == -1:
             # no macrovel applied, just return rotated spectrum to output
-            # self.SYNTHE._makesym('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),'ROT1_mac_inst')
             print("Pro: {1} --> No Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
             return (outspec,newll,'ROT1')
@@ -347,7 +350,6 @@ class FALmod(object):
                 verbose_i = True
             else:
                 verbose_i = False
-            # self.SYNTHE.broaden('ROT1',self.starpars['MACVEL'],broadtype='MAC',verbose=verbose_i)
             vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
             QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],vmacdict)
             outspec['QMU1'] = QMU1['FLUX']
@@ -360,26 +362,24 @@ class FALmod(object):
                 verbose_i = True
             else:
                 verbose_i = False
-            # self.SYNTHE.broaden('ROT1_mac',broadtype='INSTRUMENT',verbose=verbose_i)
-            # determine which instrument settings should be used
-            # if WLreg=='OPT':
-            #     intpars = self.SYNTHE.instparstr['OPT']
-            # elif WLreg=='HBAND':
-            #     intpars = self.SYNTHE.instparstr['HBAND']
-            # else:
+
             intpars = self.SYNTHE.instparstr['HBAND']
 
             parset = intpars.keys()
             if len(intpars.keys()) == 1:
-                # the case with only one instrumental broadening (likely just a gaussian)
-                # self.broadout = self._callpro("broadenx",inputstr=intpars[parset[0]],verbose=verbose)
-                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':'130000'}
-                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
-                outspec['QMU1'] = QMU1['FLUX']
+                if intpars['GAUSSIAN'] != None:
+                    # the case with only one instrumental broadening (likely just a gaussian)
+                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':intpars['GAUSSIAN']}
+                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                    outspec['QMU1'] = QMU1['FLUX']
+                else:                    
+                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.starpars['OUTRES']}
+                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                    outspec['QMU1'] = QMU1['FLUX']
             else:
                 # the special case of the solar line profile with a SINC and a gaussian
-                instdict1 = {'type':'SINX/X','val':0.008140581,'units':'CM-1'}
-                instdict2 = {'type':'GAUSSIAN','val':0.012210871,'units':'CM-1'}
+                instdict1 = {'type':'SINX/X','val':intpars['SINC'],'units':'CM-1'}
+                instdict2 = {'type':'GAUSSIAN','val':intpars['GAUSSIAN'],'units':'CM-1'}
 
                 for instdict_i in [instdict1,instdict2]:
                     QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict_i)
