@@ -48,7 +48,7 @@ def linesel(LL,condst,minWL,maxWL):
 	for ii,code in enumerate(LL['CODE']):
 		if float(code) > 100.0:
 			# pick off H2O lines
-			if float(code) = 10108.0:
+			if float(code) == 10108.0:
 				molbandarr[ii] = 'H2O'
 			else:
 				# find first character in label 
