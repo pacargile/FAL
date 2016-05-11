@@ -114,14 +114,8 @@ class FALmod(object):
             self.lasttime = self.starttime
 
         # call synbeg if readline != readlast
-        # have to do the first conditional, otherwise astropy table complains
-        if type(linelist).__name__ == 'Table':
-            if (verbose == True or verbose == 'synbeg'):
-                verbose_i = True
-            else:
-                verbose_i = False
-            self.SYNTHE.synbeg(self.starpars,clobber=True,verbose=verbose_i)
-        elif linelist == 'readlast':
+
+        if str(linelist) == 'readlast':
             if not os.path.exists('/dev/shm/FAL/{0}/INT'.format(self.ID)):
                 raise IOError("Pro: {1} --> WARNING: COULD NOT FIND INITIAL FILES!!!! {0:7.5f} s".format(time.time()-self.starttime,self.IDraw))
             else:
@@ -149,7 +143,7 @@ class FALmod(object):
         else:
             verbose_i = False
         if parr != None:
-            if linelist == 'readlast':
+            if str(linelist) == 'readlast':
                 self._adjustpar(parr,ll=self.orgll,verbose=verbose_i)
             else:
                 self._adjustpar(parr,verbose=verbose_i)
