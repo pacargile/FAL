@@ -218,11 +218,14 @@ class FALmcmc(object):
         # Assemble working line list (union of ll_i from last for-loop)
         print('Pro: {0} --> Assemble working line list'.format(self.ID))
         # stack the tables
+        print('VSTACK')
         fmll = vstack([origsyndict[ID_i][1] for ID_i in self.IDlist])
         # fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
         # sort tables on all collumns, include RESID as that way the stronger line will be listed first and will be set as a fit parameter
         tabpars = ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER']
+        print('SORT')
         fmll.sort(tabpars+['RESID'])
+        print('UNIQUE')
         fmll = unique(fmll,tabpars)
 
         # set it into self
@@ -234,6 +237,8 @@ class FALmcmc(object):
 
         for _ in range(5):
             _ = fmdict[self.IDlist[0]].runsynthe(timeit=True,linelist='readlast')
+            _ = fmdict[self.IDlist[1]].runsynthe(timeit=True,linelist='readlast')
+            print(' ')
 
         # # set bool = 1 for duplicated lines 
         # for ii,ll_i in enumerate(fmll[:-1]):
