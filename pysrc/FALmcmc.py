@@ -184,7 +184,7 @@ class FALmcmc(object):
 
         # setting cut for line selection
         self.condst = [{'LP':'RESID','OP':np.less,'LV':0.99}]
-        
+
         # define a general start time so that the code can stop short of the wall time and save everything
         if starttime == None:
             self.starttime = time.time()
@@ -200,7 +200,7 @@ class FALmcmc(object):
         print('Pro: {0} --> Full Wavelength Range = {1:9.5f}-{2:9.5f} ({3:9.5f}) nm'.format(self.ID,self.minWL-0.1,self.maxWL+0.1,self.maxWL-self.minWL+0.2))
 
         # Define synthesis wavelength range
-        waverange = [self.minWL-0.1,self.maxWL+0.1]
+        self.waverange = [self.minWL-0.1,self.maxWL+0.1]
 
         # set up some dictionaries for passing objects
         fmdict = {}
@@ -210,7 +210,7 @@ class FALmcmc(object):
         for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
             print('Pro: {0} --> Running original synthe on full master line list for {1}'.format(self.ID,star_i))
             # initialize the class
-            fm_i = FALmod.FALmod(ID=ID_i,waverange=waverange,starpars=star_i)
+            fm_i = FALmod.FALmod(ID=ID_i,waverange=self.waverange,starpars=star_i)
             # run SYNTHE using the master line list to grab all important lines
             spec_i,ll_i = fm_i.runsynthe(timeit=True,linelist='readmaster')
             fmdict[ID_i] = fm_i
@@ -236,50 +236,52 @@ class FALmcmc(object):
         # run function to select which lines are modeled
         (self.parr,self.psig,self.pflag,self.Tarr) = FALlinesel.linesel(self.fmll,self.condst,self.minLINWL,self.maxLINWL)
 
-        # # set bool = 1 for duplicated lines 
-        # for ii,ll_i in enumerate(fmll[:-1]):
-        #     if (ll_i['FILTERBOOL'] == 0) and (ll_i['WL'] == fmll['WL'][ii+1]):
-        #         fmll['FILTERBOOL'][ii+1] = 1
-        # # filter out duplicated lines
-        # fmll = fmll[fmll['FILTERBOOL'] != 1]
-        # fmll.remove_column('FILTERBOOL')
+        # calculate number of lines with free paramters and their wavelengths
+        fitlineind = []
+        fitlinewl  = []
+        for ii,tt in enumerate(self.Tarr):
+            if not all(tt == -1):
+                fitlineind.append(ii)
+                fitlinewl.append(float(self.fmll['WL'][ii]))
 
 
-        # # initialize FALmod
-        # self.indict = {'WSTART':self.minWL-0.1,'WEND':self.maxWL+0.1,'RESOL':3000000.0,'VROT':-2.02,'MACVEL':1.5,'PRED':1,'LINOUT':30}        
-        # # USING RLINE
-        # self.fm = FALmod.FALmod(startll='master',ID=self.ID,indict=self.indict,injectlines=injectlines)
-        # st = time.time()
-        # print("Pro: {0} --> Start Initial Call...".format(self.ID))
-        # ogspec = Table(self.fm([],reusell=False,writespec=True,verbose=False,timeit=True,speed='fast'))
-        # print("Pro: {0} --> Finished Call, took {1:5.3f} sec".format(self.ID,time.time()-st))
+        print("Pro: {0} --> Total number of lines considered in WL segment = {1}".format(self.ID,len(self.fm.ll)))
+        print("Pro: {0} --> Number of lines that are free in WL segment = {1}".format(self.ID,len(fitlinewl)))
+        # print("Pro: {0} --> Index in line list of the modeled lines...".format(self.ID),fitlineind)
+        # print("Pro: {0} --> WL of modeled lines...".format(self.ID),fitlinewl)
 
-        # # run function to select which lines are modeled
-        # (self.parr,self.psig,self.pflag,self.Tarr) = FALlinesel.linesel(self.fm,condst,self.minLINWL,self.maxLINWL)
+        # number of dimensions
+        self.ndim = len(self.parr)
+        print("Pro: {0} --> Number of Free Line Parameters...".format(self.ID),self.ndim)
+        print("Pro: {0} --> Fitting Transmission Spectrum (scaling and velocity)".format(self.ID))
+        self.ndim = self.ndim + 2
 
-        # # calculate number of lines with free paramters and their wavelengths
-        # fitlineind = []
-        # fitlinewl  = []
-        # for ii,tt in enumerate(self.Tarr):
-        #     if not all(tt == -1):
-        #         fitlineind.append(ii)
-        #         fitlinewl.append(float(self.fm.ll['WL'][ii]))
-        
-        # print("Pro: {0} --> Total number of lines considered in WL segment = {1}".format(self.ID,len(self.fm.ll)))
-        # print("Pro: {0} --> Number of lines that are free in WL segment = {1}".format(self.ID,len(fitlinewl)))
-        # # print("Pro: {0} --> Index in line list of the modeled lines...".format(self.ID),fitlineind)
-        # # print("Pro: {0} --> WL of modeled lines...".format(self.ID),fitlinewl)
+        # # inject fake lines
+        # self.injectfake()
 
+        # # inject previous parameters
+        # self.injectprev()
+
+        # get observed data and transmission spectrum
+        (self.obssol,self.obsarc,self.transol,self.tranarc) = self.getspecdata()
+
+        # initialize output files
+        self.initoutput()
+
+        print("Pro: {0} --> Finished Setup".format(self.ID))
+
+    def injectfake(self):
         # # print out if the code found any lines to inject
         # FAKELINES = 0
-        # for ll_t in self.fm.ll:
+        # for ll_t in self.fmll:
         #     if 'FAK' in str(ll_t['REF']):
         #         print("Pro: {0} --> Inject FAKE line at WL={1}".format(self.ID,ll_t['WL']))
         #         FAKELINES = FAKELINES + 1
         # if FAKELINES == 0:
         #     print("Pro: {0} --> NO FAKE LINES FOUND IN SEGMENT".format(self.ID))
+        return
 
-
+    def injectprev(self):
         # # determine if there are any pre-initialized lines (from previous run) and set those free parameters
         # if initlines != None:
         #     # make a unique ID for each line
@@ -331,14 +333,18 @@ class FALmcmc(object):
         #                 pass
         #     print("Pro: {0} --> Setting Previous Pars for {1} lines".format(self.ID,numpreset))
 
-        # # number of dimensions
-        # self.ndim = len(self.parr)
-        # print("Pro: {0} --> Number of Free Line Parameters...".format(self.ID),self.ndim)
-        # if self.transpar == 1:
-        #     print("Pro: {0} --> Fitting Transmission Spectrum Scaling".format(self.ID))
-        #     self.ndim = self.ndim + 1
-        #     print("Pro: {0} --> Fitting Transmission Spectrum Vel Shift".format(self.ID))
-        #     self.ndim = self.ndim + 1
+        return
+
+    def getspecdata(self):
+        if ((self.minWL > 470.0) & (self.maxWL < 800.0)):
+            print("Pro: {0} --> Working with Solar Optical Spectrum".format(self.ID))
+            sol = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_4750_8270.fits',format='fits')            
+            transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_OPT_10_22_15.h5','r')
+            trans = Table(np.array(transh5['spec']))
+            trans.sort('WAVE')
+
+            # correct for slight doppler shift
+            trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
 
         # # read in observed data
         # if ((self.minWL > 400.0) & (self.maxWL < 475.0)):
@@ -380,6 +386,9 @@ class FALmcmc(object):
         # transintrp = UnivariateSpline(trans_i['WAVE'].data,trans_i['FLUX'].data,s=0,k=1)(self.obswave)
         # self.transflux = transintrp
 
+        return (sol,arc,transol,tranarc)
+
+    def initoutput(self):
         # print("Pro: {0} --> Initializing Output Files".format(self.ID))
         # # set up outfile
         # if outputfile == None:
@@ -449,7 +458,7 @@ class FALmcmc(object):
         # transpec['FLUX'] = self.transflux
         # transpec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
 
-        # print("Pro: {0} --> Finished Setup".format(self.ID))
+        return 
 
 
     def buildsampler(self,nwalkers=0,threads=0):
