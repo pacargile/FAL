@@ -228,14 +228,14 @@ class FALmcmc(object):
         # set it into self
         self.fmll = fmll
 
-        # now run each stellar spectrum again and archive the results
-        for ID_i in self.IDlist:
-            _spec,_ll = fmdict[ID_i].runsynthe(timeit=True,linelist=self.fmll,archive=True)
+        # # now run each stellar spectrum again and archive the results
+        # for ID_i in self.IDlist:
+        #     _spec,_ll = fmdict[ID_i].runsynthe(timeit=True,linelist=self.fmll,archive=True)
         
-        for _ in range(5):
-            _ = fmdict[self.IDlist[0]].runsynthe(timeit=True,linelist='readlast')
-            _ = fmdict[self.IDlist[1]].runsynthe(timeit=True,linelist='readlast')
-            print(' ')
+        # for _ in range(5):
+        #     _ = fmdict[self.IDlist[0]].runsynthe(timeit=True,linelist='readlast')
+        #     _ = fmdict[self.IDlist[1]].runsynthe(timeit=True,linelist='readlast')
+        #     print(' ')
 
         # # set bool = 1 for duplicated lines 
         # for ii,ll_i in enumerate(fmll[:-1]):
