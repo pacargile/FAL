@@ -5,7 +5,7 @@ import emcee
 import h5py
 
 import numpy as np
-from astropy.table import Table
+from astropy.table import Table,vstack
 from scipy.interpolate import UnivariateSpline
 from scipy.stats import beta
 from scipy import constants
@@ -221,9 +221,10 @@ class FALmcmc(object):
         fmll = vstack([origsyndict[ID_i](1) for ID_i in self.IDlist])
         fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
         # sort tables on all collumns, include RESID as that way the stronger line will be listed first
-        fmll.sort(
-            ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER','RESID']
-            )
+        tabpars = ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER']
+        fmll.sort(tabpars+['RESID'])
+        fmll = unique(fmll,tabpars)
+
         # set bool = 1 for duplicated lines 
         for ii,ll_i in enumerate(fmll[:-1]):
             if (ll_i['FILTERBOOL'] == 0) and (ll_i['WL'] == fmll['WL'][ii+1]):
