@@ -211,7 +211,7 @@ class FALmcmc(object):
             # initialize the class
             fm_i = FALmod.FALmod(ID=ID_i,waverange=waverange,starpars=star_i)
             # run SYNTHE using the master line list to grab all important lines
-            spec_i,ll_i = fm.runsynthe(timeit=True,linelist='readmaster')
+            spec_i,ll_i = fm_i.runsynthe(timeit=True,linelist='readmaster')
             fmdict[ID_i] = fm_i
             origsyndict[ID_i] = (spec_i,ll_i)
 
