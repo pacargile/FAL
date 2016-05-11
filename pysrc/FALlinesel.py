@@ -47,22 +47,26 @@ def linesel(LL,condst,minWL,maxWL):
 
 	for ii,code in enumerate(LL['CODE']):
 		if float(code) > 100.0:
-			# find first character in label 
-			for aa in LL['LABEL'][ii]:
-				if aa.isalpha():
-					AA = aa
-					break
-			# find first character in labelp 
-			for bb in LL['LABELP'][ii]:
-				if bb.isalpha():
-					BB = bb
-					break
-			# generate a band symbol
-			try:
-				molbandarr[ii] = AA+BB
-			except UnboundLocalError:
-				print LL[ii]
-				raise
+			# pick off H2O lines
+			if float(code) = 10108.0:
+				molbandarr[ii] = 'H2O'
+			else:
+				# find first character in label 
+				for aa in LL['LABEL'][ii]:
+					if aa.isalpha():
+						AA = aa
+						break
+				# find first character in labelp 
+				for bb in LL['LABELP'][ii]:
+					if bb.isalpha():
+						BB = bb
+						break
+				# generate a band symbol
+				try:
+					molbandarr[ii] = AA+BB
+				except UnboundLocalError:
+					print LL[ii]
+					raise
 
 
 	for ii,lind in enumerate(lineselectind):
