@@ -441,8 +441,8 @@ class synthe(object):
             if os.path.isfile("fort.11"):
                 self._rmsym('fort.11',verbose=verbose)
             # check to see if user line list is np table ll or an ascii path
-            if type(usrll).__name__ == 'Table':
-                self.glue.writenp(usrll,'/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+            if type(userll).__name__ == 'Table':
+                self.glue.writenp(userll,'/dev/shm/FAL/{0}/fort.11'.format(self.ID))
                 os.symlink('/dev/shm/FAL/{0}/fort.11'.format(self.ID),'fort.11')
             else:
                 self._makesym(userll,'fort.11')
