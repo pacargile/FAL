@@ -113,8 +113,15 @@ class FALmod(object):
             self.starttime = time.time()
             self.lasttime = self.starttime
 
-        # call synbeg if readline != readold
-        if linelist == 'readlast':
+        # call synbeg if readline != readlast
+        # have to do the first conditional, otherwise astropy table complains
+        if type(linelist).__name__ == 'Table':
+            if (verbose == True or verbose == 'synbeg'):
+                verbose_i = True
+            else:
+                verbose_i = False
+            self.SYNTHE.synbeg(self.starpars,clobber=True,verbose=verbose_i)
+        elif linelist == 'readlast':
             if not os.path.exists('/dev/shm/FAL/{0}/INT'.format(self.ID)):
                 raise IOError("Pro: {1} --> WARNING: COULD NOT FIND INITIAL FILES!!!! {0:7.5f} s".format(time.time()-self.starttime,self.IDraw))
             else:
@@ -205,9 +212,7 @@ class FALmod(object):
     def _readline(self,linelist,verbose_i=False):
         # read the line list appropriate for the user call
         # catch the case where the line list is a numpy table
-        print('HERE1')
         if type(linelist).__name__ == 'Table':
-            print('HERE2')
             # linelist equal to a path to user defined line list 
             self.SYNTHE.readlines(rtype=linelist,verbose=verbose_i)
             self.speed = 'fast'
