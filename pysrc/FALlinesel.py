@@ -2,8 +2,7 @@ import numpy as np
 
 # FUNCTION THAT TAKES A FM.LL + CONDITIONAL STATEMENT AND RETURNS A P ARRAY, P_SIGMA ARRAY, AND T ARRAY
 
-def linesel(fm,condst,minWL,maxWL):
-	LL = fm.ll.copy()
+def linesel(LL,condst,minWL,maxWL):
 
 	# GENERATE ZEROED T ARRAY
 	t = np.array([[-1,-1,-1,-1,-1] for _ in LL])
@@ -79,7 +78,8 @@ def linesel(fm,condst,minWL,maxWL):
 			t[lind][1] = kk
 			kk = kk+1
 
-			if fm.gammaswitch['switch'][lind] == 'W':
+			# append van der Waals if it isn't a molecule
+			if float(LL['CODE'][lind]) < 100.0:
 				# van der Waals
 				p.append(LL['DGAMMAW'][lind])
 				psig.append(init_delga_sig)
@@ -87,24 +87,32 @@ def linesel(fm,condst,minWL,maxWL):
 				t[lind][2] = kk
 				kk = kk + 1
 
-			elif fm.gammaswitch['switch'][lind] == 'R':
-				# radiative
-				p.append(LL['DGAMMAR'][lind])
-				psig.append(init_delga_sig)
-				pflag.append('GR')
-				t[lind][3] = kk
-				kk = kk + 1
+			# if fm.gammaswitch['switch'][lind] == 'W':
+			# 	# van der Waals
+			# 	p.append(LL['DGAMMAW'][lind])
+			# 	psig.append(init_delga_sig)
+			# 	pflag.append('GW')
+			# 	t[lind][2] = kk
+			# 	kk = kk + 1
 
-			elif fm.gammaswitch['switch'][lind] == 'S':
-				# starks
-				p.append(LL['DGAMMAS'][lind])
-				psig.append(init_delga_sig)
-				pflag.append('GS')
-				t[lind][4] = kk
-				kk = kk + 1
+			# elif fm.gammaswitch['switch'][lind] == 'R':
+			# 	# radiative
+			# 	p.append(LL['DGAMMAR'][lind])
+			# 	psig.append(init_delga_sig)
+			# 	pflag.append('GR')
+			# 	t[lind][3] = kk
+			# 	kk = kk + 1
 
-			else:
-				pass
+			# elif fm.gammaswitch['switch'][lind] == 'S':
+			# 	# starks
+			# 	p.append(LL['DGAMMAS'][lind])
+			# 	psig.append(init_delga_sig)
+			# 	pflag.append('GS')
+			# 	t[lind][4] = kk
+			# 	kk = kk + 1
+
+			# else:
+			# 	pass
 
 			# IDENTIFY ANY POSSIBLE COUPLED LINES AND SET THEIR T ARRAY TO BE THE SAME AS THE CURRENT LINE
 

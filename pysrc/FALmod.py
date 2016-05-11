@@ -120,12 +120,14 @@ class FALmod(object):
                 raise IOError("Pro: {1} --> WARNING: COULD NOT FIND INITIAL FILES!!!! {0:7.5f} s".format(time.time()-self.starttime,self.IDraw))
             else:
                 self.SYNTHE.reset()
-        else:
+        elif str(linelist) != 'readlast':
             if (verbose == True or verbose == 'synbeg'):
                 verbose_i = True
             else:
                 verbose_i = False
             self.SYNTHE.synbeg(self.starpars,clobber=True,verbose=verbose_i)
+        else:
+            pass
 
         if archive:
             self.SYNTHE.archive()
@@ -210,9 +212,8 @@ class FALmod(object):
             # linelist equal to a path to user defined line list 
             self.SYNTHE.readlines(rtype=linelist,verbose=verbose_i)
             self.speed = 'fast'
-            linelistname = 'NP LL'
             if self.timeit:
-                print("Pro: {1} --> Read in user defined line list {2} -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw,linelistname))
+                print("Pro: {1} --> Read in user defined numpy table line list -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
             return
 

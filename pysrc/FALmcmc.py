@@ -179,11 +179,12 @@ class FALmcmc(object):
             self.maxLINWL = maxlinWL
 
         self.ID = IDin
-
         self.numstars = 2
-
         self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
+        # setting cut for line selection
+        self.condst = [{'LP':'RESID','OP':np.less,'LV':0.99}]
+        
         # define a general start time so that the code can stop short of the wall time and save everything
         if starttime == None:
             self.starttime = time.time()
@@ -231,11 +232,9 @@ class FALmcmc(object):
         # now run each stellar spectrum again and archive the results
         for ID_i in self.IDlist:
             _spec,_ll = fmdict[ID_i].runsynthe(timeit=True,linelist=self.fmll,archive=True)
-        
-        # for _ in range(5):
-        #     _ = fmdict[self.IDlist[0]].runsynthe(timeit=True,linelist='readlast')
-        #     _ = fmdict[self.IDlist[1]].runsynthe(timeit=True,linelist='readlast')
-        #     print(' ')
+
+        # run function to select which lines are modeled
+        (self.parr,self.psig,self.pflag,self.Tarr) = FALlinesel.linesel(self.fmll,self.condst,self.minLINWL,self.maxLINWL)
 
         # # set bool = 1 for duplicated lines 
         # for ii,ll_i in enumerate(fmll[:-1]):

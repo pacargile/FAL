@@ -311,7 +311,7 @@ class synthe(object):
                     os.stat(lf)
                 except OSError:
                     os.unlink(lf)
-                    
+
         # read in information from input dictionary
         self.WSTART = self.starpars['WSTART']
         self.WEND = self.starpars['WEND']
