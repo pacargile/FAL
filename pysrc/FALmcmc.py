@@ -5,7 +5,7 @@ import emcee
 import h5py
 
 import numpy as np
-from astropy.table import Table,vstack
+from astropy.table import Table,vstack,unique
 from scipy.interpolate import UnivariateSpline
 from scipy.stats import beta
 from scipy import constants
