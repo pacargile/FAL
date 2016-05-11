@@ -58,7 +58,11 @@ def linesel(LL,condst,minWL,maxWL):
 					BB = bb
 					break
 			# generate a band symbol
-			molbandarr[ii] = AA+BB
+			try:
+				molbandarr[ii] = AA+BB
+			except UnboundLocalError:
+				print LL[ii]
+				raise
 
 
 	for ii,lind in enumerate(lineselectind):
