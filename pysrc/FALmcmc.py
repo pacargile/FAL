@@ -219,19 +219,19 @@ class FALmcmc(object):
         print('Pro: {0} --> Assemble working line list'.format(self.ID))
         # stack the tables
         fmll = vstack([origsyndict[ID_i](1) for ID_i in self.IDlist])
-        fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
+        # fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
         # sort tables on all collumns, include RESID as that way the stronger line will be listed first
         tabpars = ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER']
         fmll.sort(tabpars+['RESID'])
         fmll = unique(fmll,tabpars)
 
-        # set bool = 1 for duplicated lines 
-        for ii,ll_i in enumerate(fmll[:-1]):
-            if (ll_i['FILTERBOOL'] == 0) and (ll_i['WL'] == fmll['WL'][ii+1]):
-                fmll['FILTERBOOL'][ii+1] = 1
-        # filter out duplicated lines
-        fmll = fmll[fmll['FILTERBOOL'] != 1]
-        fmll.remove_column('FILTERBOOL')
+        # # set bool = 1 for duplicated lines 
+        # for ii,ll_i in enumerate(fmll[:-1]):
+        #     if (ll_i['FILTERBOOL'] == 0) and (ll_i['WL'] == fmll['WL'][ii+1]):
+        #         fmll['FILTERBOOL'][ii+1] = 1
+        # # filter out duplicated lines
+        # fmll = fmll[fmll['FILTERBOOL'] != 1]
+        # fmll.remove_column('FILTERBOOL')
 
         self.fmll = fmll
 
