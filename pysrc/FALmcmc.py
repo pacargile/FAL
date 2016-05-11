@@ -220,7 +220,7 @@ class FALmcmc(object):
         # stack the tables
         fmll = vstack([origsyndict[ID_i][1] for ID_i in self.IDlist])
         # fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
-        # sort tables on all collumns, include RESID as that way the stronger line will be listed first
+        # sort tables on all collumns, include RESID as that way the stronger line will be listed first and will be set as a fit parameter
         tabpars = ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER']
         fmll.sort(tabpars+['RESID'])
         fmll = unique(fmll,tabpars)

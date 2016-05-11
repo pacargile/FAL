@@ -316,7 +316,7 @@ class synthe(object):
         if 'TOL' in self.starpars.keys():
             self.TOL = self.starpars['TOL']
         else:
-            self.TOL = 1e-4
+            self.TOL = 1e-3
         if 'OUTRES' in self.starpars.keys():
             self.OUTRES = self.starpars['OUTRES']
         else:
