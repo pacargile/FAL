@@ -311,7 +311,7 @@ class synthe(object):
                     os.stat(lf)
                 except OSError:
                     os.unlink(lf)
-
+                    
         # read in information from input dictionary
         self.WSTART = self.starpars['WSTART']
         self.WEND = self.starpars['WEND']
@@ -842,7 +842,10 @@ class synthe(object):
         # make mod atm link to fort.5 and spectrv.input as fort.25
         self._makesym(self.atmomod,'fort.5')
         self._makesym(self.spectrvin,'fort.25')
-                
+        
+        if os.path.exists('./LINEINFO.dat'):
+            os.remove('./LINEINFO.dat')
+     
         # check to make sure all input/output files are right
         filesdict = {}
         filesdict['infiles'] = {'fort.5':'ascii','fort.25':'ascii','fort.9':'bin','fort.25':'bin'}
