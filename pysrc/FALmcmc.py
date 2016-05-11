@@ -213,12 +213,12 @@ class FALmcmc(object):
             # run SYNTHE using the master line list to grab all important lines
             spec_i,ll_i = fm_i.runsynthe(timeit=True,linelist='readmaster')
             fmdict[ID_i] = fm_i
-            origsyndict[ID_i] = (spec_i,ll_i)
+            origsyndict[ID_i] = [spec_i,ll_i]
 
         # Assemble working line list (union of ll_i from last for-loop)
         print('Pro: {0} --> Assemble working line list'.format(self.ID))
         # stack the tables
-        fmll = vstack([origsyndict[ID_i](1) for ID_i in self.IDlist])
+        fmll = vstack([origsyndict[ID_i][1] for ID_i in self.IDlist])
         # fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
         # sort tables on all collumns, include RESID as that way the stronger line will be listed first
         tabpars = ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER']
