@@ -205,7 +205,9 @@ class FALmod(object):
     def _readline(self,linelist,verbose_i=False):
         # read the line list appropriate for the user call
         # catch the case where the line list is a numpy table
+        print('HERE1')
         if type(linelist).__name__ == 'Table':
+            print('HERE2')
             # linelist equal to a path to user defined line list 
             self.SYNTHE.readlines(rtype=linelist,verbose=verbose_i)
             self.speed = 'fast'
@@ -215,7 +217,7 @@ class FALmod(object):
                 self.lasttime = time.time()
             return
 
-        if linelist == 'readall':
+        elif linelist == 'readall':
             # read all individual line lists
             rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":True} # atoms, molecules + H2O & TiO
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
@@ -224,6 +226,7 @@ class FALmod(object):
             if self.timeit:
                 print("Pro: {1} --> Read in all line lists -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
+            return
 
         elif linelist == 'readmaster':
             # read the masterline lists (cargile or kurucz plus H2O+TiO)
@@ -232,6 +235,7 @@ class FALmod(object):
             if self.timeit:
                 print("Pro: {1} --> Read in master line list -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
+            return
 
         elif linelist == 'readlast':
             # read the previously created line list in directory
@@ -240,6 +244,7 @@ class FALmod(object):
             if self.timeit:
                 print("Pro: {1} --> Read in lines -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
+            return
 
         else:
             # linelist equal to a path to user defined line list 
@@ -249,6 +254,7 @@ class FALmod(object):
             if self.timeit:
                 print("Pro: {1} --> Read in user defined line list {2} -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw,linelistname))
                 self.lasttime = time.time()
+            return
 
 
     def _adjustpar(self,parr_i,ll=None,verbose=False):
