@@ -204,8 +204,16 @@ class FALmod(object):
 
     def _readline(self,linelist,verbose_i=False):
         # read the line list appropriate for the user call
-
-        if linelist == 'readall':
+        if type(linelist).__name__ == 'Table':
+            # linelist equal to a path to user defined line list 
+            self.SYNTHE.readlines(rtype=linelist,verbose=verbose_i)
+            self.speed = 'fast'
+            linelistname = 'NP LL'
+            if self.timeit:
+                print("Pro: {1} --> Read in user defined line list {2} -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw,linelistname))
+                self.lasttime = time.time()
+                
+        elif linelist == 'readall':
             # read all individual line lists
             rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":True} # atoms, molecules + H2O & TiO
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
@@ -235,10 +243,7 @@ class FALmod(object):
             # linelist equal to a path to user defined line list 
             self.SYNTHE.readlines(rtype=linelist,verbose=verbose_i)
             self.speed = 'fast'
-            if type(linelist).__name__ == 'Table':
-                linelistname = 'NP LL'
-            else:
-                linelistname = linelist
+            linelistname = linelist
             if self.timeit:
                 print("Pro: {1} --> Read in user defined line list {2} -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw,linelistname))
                 self.lasttime = time.time()

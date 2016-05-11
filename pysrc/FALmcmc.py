@@ -224,7 +224,6 @@ class FALmcmc(object):
         tabpars = ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER']
         fmll.sort(tabpars+['RESID'])
         fmll = unique(fmll,tabpars)
-        print('UNIQUE')
 
         # set it into self
         self.fmll = fmll
@@ -232,7 +231,7 @@ class FALmcmc(object):
         # now run each stellar spectrum again and archive the results
         for ID_i in self.IDlist:
             _spec,_ll = fmdict[ID_i].runsynthe(timeit=True,linelist=self.fmll,archive=True)
-
+        
         for _ in range(5):
             _ = fmdict[self.IDlist[0]].runsynthe(timeit=True,linelist='readlast')
             _ = fmdict[self.IDlist[1]].runsynthe(timeit=True,linelist='readlast')
