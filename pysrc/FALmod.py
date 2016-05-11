@@ -143,9 +143,9 @@ class FALmod(object):
             verbose_i = False
         if parr != None:
             if linelist == 'readlast':
-                self._adjustpar(parr,ll=self.orgll,verbose_i)
+                self._adjustpar(parr,ll=self.orgll,verbose=verbose_i)
             else:
-                self._adjustpar(parr,verbose_i)
+                self._adjustpar(parr,verbose=verbose_i)
 
         # do synthesis calc
         if type(verbose) == type(True):
