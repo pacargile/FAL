@@ -10,6 +10,7 @@ from scipy import io as spIO
 import numpy as np
 
 from FALselMOD import selmod
+import FALGlue
 
 __all__ = ["synthepkg"]
 
@@ -61,6 +62,8 @@ class synthe(object):
         self.datadir = self.HOMEDIR+"/FAL/PYTHON/data/"
         self.bigdatadir = self.WORKDIR+"/FAL/DATA/"
 
+        # create the glue  
+        self.glue = FALGlue.glue()
 
         # Call selmod to set model atm and other star specific parameters
         (self.synbegvar,self.instparstr,self.modatm) = selmod(self.starpars)
@@ -387,7 +390,8 @@ class synthe(object):
 
         # Master lines file is gigantic, so don't copy into memory just sym link it
         if MASTERLL == None:
-            MASTERLL = '/work/02349/cargilpa/FAL/MASTERLL/HBAND/CargileLL_1400_1900.bin'
+            # MASTERLL = '/work/02349/cargilpa/FAL/MASTERLL/HBAND/CargileLL_1400_1900.bin'
+            MASTERLL = '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin'
 
         os.symlink(MASTERLL,'fort.11')
 
@@ -436,7 +440,12 @@ class synthe(object):
             # write line list into fort.11
             if os.path.isfile("fort.11"):
                 self._rmsym('fort.11',verbose=verbose)
-            self._makesym(userll,'fort.11')
+            # check to see if user line list is np table ll or an ascii path
+            if type(usrll).__name__ == 'Table':
+                self.glue.writenp(usrll,'/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+                os.symlink('/dev/shm/FAL/{0}/fort.11'.format(self.ID),'fort.11')
+            else:
+                self._makesym(userll,'fort.11')
         
         # check to make sure all input/output files are right
         filesdict = {}

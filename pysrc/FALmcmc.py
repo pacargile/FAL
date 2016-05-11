@@ -88,13 +88,6 @@ def lnlike(p,obswave,obsflux,fm,minWL,maxWL):
 
 
 def lnprior(p,Tarr,fm,minWL,maxWL,verbose=False):
-    # non-informative prior on gamma's
-    # for parname in ['DGAMMAR','DGAMMAS','DGAMMAW']:
-        # if min(p[parname]) < -9.0:
-        #     return -np.inf
-        # if max(p[parname]) > 2.0:
-        #     return -np.inf
-
 
     # apply non-informative prior on wavelength to make sure
     # line is not shifted outside working segment
@@ -105,20 +98,6 @@ def lnprior(p,Tarr,fm,minWL,maxWL,verbose=False):
                 if verbose:
                     print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE SPECTRUM BOUNDS, LINE SHIFTED TO: {1}'.format(fm.IDraw,wlshift))
                 return -np.inf
-
-    # # apply non-informative prior on wavelength to make sure
-    # # line is not shifted beyond next line in line list
-    # for ii,pp in enumerate(p['DWL']):
-    #     if pp < minDWL_ll[ii]:
-    #         return -np.inf
-    #     if pp > maxDWL_ll[ii]:
-    #         return -np.inf
-
-    # non-informative prior on the gamma
-    # if min(p['DGAMMA']) < -5.0:
-    #     return -np.inf
-    # if max(p['DGAMMA']) > 1.5:
-    #     return -np.inf
 
     # Prior on gamma using beta function
     mingamma = -1.0
@@ -154,9 +133,6 @@ def lnprior(p,Tarr,fm,minWL,maxWL,verbose=False):
     minwll = -1.0*wsh_max
     maxwll = wsh_max
     rangewll = maxwll-minwll
-    # minwll = -0.05
-    # maxwll =  0.05
-    # rangewll = maxwll-minwll
     wlprior = beta.logpdf(p['DWL'][Tarr[...,0] != -1],2.0,2.0,loc=minwll,scale=rangewll)
 
     # check to see if it returns any priors outside uniform prior
@@ -175,38 +151,11 @@ def lnprior(p,Tarr,fm,minWL,maxWL,verbose=False):
     if len(gammasprior) == 0:
         gammasprior = [0.0]
 
-
-    # non-informative prior on log(gf)
-    # if min(p['DGFLOG']) < -9.0:
-    #     return -np.inf
-    # if max(p['DGFLOG']) > 0.5:
-    #     return -np.inf
-
-    # # Prior on log(gf) using beta function
-    # mingflog = -5.0
-    # maxgflog = 1.5
-    # rangegflog = maxgflog-mingflog
-    # gflogprior = beta.logpdf(p['DGFLOG'],5.0,1.8,loc=mingflog,scale=rangegflog)
-
-    # firstprior = np.add(gammaprior,gflogprior)
-    # firstprior = gammaprior
-
-    # no addition prior to DWL
-    # return 0.0
-
-    # # gaussian prior on delta(lambda)
-    # sig_DWL = 0.01
-    # pi_DWL = (-0.5*(p['DWL']**2.0)/(sig_DWL**2.0)) - 0.5*np.log(2.0*np.pi*(sig_DWL**2.0))
-
     # 2-D gaussian prior on delta(log(gf)) and delta(lambda)
     # reparameterize such that they move on space evenly
     sig_dgflog = 0.5
     sig_dWL = 1.0
     gf_wl_prior = (-0.5*((p['DGFLOG'][Tarr[...,1] != -1]/sig_dgflog)**2.0)*((p['DWL'][Tarr[...,0] != -1]/sig_dWL)**2.0)) #- 0.5*np.log(2.0*np.pi*(sig_coup**2.0))
-    # gf_wl_prior = 0.0
-
-    # RETURN WITHOUT COUPLED PRIOR
-    # return np.sum(np.hstack([gammawprior,gammarprior,gammasprior,gfprior,wlprior]))
 
     # RETURN WITH COUPLED PRIOR
     return np.sum(np.hstack([gammawprior,gammarprior,gammasprior,gfprior,wlprior,gf_wl_prior]))
@@ -217,7 +166,7 @@ class FALmcmc(object):
         IDin=1,
         starttime=None,walltime=None,
         initlines=None,injectlines=None,
-        fixedlines=False,condst=False,outputfile=None):
+        outputfile=None):
 
         # change the following lines to be inputs when you init the class
         self.minWL = minWLin
@@ -231,9 +180,9 @@ class FALmcmc(object):
 
         self.ID = IDin
 
-        self.transpar = 1
+        self.numstars = 2
 
-        self.nGPpar = 0
+        self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
         # define a general start time so that the code can stop short of the wall time and save everything
         if starttime == None:
@@ -249,213 +198,248 @@ class FALmcmc(object):
         print('Pro: {0} --> Total possible run time = {1} seconds'.format(self.ID,self.walltime-self.starttime))
         print('Pro: {0} --> Full Wavelength Range = {1:9.5f}-{2:9.5f} ({3:9.5f}) nm'.format(self.ID,self.minWL-0.1,self.maxWL+0.1,self.maxWL-self.minWL+0.2))
 
-        # initialize FALmod
-        self.indict = {'WSTART':self.minWL-0.1,'WEND':self.maxWL+0.1,'RESOL':3000000.0,'VROT':-2.02,'MACVEL':1.5,'PRED':1,'LINOUT':30}        
-        # USING THE PUNCH500 FILE
-        #self.fm = FALmod.FALmod('punch500',ID=self.ID,indict=self.indict)
-        # USING RLINE
-        self.fm = FALmod.FALmod(startll='master',ID=self.ID,indict=self.indict,injectlines=injectlines)
-        st = time.time()
-        print("Pro: {0} --> Start Initial Call...".format(self.ID))
-        ogspec = Table(self.fm([],reusell=False,writespec=True,verbose=False,timeit=True,speed='fast'))
-        print("Pro: {0} --> Finished Call, took {1:5.3f} sec".format(self.ID,time.time()-st))
+        # Define synthesis wavelength range
+        waverange = [self.minWL-0.1,self.maxWL+0.1]
 
-        # run function to select which lines are modeled
-        (self.parr,self.psig,self.pflag,self.Tarr) = FALlinesel.linesel(self.fm,condst,self.minLINWL,self.maxLINWL)
+        # set up some dictionaries for passing objects
+        fmdict = {}
+        origsyndict = {}
 
-        # calculate number of lines with free paramters and their wavelengths
-        fitlineind = []
-        fitlinewl  = []
-        for ii,tt in enumerate(self.Tarr):
-            if not all(tt == -1):
-                fitlineind.append(ii)
-                fitlinewl.append(float(self.fm.ll['WL'][ii]))
+        # run synthe to get all needed lines
+        for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
+            print('Pro: {0} --> Running original synthe on full master line list for {1}'.format(self.ID,star_i))
+            # initialize the class
+            fm_i = FALmod.FALmod(ID=ID_i,waverange=waverange,starpars=star_i)
+            # run SYNTHE using the master line list to grab all important lines
+            spec_i,ll_i = fm.runsynthe(timeit=True,linelist='readmaster')
+            fmdict[ID_i] = fm_i
+            origsyndict[ID_i] = (spec_i,ll_i)
+
+        # Assemble working line list (union of ll_i from last for-loop)
+        print('Pro: {0} --> Assemble working line list'.format(self.ID))
+        # stack the tables
+        fmll = vstack([origsyndict[ID_i](1) for ID_i in self.IDlist])
+        fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
+        # sort tables on all collumns, include RESID as that way the stronger line will be listed first
+        fmll.sort(
+            ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER','RESID']
+            )
+        # set bool = 1 for duplicated lines 
+        for ii,ll_i in enumerate(fmll[:-1]):
+            if (ll_i['FILTERBOOL'] == 0) and (ll_i['WL'] == fmll['WL'][ii+1]):
+                fmll['FILTERBOOL'][ii+1] = 1
+        # filter out duplicated lines
+        fmll = fmll[fmll['FILTERBOOL'] != 1]
+        fmll.remove_column('FILTERBOOL')
+
+        self.fmll = fmll
+
+
+        # # initialize FALmod
+        # self.indict = {'WSTART':self.minWL-0.1,'WEND':self.maxWL+0.1,'RESOL':3000000.0,'VROT':-2.02,'MACVEL':1.5,'PRED':1,'LINOUT':30}        
+        # # USING RLINE
+        # self.fm = FALmod.FALmod(startll='master',ID=self.ID,indict=self.indict,injectlines=injectlines)
+        # st = time.time()
+        # print("Pro: {0} --> Start Initial Call...".format(self.ID))
+        # ogspec = Table(self.fm([],reusell=False,writespec=True,verbose=False,timeit=True,speed='fast'))
+        # print("Pro: {0} --> Finished Call, took {1:5.3f} sec".format(self.ID,time.time()-st))
+
+        # # run function to select which lines are modeled
+        # (self.parr,self.psig,self.pflag,self.Tarr) = FALlinesel.linesel(self.fm,condst,self.minLINWL,self.maxLINWL)
+
+        # # calculate number of lines with free paramters and their wavelengths
+        # fitlineind = []
+        # fitlinewl  = []
+        # for ii,tt in enumerate(self.Tarr):
+        #     if not all(tt == -1):
+        #         fitlineind.append(ii)
+        #         fitlinewl.append(float(self.fm.ll['WL'][ii]))
         
-        print("Pro: {0} --> Total number of lines considered in WL segment = {1}".format(self.ID,len(self.fm.ll)))
-        print("Pro: {0} --> Number of lines that are free in WL segment = {1}".format(self.ID,len(fitlinewl)))
-        # print("Pro: {0} --> Index in line list of the modeled lines...".format(self.ID),fitlineind)
-        # print("Pro: {0} --> WL of modeled lines...".format(self.ID),fitlinewl)
+        # print("Pro: {0} --> Total number of lines considered in WL segment = {1}".format(self.ID,len(self.fm.ll)))
+        # print("Pro: {0} --> Number of lines that are free in WL segment = {1}".format(self.ID,len(fitlinewl)))
+        # # print("Pro: {0} --> Index in line list of the modeled lines...".format(self.ID),fitlineind)
+        # # print("Pro: {0} --> WL of modeled lines...".format(self.ID),fitlinewl)
 
-        # print out if the code found any lines to inject
-        FAKELINES = 0
-        for ll_t in self.fm.ll:
-            if 'FAK' in str(ll_t['REF']):
-                print("Pro: {0} --> Inject FAKE line at WL={1}".format(self.ID,ll_t['WL']))
-                FAKELINES = FAKELINES + 1
-        if FAKELINES == 0:
-            print("Pro: {0} --> NO FAKE LINES FOUND IN SEGMENT".format(self.ID))
-
-
-        # determine if there are any pre-initialized lines (from previous run) and set those free parameters
-        if initlines != None:
-            # make a unique ID for each line
-            fmllcode = np.empty(len(self.fm.ll),dtype=object)
-            for nnn,ill in enumerate(self.fm.ll):
-                fmllcode[nnn] = "".join(
-                    [str(ill['WL']),
-                    ill['CODE'],
-                    ill['E'],ill['EP'],
-                    ill['XJ'],ill['XJP'],
-                    ill['REF'],
-                    ill['ISO1'],ill['X1'],
-                    ill['ISO2'],ill['X2'],
-                    ill['OTHER']]
-                    ).replace(" ","")
-
-            # Read previous table: LINE INFO, DWL, DGFLOG, DGAMMA (will figure out which GAMMA after the fact)
-            ilines = Table(np.array(h5py.File(initlines,'r')['data']))
-
-            ilines.sort('WL')
-            # ilines = Table.read(initlines,format='fits')
-            ilines['UNIQ_ID'] = np.empty(len(ilines),dtype=object)
-            for nnn,ill in enumerate(ilines):
-                ilines['UNIQ_ID'][nnn] = "".join(
-                    [str(ill['WL']),
-                    ill['CODE'],
-                    ill['E'],ill['EP'],
-                    ill['XJ'],ill['XJP'],
-                    ill['REF'],
-                    ill['ISO1'],ill['X1'],
-                    ill['ISO2'],ill['X2'],
-                    ill['OTHER']]
-                ).replace(" ","")
-            numpreset = 0
-            for ii,fmlc in enumerate(fmllcode):
-                cond_intl = np.in1d(ilines['UNIQ_ID'],fmlc,assume_unique=True)
-                if any(cond_intl):
-                    numpreset = numpreset + 1
-                    # print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(self.fm.ll['WL'][ii])))
-                    self.fm.ll['DWL'][ii] = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
-                    self.fm.ll['DGFLOG'][ii] = float('{0:6.4f}'.format(float(ilines['DGFLOG'][cond_intl])))
-                    if self.fm.gammaswitch['switch'][ii] == 'W':
-                        self.fm.ll['DGAMMAW'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
-                    elif self.fm.gammaswitch['switch'][ii] == 'R':
-                        self.fm.ll['DGAMMAR'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
-                    elif self.fm.gammaswitch['switch'][ii] == 'S':
-                        self.fm.ll['DGAMMAS'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
-                    else:
-                        pass
-            print("Pro: {0} --> Setting Previous Pars for {1} lines".format(self.ID,numpreset))
-
-        # number of dimensions
-        self.ndim = len(self.parr)
-        print("Pro: {0} --> Number of Free Line Parameters...".format(self.ID),self.ndim)
-        if self.transpar == 1:
-            print("Pro: {0} --> Fitting Transmission Spectrum Scaling".format(self.ID))
-            self.ndim = self.ndim + 1
-            print("Pro: {0} --> Fitting Transmission Spectrum Vel Shift".format(self.ID))
-            self.ndim = self.ndim + 1
-
-        # read in observed data
-        if ((self.minWL > 400.0) & (self.maxWL < 475.0)):
-            sol = Table.read('/home1/02349/cargilpa/FAL/PYTHON/data/SOL_4000_4750.fits',format='fits')
-        elif ((self.minWL > 475.0) & (self.maxWL < 800.0)):
-            print("Pro: {0} --> Working with Solar Optical Spectrum".format(self.ID))
-            sol = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_4750_8270.fits',format='fits')            
-            transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_OPT_10_22_15.h5','r')
-            trans = Table(np.array(transh5['spec']))
-            trans.sort('WAVE')
-
-            # correct for slight doppler shift
-            trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
-
-        elif ((self.minWL > 800.0) & (self.maxWL < 900.0)):
-            sol = Table.read('/home1/02349/cargilpa/FAL/PYTHON/data/SOL_8000_9000.fits',format='fits')
-        elif ((self.minWL > 900.0) & (self.maxWL < 1000.0)):
-            sol = Table.read('/home1/02349/cargilpa/FAL/PYTHON/data/SOL_9000_10000.fits',format='fits')
-        elif ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
-            print("Pro: {0} --> Working with Solar H-Band Spectrum".format(self.ID))
-            sol = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
-            transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_HBAND_10_22_15.h5','r')
-            trans = Table(np.array(transh5['spec']))
-            trans.sort('WAVE')
-        else:
-            raise IOError("COULD NOT FIND OBSERVED SOLAR SPECTRUM IN THIS WAVELENGTH RANGE!")
-
-        # parse solar spectrum
-        OW = sol['WAVE'].data
-        OF = sol['FLUX'].data
-        solind = np.argwhere( (OW > self.minWL) & (OW < self.maxWL) )
-        self.obswave = np.squeeze(np.array(OW[solind]))
-        self.obsflux = np.squeeze(np.array(OF[solind]))
-
-        # parse and interpolate transmission spectrum
-        trans_i = trans[ (trans['WAVE'] > self.obswave.min()-0.1) & (trans['WAVE'] < self.obswave.max()+0.1) ]
-        if 'FLUX' not in trans_i.keys():
-            trans_i['FLUX'] = trans_i['QMU1'] / trans_i['QMU2']
-        transintrp = UnivariateSpline(trans_i['WAVE'].data,trans_i['FLUX'].data,s=0,k=1)(self.obswave)
-        self.transflux = transintrp
-
-        print("Pro: {0} --> Initializing Output Files".format(self.ID))
-        # set up outfile
-        if outputfile == None:
-            self.outputfile = 'MCMC_{0:n}.dat'.format(time.time())
-        else:
-            self.outputfile = outputfile
-        with open(self.outputfile, "w") as f:
-            f.write(
-                '# RUN DATE/TIME: {0}, NumFP: {1} ,'.format(
-                    datetime.today(),self.ndim))
-            if condst != False:
-                for condict in condst:
-                    f.write('{0}'.format(condict['LP']))
-                    if (condict['OP'].__str__() == "<ufunc 'less'>"):
-                        f.write('<')
-                    elif (condict['OP'].__str__() == "<ufunc 'greater'>"):
-                        f.write('>')
-                    elif (condict['OP'].__str__() == "<ufunc 'less_equal'>"):
-                        f.write('<=')
-                    elif (condict['OP'].__str__() == "<ufunc 'greater_equal'>"):
-                        f.write('>=')
-                    elif (condict['OP'].__str__() == "<ufunc 'equal'>"):
-                        f.write('==')
-                    elif (condict['OP'].__str__() == "<ufunc 'not_equal'>"):
-                        f.write('!=')
-                    else:
-                        f.write('***')
-                    f.write('{0} '.format(condict['LV']))
-            f.write('\n')
-            f.write('# WAVELENGTH RANGE: {0:8.4f} {1:8.4f}'.format(self.minWL,self.maxWL))
-            f.write(' LINE RANGE: {0:8.4f} {1:8.4f}\n'.format(self.minLINWL,self.maxLINWL))
-            f.write('# TYPE OF FREE PARS: ')
-            for pf in self.pflag:
-                f.write('{0} '.format(pf))
-            f.write('\n')
-            f.write('WN ')
-            for ii in range(self.ndim+self.nGPpar):
-                f.write('par{0}\t'.format(ii))
-            f.write('lnprob\n')
+        # # print out if the code found any lines to inject
+        # FAKELINES = 0
+        # for ll_t in self.fm.ll:
+        #     if 'FAK' in str(ll_t['REF']):
+        #         print("Pro: {0} --> Inject FAKE line at WL={1}".format(self.ID,ll_t['WL']))
+        #         FAKELINES = FAKELINES + 1
+        # if FAKELINES == 0:
+        #     print("Pro: {0} --> NO FAKE LINES FOUND IN SEGMENT".format(self.ID))
 
 
-        # WRITE LL WITH PARR INFO
-        self.ll_i = self.fm.ll.copy()
-        self.ll_i['FWL']     = self.Tarr[:,0]
-        self.ll_i['FGFLOG']  = self.Tarr[:,1]
-        self.ll_i['FGAMMAW'] = self.Tarr[:,2]
-        self.ll_i['FGAMMAR'] = self.Tarr[:,3]
-        self.ll_i['FGAMMAS'] = self.Tarr[:,4]
-        self.ll_i.write('LL'+self.outputfile[4:-3]+'fits',format='fits',overwrite=True) 
+        # # determine if there are any pre-initialized lines (from previous run) and set those free parameters
+        # if initlines != None:
+        #     # make a unique ID for each line
+        #     fmllcode = np.empty(len(self.fm.ll),dtype=object)
+        #     for nnn,ill in enumerate(self.fm.ll):
+        #         fmllcode[nnn] = "".join(
+        #             [str(ill['WL']),
+        #             ill['CODE'],
+        #             ill['E'],ill['EP'],
+        #             ill['XJ'],ill['XJP'],
+        #             ill['REF'],
+        #             ill['ISO1'],ill['X1'],
+        #             ill['ISO2'],ill['X2'],
+        #             ill['OTHER']]
+        #             ).replace(" ","")
+
+        #     # Read previous table: LINE INFO, DWL, DGFLOG, DGAMMA (will figure out which GAMMA after the fact)
+        #     ilines = Table(np.array(h5py.File(initlines,'r')['data']))
+
+        #     ilines.sort('WL')
+        #     # ilines = Table.read(initlines,format='fits')
+        #     ilines['UNIQ_ID'] = np.empty(len(ilines),dtype=object)
+        #     for nnn,ill in enumerate(ilines):
+        #         ilines['UNIQ_ID'][nnn] = "".join(
+        #             [str(ill['WL']),
+        #             ill['CODE'],
+        #             ill['E'],ill['EP'],
+        #             ill['XJ'],ill['XJP'],
+        #             ill['REF'],
+        #             ill['ISO1'],ill['X1'],
+        #             ill['ISO2'],ill['X2'],
+        #             ill['OTHER']]
+        #         ).replace(" ","")
+        #     numpreset = 0
+        #     for ii,fmlc in enumerate(fmllcode):
+        #         cond_intl = np.in1d(ilines['UNIQ_ID'],fmlc,assume_unique=True)
+        #         if any(cond_intl):
+        #             numpreset = numpreset + 1
+        #             # print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(self.fm.ll['WL'][ii])))
+        #             self.fm.ll['DWL'][ii] = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
+        #             self.fm.ll['DGFLOG'][ii] = float('{0:6.4f}'.format(float(ilines['DGFLOG'][cond_intl])))
+        #             if self.fm.gammaswitch['switch'][ii] == 'W':
+        #                 self.fm.ll['DGAMMAW'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
+        #             elif self.fm.gammaswitch['switch'][ii] == 'R':
+        #                 self.fm.ll['DGAMMAR'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
+        #             elif self.fm.gammaswitch['switch'][ii] == 'S':
+        #                 self.fm.ll['DGAMMAS'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
+        #             else:
+        #                 pass
+        #     print("Pro: {0} --> Setting Previous Pars for {1} lines".format(self.ID,numpreset))
+
+        # # number of dimensions
+        # self.ndim = len(self.parr)
+        # print("Pro: {0} --> Number of Free Line Parameters...".format(self.ID),self.ndim)
+        # if self.transpar == 1:
+        #     print("Pro: {0} --> Fitting Transmission Spectrum Scaling".format(self.ID))
+        #     self.ndim = self.ndim + 1
+        #     print("Pro: {0} --> Fitting Transmission Spectrum Vel Shift".format(self.ID))
+        #     self.ndim = self.ndim + 1
+
+        # # read in observed data
+        # if ((self.minWL > 400.0) & (self.maxWL < 475.0)):
+        #     sol = Table.read('/home1/02349/cargilpa/FAL/PYTHON/data/SOL_4000_4750.fits',format='fits')
+        # elif ((self.minWL > 475.0) & (self.maxWL < 800.0)):
+        #     print("Pro: {0} --> Working with Solar Optical Spectrum".format(self.ID))
+        #     sol = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_4750_8270.fits',format='fits')            
+        #     transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_OPT_10_22_15.h5','r')
+        #     trans = Table(np.array(transh5['spec']))
+        #     trans.sort('WAVE')
+
+        #     # correct for slight doppler shift
+        #     trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
+
+        # elif ((self.minWL > 800.0) & (self.maxWL < 900.0)):
+        #     sol = Table.read('/home1/02349/cargilpa/FAL/PYTHON/data/SOL_8000_9000.fits',format='fits')
+        # elif ((self.minWL > 900.0) & (self.maxWL < 1000.0)):
+        #     sol = Table.read('/home1/02349/cargilpa/FAL/PYTHON/data/SOL_9000_10000.fits',format='fits')
+        # elif ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
+        #     print("Pro: {0} --> Working with Solar H-Band Spectrum".format(self.ID))
+        #     sol = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
+        #     transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_HBAND_10_22_15.h5','r')
+        #     trans = Table(np.array(transh5['spec']))
+        #     trans.sort('WAVE')
+        # else:
+        #     raise IOError("COULD NOT FIND OBSERVED SOLAR SPECTRUM IN THIS WAVELENGTH RANGE!")
+
+        # # parse solar spectrum
+        # OW = sol['WAVE'].data
+        # OF = sol['FLUX'].data
+        # solind = np.argwhere( (OW > self.minWL) & (OW < self.maxWL) )
+        # self.obswave = np.squeeze(np.array(OW[solind]))
+        # self.obsflux = np.squeeze(np.array(OF[solind]))
+
+        # # parse and interpolate transmission spectrum
+        # trans_i = trans[ (trans['WAVE'] > self.obswave.min()-0.1) & (trans['WAVE'] < self.obswave.max()+0.1) ]
+        # if 'FLUX' not in trans_i.keys():
+        #     trans_i['FLUX'] = trans_i['QMU1'] / trans_i['QMU2']
+        # transintrp = UnivariateSpline(trans_i['WAVE'].data,trans_i['FLUX'].data,s=0,k=1)(self.obswave)
+        # self.transflux = transintrp
+
+        # print("Pro: {0} --> Initializing Output Files".format(self.ID))
+        # # set up outfile
+        # if outputfile == None:
+        #     self.outputfile = 'MCMC_{0:n}.dat'.format(time.time())
+        # else:
+        #     self.outputfile = outputfile
+        # with open(self.outputfile, "w") as f:
+        #     f.write(
+        #         '# RUN DATE/TIME: {0}, NumFP: {1} ,'.format(
+        #             datetime.today(),self.ndim))
+        #     if condst != False:
+        #         for condict in condst:
+        #             f.write('{0}'.format(condict['LP']))
+        #             if (condict['OP'].__str__() == "<ufunc 'less'>"):
+        #                 f.write('<')
+        #             elif (condict['OP'].__str__() == "<ufunc 'greater'>"):
+        #                 f.write('>')
+        #             elif (condict['OP'].__str__() == "<ufunc 'less_equal'>"):
+        #                 f.write('<=')
+        #             elif (condict['OP'].__str__() == "<ufunc 'greater_equal'>"):
+        #                 f.write('>=')
+        #             elif (condict['OP'].__str__() == "<ufunc 'equal'>"):
+        #                 f.write('==')
+        #             elif (condict['OP'].__str__() == "<ufunc 'not_equal'>"):
+        #                 f.write('!=')
+        #             else:
+        #                 f.write('***')
+        #             f.write('{0} '.format(condict['LV']))
+        #     f.write('\n')
+        #     f.write('# WAVELENGTH RANGE: {0:8.4f} {1:8.4f}'.format(self.minWL,self.maxWL))
+        #     f.write(' LINE RANGE: {0:8.4f} {1:8.4f}\n'.format(self.minLINWL,self.maxLINWL))
+        #     f.write('# TYPE OF FREE PARS: ')
+        #     for pf in self.pflag:
+        #         f.write('{0} '.format(pf))
+        #     f.write('\n')
+        #     f.write('WN ')
+        #     for ii in range(self.ndim+self.nGPpar):
+        #         f.write('par{0}\t'.format(ii))
+        #     f.write('lnprob\n')
 
 
-        # compute zero spectrum with all the previous shifts applied
-        ogspec_s = Table(self.fm(self.fm.ll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW'],writespec=False,reusell=True,verbose=False,speed='fast'))
+        # # WRITE LL WITH PARR INFO
+        # self.ll_i = self.fm.ll.copy()
+        # self.ll_i['FWL']     = self.Tarr[:,0]
+        # self.ll_i['FGFLOG']  = self.Tarr[:,1]
+        # self.ll_i['FGAMMAW'] = self.Tarr[:,2]
+        # self.ll_i['FGAMMAR'] = self.Tarr[:,3]
+        # self.ll_i['FGAMMAS'] = self.Tarr[:,4]
+        # self.ll_i.write('LL'+self.outputfile[4:-3]+'fits',format='fits',overwrite=True) 
 
-        # Initialize HDF5 File for SAMP
-        self.outspec = Table()
-        self.outspec['WAVE'] = self.obswave
-        self.outspec['FLUX'] = self.obsflux
-        self.outspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='sol',overwrite=True)
 
-        # write zero spectrum to HDF5 file for SAMP
-        ogspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='zero_i',overwrite=True,append=True)
-        ogspec_s.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='zero',overwrite=True,append=True)
+        # # compute zero spectrum with all the previous shifts applied
+        # ogspec_s = Table(self.fm(self.fm.ll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW'],writespec=False,reusell=True,verbose=False,speed='fast'))
 
-        # write original transmission spectrum into file
-        transpec = Table()
-        transpec['FLUX'] = self.transflux
-        transpec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
+        # # Initialize HDF5 File for SAMP
+        # self.outspec = Table()
+        # self.outspec['WAVE'] = self.obswave
+        # self.outspec['FLUX'] = self.obsflux
+        # self.outspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='sol',overwrite=True)
 
-        print("Pro: {0} --> Finished Setup".format(self.ID))
+        # # write zero spectrum to HDF5 file for SAMP
+        # ogspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='zero_i',overwrite=True,append=True)
+        # ogspec_s.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='zero',overwrite=True,append=True)
+
+        # # write original transmission spectrum into file
+        # transpec = Table()
+        # transpec['FLUX'] = self.transflux
+        # transpec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
+
+        # print("Pro: {0} --> Finished Setup".format(self.ID))
 
 
     def buildsampler(self,nwalkers=0,threads=0):

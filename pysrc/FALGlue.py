@@ -257,6 +257,12 @@ class glue(object):
 		x = x[tuple(self.lpars)]
 		return x
 
+	def writenp(self,tab,filename):
+		# takes an np format table, converts it to lp, and then writes it to file
+		tab_i = self.con_nptolp(tab)
+		self.writelp(tab_i,filename)
+		return None
+
 	def writelp(self,tab,filename):
 		# write an ascii line file from an astropy table
 		with open(filename,'w') as outfile:
