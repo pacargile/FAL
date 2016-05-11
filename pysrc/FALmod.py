@@ -124,7 +124,7 @@ class FALmod(object):
                 verbose_i = True
             else:
                 verbose_i = False
-            self.SYNTHE.synbeg(self.starpars,verbose=verbose_i)
+            self.SYNTHE.synbeg(self.starpars,clobber=True,verbose=verbose_i)
 
         if archive:
             self.SYNTHE.archive()

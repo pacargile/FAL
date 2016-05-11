@@ -280,7 +280,7 @@ class synthe(object):
         for ff in filelist:
             os.remove(ff)
 
-    def synbeg(self,indict,verbose=None):
+    def synbeg(self,indict,clobber=False,verbose=None):
         """
         Run SYNBEG code
 
@@ -298,6 +298,20 @@ class synthe(object):
             fort.20 (bin)
             fort.93 (bin)
         """
+        # clobber old run if wanted
+        if clobber == True:
+            # first delete any *_* files in memory
+            memfiles = glob.glob('/dev/shm/FAL/{0}/fort.*'.format(self.ID))
+            for mf in memfiles:
+                os.unlink(mf)
+            # clear local directory of broken links
+            locfiles = glob.glob('./*')
+            for lf in locfiles:
+                try:
+                    os.stat(lf)
+                except OSError:
+                    os.unlink(lf)
+
         # read in information from input dictionary
         self.WSTART = self.starpars['WSTART']
         self.WEND = self.starpars['WEND']
