@@ -229,8 +229,11 @@ class FALmcmc(object):
         self.fmll = fmll
 
         # now run each stellar spectrum again and archive the results
-        for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
+        for ID_i in self.IDlist:
             _spec,_ll = fmdict[ID_i].runsynthe(timeit=True,linelist=self.fmll,archive=True)
+
+        for _ in range(5):
+            _ = fmdict[self.IDlist[0]].runsynthe(timeit=True,linelist='readlast')
 
         # # set bool = 1 for duplicated lines 
         # for ii,ll_i in enumerate(fmll[:-1]):
