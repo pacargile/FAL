@@ -31,7 +31,7 @@ class synthe(object):
         # memory files
         if clobber == True:
             # first delete any *_* files in memory
-            memfiles = glob.glob('/dev/shm/FAL/{0}/*_*'.format(self.ID))
+            memfiles = glob.glob('/dev/shm/FAL/{0}/fort.*'.format(self.ID))
             for mf in memfiles:
                 os.unlink(mf)
             # clear local directory of broken links

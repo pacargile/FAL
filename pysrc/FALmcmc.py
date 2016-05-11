@@ -225,6 +225,12 @@ class FALmcmc(object):
         fmll.sort(tabpars+['RESID'])
         fmll = unique(fmll,tabpars)
 
+        # set it into self
+        self.fmll = fmll
+
+        # now run each stellar spectrum again and archive the results
+        
+
         # # set bool = 1 for duplicated lines 
         # for ii,ll_i in enumerate(fmll[:-1]):
         #     if (ll_i['FILTERBOOL'] == 0) and (ll_i['WL'] == fmll['WL'][ii+1]):
@@ -232,8 +238,6 @@ class FALmcmc(object):
         # # filter out duplicated lines
         # fmll = fmll[fmll['FILTERBOOL'] != 1]
         # fmll.remove_column('FILTERBOOL')
-
-        self.fmll = fmll
 
 
         # # initialize FALmod
