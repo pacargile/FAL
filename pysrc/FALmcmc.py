@@ -207,7 +207,7 @@ class FALmcmc(object):
 
 
         # set up some dictionaries for passing objects
-        fmdict = {}
+        self.fmdict = {}
         origsyndict = {}
 
         # run synthe to get all needed lines
@@ -217,7 +217,7 @@ class FALmcmc(object):
             fm_i = FALmod.FALmod(ID=ID_i,waverange=self.waverange,starpars=star_i)
             # run SYNTHE using the master line list to grab all important lines
             spec_i,ll_i = fm_i.runsynthe(timeit=True,linelist='readmaster')
-            fmdict[ID_i] = fm_i
+            self.fmdict[ID_i] = fm_i
             origsyndict[ID_i] = [Table(spec_i),ll_i]
 
         # Assemble working line list (union of ll_i from last for-loop)
@@ -235,7 +235,7 @@ class FALmcmc(object):
 
         # now run each stellar spectrum again and archive the results
         for ID_i in self.IDlist:
-            _spec,_ll = fmdict[ID_i].runsynthe(timeit=True,linelist=self.fmll,archive=True)
+            _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=True,linelist=self.fmll,archive=True)
 
         # run function to select which lines are modeled
         (self.parr,self.psig,self.pflag,self.Tarr) = FALlinesel.linesel(self.fmll,self.condst,self.minLINWL,self.maxLINWL)
@@ -463,7 +463,7 @@ class FALmcmc(object):
         # compute zero spectrum with all the previous shifts applied
         ogspecdict = {}
         for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
-            _spec,_ll = fmdict[ID_i].runsynthe(timeit=True,linelist='readlast',parr=self.fmll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW'])
+            _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=True,linelist='readlast',parr=self.fmll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW'])
             _spectab = Table(_spec)
             _spectab.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path=star_i+'_zero',overwrite=True,append=True)
 
