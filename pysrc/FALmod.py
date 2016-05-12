@@ -146,9 +146,9 @@ class FALmod(object):
             verbose_i = False
         if parr != None:
             if str(linelist) == 'readlast':
-                self._adjustpar(parr,ll=self.orgll,verbose=verbose_i)
+                llo = self._adjustpar(parr,ll=self.orgll,verbose=verbose_i)
             else:
-                self._adjustpar(parr,verbose=verbose_i)
+                llo = self._adjustpar(parr,verbose=verbose_i)
 
         # do synthesis calc
         if type(verbose) == type(True):
@@ -273,7 +273,7 @@ class FALmod(object):
             ll = self.glue.con_lptonp_raw(ll_i)
 
         # copy orginal linelist into a working list
-        self.ll = ll.copy()
+        llo = ll.copy()
 
         # delete old fort.11 file
         os.unlink('fort.11')
@@ -284,23 +284,26 @@ class FALmod(object):
 
         # the case where all lines are free (i.e., no lineind index array)
         if lineind==None:
-            del self.ll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW']
-            self.ll.add_columns(parr.columns.values())
+            for kk in parr.keys():
+                del llo[kk]
+                llo[kk] = parr[kk]
         else:
             # else just replace the parameters for the lines that are indictated in lineind
             for pind,llind in enumerate(lineind):
-                self.ll['DWL'][llind] = parr['DWL'][pind]
-                self.ll['DGFLOG'][llind] = parr['DGFLOG'][pind]
-                self.ll['DGAMMAR'][llind] = parr['DGAMMAR'][pind]
-                self.ll['DGAMMAS'][llind] = parr['DGAMMAS'][pind]
-                self.ll['DGAMMAW'][llind] = parr['DGAMMAW'][pind]
+                llo['DWL'][llind] = parr['DWL'][pind]
+                llo['DGFLOG'][llind] = parr['DGFLOG'][pind]
+                llo['DGAMMAR'][llind] = parr['DGAMMAR'][pind]
+                llo['DGAMMAS'][llind] = parr['DGAMMAS'][pind]
+                llo['DGAMMAW'][llind] = parr['DGAMMAW'][pind]
 
         # convert the table into the correct string format
-        lpfmttab = self.glue.con_nptolp(self.ll)
+        lpfmttab = self.glue.con_nptolp(llo)
 
         # write out the ascii line list
         self.glue.writelp(lpfmttab,'/dev/shm/FAL/{0}/fort.11'.format(self.ID))
         os.symlink('/dev/shm/FAL/{0}/fort.11'.format(self.ID),'fort.11')
+
+        return llo
 
     def _synthesis(self,verbose=False):
         # now run the synthe steps
