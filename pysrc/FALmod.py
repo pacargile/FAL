@@ -265,6 +265,7 @@ class FALmod(object):
             lineind = parr_i['lineind']
         else:
             parr = parr_i
+            lineind = None
 
         # check to see if line list has been defined in self
         if ll == None:
