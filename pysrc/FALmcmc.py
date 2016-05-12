@@ -448,13 +448,17 @@ class FALmcmc(object):
         self.ll_i['FGAMMAS'] = self.Tarr[:,4]
         self.ll_i.write('LL'+self.outputfile[4:-3]+'fits',format='fits',overwrite=True) 
 
-        # Initialize HDF5 File for SAMP
-        self.outspec = Table()
-        self.outspec['SOL_WAVE'] = self.solobswave
-        self.outspec['SOL_FLUX'] = self.solobsflux
-        self.outspec['ARC_WAVE'] = self.arcobswave
-        self.outspec['ARC_FLUX'] = self.arcobsflux
-        self.outspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='obs',overwrite=True)
+        # Initialize HDF5 File for SAMP & write Sun observed spec
+        self.soloutspec = Table()
+        self.soloutspec['SOL_WAVE'] = self.solobswave
+        self.soloutspec['SOL_FLUX'] = self.solobsflux
+        self.soloutspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='solobs',overwrite=True)
+
+        # write arcturus obs spec
+        self.arcoutspec = Table()
+        self.arcoutspec['ARC_WAVE'] = self.arcobswave
+        self.arcoutspec['ARC_FLUX'] = self.arcobsflux
+        self.arcoutspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='arcobs',overwrite=True,append=True)
 
         # compute zero spectrum with all the previous shifts applied
         ogspecdict = {}
