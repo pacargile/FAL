@@ -260,7 +260,7 @@ class FALmod(object):
     def _adjustpar(self,parr_i,ll=None,verbose=False):
         # check to see if parr is one table of parameters (for the whole line list)
         # or if it is a dictionary of parameters and line indices
-        if isinstance(parr,dict):
+        if isinstance(parr_i,dict):
             parr = parr_i['parr']
             lineind = parr_i['lineind']
         else:
