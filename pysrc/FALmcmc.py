@@ -270,7 +270,7 @@ class FALmcmc(object):
         # self.injectprev()
 
         # get observed data and transmission spectrum
-        (self.solobswave,self.solobsflux,self.arcobswave,self.arcobsflux,self.tranflux) = self.getspecdata()
+        (self.solobswave,self.solobsflux,self.arcobswave,self.arcobsflux,self.transflux) = self.getspecdata()
 
         # initialize output files
         self.initoutput()
