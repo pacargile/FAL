@@ -245,7 +245,7 @@ class FALmcmc(object):
                 fitlinewl.append(float(self.fmll['WL'][ii]))
 
 
-        print("Pro: {0} --> Total number of lines considered in WL segment = {1}".format(self.ID,len(self.fm.ll)))
+        print("Pro: {0} --> Total number of lines considered in WL segment = {1}".format(self.ID,len(self.fmll)))
         print("Pro: {0} --> Number of lines that are free in WL segment = {1}".format(self.ID,len(fitlinewl)))
         # print("Pro: {0} --> Index in line list of the modeled lines...".format(self.ID),fitlineind)
         # print("Pro: {0} --> WL of modeled lines...".format(self.ID),fitlinewl)
