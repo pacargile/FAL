@@ -237,6 +237,8 @@ class FALmcmc(object):
         print('Pro: {0} --> Archiving the results into working directories'.format(self.ID))
         for ID_i in self.IDlist:
             _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=False,linelist=self.fmll,archive=True)
+            # reset orgll to fmll because we don't want to use the synthe parsed ll
+            self.fmdict[ID_i].orgll = self.fmll
 
         # run function to select which lines are modeled
         (self.parr,self.psig,self.pflag,self.Tarr) = FALlinesel.linesel(self.fmll,self.condst,self.minLINWL,self.maxLINWL)
