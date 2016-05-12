@@ -380,8 +380,8 @@ class FALmcmc(object):
         AW = arc_i['WAVE'].data
         AF = arc_i['FLUX'].data
         arcind = np.argwhere( (AW > self.minWL) & (AW < self.maxWL) )
-        arcobswave = np.squeeze(np.array(AW[solind]))
-        arcobsflux = np.squeeze(np.array(AF[solind]))
+        arcobswave = np.squeeze(np.array(AW[arcind]))
+        arcobsflux = np.squeeze(np.array(AF[arcind]))
 
         # parse and interpolate transmission spectrum
         trans_i = trans[ (trans['WAVE'] > solobswave.min()-0.1) & (trans['WAVE'] < obswave.max()+0.1) ]
