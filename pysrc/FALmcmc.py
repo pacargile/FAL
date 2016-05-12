@@ -182,8 +182,14 @@ class FALmcmc(object):
         self.numstars = 2
         self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
+        # Define synthesis wavelength range
+        self.waverange = [self.minWL-0.1,self.maxWL+0.1]
+
         # setting cut for line selection
         self.condst = [{'LP':'RESID','OP':np.less,'LV':0.99}]
+
+        # set output file name
+        self.outputfile = outputfile
 
         # define a general start time so that the code can stop short of the wall time and save everything
         if starttime == None:
@@ -199,8 +205,6 @@ class FALmcmc(object):
         print('Pro: {0} --> Total possible run time = {1} seconds'.format(self.ID,self.walltime-self.starttime))
         print('Pro: {0} --> Full Wavelength Range = {1:9.5f}-{2:9.5f} ({3:9.5f}) nm'.format(self.ID,self.minWL-0.1,self.maxWL+0.1,self.maxWL-self.minWL+0.2))
 
-        # Define synthesis wavelength range
-        self.waverange = [self.minWL-0.1,self.maxWL+0.1]
 
         # set up some dictionaries for passing objects
         fmdict = {}
@@ -395,10 +399,9 @@ class FALmcmc(object):
     def initoutput(self):
         print("Pro: {0} --> Initializing Output Files".format(self.ID))
         # set up outfile
-        if outputfile == None:
+        if self.outputfile == None:
             self.outputfile = 'MCMC_{0:n}.dat'.format(time.time())
-        else:
-            self.outputfile = outputfile
+
         with open(self.outputfile, "w") as f:
             f.write(
                 '# RUN DATE/TIME: {0}, NumFP: {1} ,'.format(
