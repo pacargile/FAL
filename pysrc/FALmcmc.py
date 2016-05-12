@@ -214,7 +214,7 @@ class FALmcmc(object):
             # run SYNTHE using the master line list to grab all important lines
             spec_i,ll_i = fm_i.runsynthe(timeit=True,linelist='readmaster')
             fmdict[ID_i] = fm_i
-            origsyndict[ID_i] = [spec_i,ll_i]
+            origsyndict[ID_i] = [Table(spec_i),ll_i]
 
         # Assemble working line list (union of ll_i from last for-loop)
         print('Pro: {0} --> Assemble working line list'.format(self.ID))
@@ -263,7 +263,7 @@ class FALmcmc(object):
         # self.injectprev()
 
         # get observed data and transmission spectrum
-        (self.obssol,self.obsarc,self.transol,self.tranarc) = self.getspecdata()
+        (self.solobswave,self.solobsflux,self.arcobswave,self.arcobsflux,self.tranflux) = self.getspecdata()
 
         # initialize output files
         self.initoutput()
@@ -337,126 +337,133 @@ class FALmcmc(object):
 
     def getspecdata(self):
         if ((self.minWL > 470.0) & (self.maxWL < 800.0)):
-            print("Pro: {0} --> Working with Solar Optical Spectrum".format(self.ID))
-            sol = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_4750_8270.fits',format='fits')            
+            print("Pro: {0} --> Working with Optical Spectrum".format(self.ID))
+            # read in observed data for the Sun and Acturus
+            sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_4750_8270.fits',format='fits')            
+            arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_3800_9300_HINKLE.fits',format='fits')
+            arc_i = Table()
+            arc_i['WAVE'] = arc_ii['WAVELENGTH']
+            arc_i['FLUX'] = arc_ii['ARCTURUS']
+
+            # read in transmission spectrum
             transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_OPT_10_22_15.h5','r')
             trans = Table(np.array(transh5['spec']))
             trans.sort('WAVE')
-
             # correct for slight doppler shift
             trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
 
-        # # read in observed data
-        # if ((self.minWL > 400.0) & (self.maxWL < 475.0)):
-        #     sol = Table.read('/home1/02349/cargilpa/FAL/PYTHON/data/SOL_4000_4750.fits',format='fits')
-        # elif ((self.minWL > 475.0) & (self.maxWL < 800.0)):
-        #     print("Pro: {0} --> Working with Solar Optical Spectrum".format(self.ID))
-        #     sol = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_4750_8270.fits',format='fits')            
-        #     transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_OPT_10_22_15.h5','r')
-        #     trans = Table(np.array(transh5['spec']))
-        #     trans.sort('WAVE')
+        elif ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
+            print("Pro: {0} --> Working with H-Band Spectrum".format(self.ID))
+            sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
+            arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_HBAND_HINKLE.fits',format='fits')
+            arc_i = Table()
+            arc_i['WAVE'] = arc_ii['Wavelength_air']
+            arc_i['FLUX'] = arc_ii['Flux']
+            arc_i.sort('WAVE')
 
-        #     # correct for slight doppler shift
-        #     trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
+            # read in transmission spectrum
+            transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_HBAND_10_22_15.h5','r')
+            trans = Table(np.array(transh5['spec']))
+            trans.sort('WAVE')
 
-        # elif ((self.minWL > 800.0) & (self.maxWL < 900.0)):
-        #     sol = Table.read('/home1/02349/cargilpa/FAL/PYTHON/data/SOL_8000_9000.fits',format='fits')
-        # elif ((self.minWL > 900.0) & (self.maxWL < 1000.0)):
-        #     sol = Table.read('/home1/02349/cargilpa/FAL/PYTHON/data/SOL_9000_10000.fits',format='fits')
-        # elif ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
-        #     print("Pro: {0} --> Working with Solar H-Band Spectrum".format(self.ID))
-        #     sol = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
-        #     transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_HBAND_10_22_15.h5','r')
-        #     trans = Table(np.array(transh5['spec']))
-        #     trans.sort('WAVE')
-        # else:
-        #     raise IOError("COULD NOT FIND OBSERVED SOLAR SPECTRUM IN THIS WAVELENGTH RANGE!")
+        else:
+            raise IOError("COULD NOT FIND OBSERVED SOLAR SPECTRUM IN THIS WAVELENGTH RANGE!")
 
-        # # parse solar spectrum
-        # OW = sol['WAVE'].data
-        # OF = sol['FLUX'].data
-        # solind = np.argwhere( (OW > self.minWL) & (OW < self.maxWL) )
-        # self.obswave = np.squeeze(np.array(OW[solind]))
-        # self.obsflux = np.squeeze(np.array(OF[solind]))
+        # parse solar spectrum
+        SW = sol_i['WAVE'].data
+        SF = sol_i['FLUX'].data
+        solind = np.argwhere( (SW > self.minWL) & (SW < self.maxWL) )
+        solobswave = np.squeeze(np.array(SW[solind]))
+        solobsflux = np.squeeze(np.array(SF[solind]))
 
-        # # parse and interpolate transmission spectrum
-        # trans_i = trans[ (trans['WAVE'] > self.obswave.min()-0.1) & (trans['WAVE'] < self.obswave.max()+0.1) ]
-        # if 'FLUX' not in trans_i.keys():
-        #     trans_i['FLUX'] = trans_i['QMU1'] / trans_i['QMU2']
-        # transintrp = UnivariateSpline(trans_i['WAVE'].data,trans_i['FLUX'].data,s=0,k=1)(self.obswave)
-        # self.transflux = transintrp
+        # parse arcturus spectrum
+        AW = arc_i['WAVE'].data
+        AF = arc_i['FLUX'].data
+        arcind = np.argwhere( (AW > self.minWL) & (AW < self.maxWL) )
+        arcobswave = np.squeeze(np.array(AW[solind]))
+        arcobsflux = np.squeeze(np.array(AF[solind]))
 
-        return (sol,arc,transol,tranarc)
+        # parse and interpolate transmission spectrum
+        trans_i = trans[ (trans['WAVE'] > solobswave.min()-0.1) & (trans['WAVE'] < obswave.max()+0.1) ]
+        if 'FLUX' not in trans_i.keys():
+            trans_i['FLUX'] = trans_i['QMU1'] / trans_i['QMU2']
+        transintrp = UnivariateSpline(trans_i['WAVE'].data,trans_i['FLUX'].data,s=0,k=1)(solobswave)
+        transflux = transintrp
+
+        return (solobswave,solobsflux,arcobswave,arcobsflux,tranflux)
 
     def initoutput(self):
-        # print("Pro: {0} --> Initializing Output Files".format(self.ID))
-        # # set up outfile
-        # if outputfile == None:
-        #     self.outputfile = 'MCMC_{0:n}.dat'.format(time.time())
-        # else:
-        #     self.outputfile = outputfile
-        # with open(self.outputfile, "w") as f:
-        #     f.write(
-        #         '# RUN DATE/TIME: {0}, NumFP: {1} ,'.format(
-        #             datetime.today(),self.ndim))
-        #     if condst != False:
-        #         for condict in condst:
-        #             f.write('{0}'.format(condict['LP']))
-        #             if (condict['OP'].__str__() == "<ufunc 'less'>"):
-        #                 f.write('<')
-        #             elif (condict['OP'].__str__() == "<ufunc 'greater'>"):
-        #                 f.write('>')
-        #             elif (condict['OP'].__str__() == "<ufunc 'less_equal'>"):
-        #                 f.write('<=')
-        #             elif (condict['OP'].__str__() == "<ufunc 'greater_equal'>"):
-        #                 f.write('>=')
-        #             elif (condict['OP'].__str__() == "<ufunc 'equal'>"):
-        #                 f.write('==')
-        #             elif (condict['OP'].__str__() == "<ufunc 'not_equal'>"):
-        #                 f.write('!=')
-        #             else:
-        #                 f.write('***')
-        #             f.write('{0} '.format(condict['LV']))
-        #     f.write('\n')
-        #     f.write('# WAVELENGTH RANGE: {0:8.4f} {1:8.4f}'.format(self.minWL,self.maxWL))
-        #     f.write(' LINE RANGE: {0:8.4f} {1:8.4f}\n'.format(self.minLINWL,self.maxLINWL))
-        #     f.write('# TYPE OF FREE PARS: ')
-        #     for pf in self.pflag:
-        #         f.write('{0} '.format(pf))
-        #     f.write('\n')
-        #     f.write('WN ')
-        #     for ii in range(self.ndim+self.nGPpar):
-        #         f.write('par{0}\t'.format(ii))
-        #     f.write('lnprob\n')
+        print("Pro: {0} --> Initializing Output Files".format(self.ID))
+        # set up outfile
+        if outputfile == None:
+            self.outputfile = 'MCMC_{0:n}.dat'.format(time.time())
+        else:
+            self.outputfile = outputfile
+        with open(self.outputfile, "w") as f:
+            f.write(
+                '# RUN DATE/TIME: {0}, NumFP: {1} ,'.format(
+                    datetime.today(),self.ndim))
+            try:
+                assert self.condst
+                for condict in self.condst:
+                    f.write('{0}'.format(condict['LP']))
+                    if (condict['OP'].__str__() == "<ufunc 'less'>"):
+                        f.write('<')
+                    elif (condict['OP'].__str__() == "<ufunc 'greater'>"):
+                        f.write('>')
+                    elif (condict['OP'].__str__() == "<ufunc 'less_equal'>"):
+                        f.write('<=')
+                    elif (condict['OP'].__str__() == "<ufunc 'greater_equal'>"):
+                        f.write('>=')
+                    elif (condict['OP'].__str__() == "<ufunc 'equal'>"):
+                        f.write('==')
+                    elif (condict['OP'].__str__() == "<ufunc 'not_equal'>"):
+                        f.write('!=')
+                    else:
+                        f.write('***')
+                    f.write('{0} '.format(condict['LV']))
+            except NameError:
+                pass
+            f.write('\n')
+            f.write('# WAVELENGTH RANGE: {0:8.4f} {1:8.4f}'.format(self.minWL,self.maxWL))
+            f.write(' LINE RANGE: {0:8.4f} {1:8.4f}\n'.format(self.minLINWL,self.maxLINWL))
+            f.write('# TYPE OF FREE PARS: ')
+            for pf in self.pflag:
+                f.write('{0} '.format(pf))
+            f.write('\n')
+            f.write('WN ')
+            for ii in range(self.ndim):
+                f.write('par{0}\t'.format(ii))
+            f.write('lnprob\n')
 
+        # WRITE LL WITH PARR INFO
+        self.ll_i = self.fmll.copy()
+        self.ll_i['FWL']     = self.Tarr[:,0]
+        self.ll_i['FGFLOG']  = self.Tarr[:,1]
+        self.ll_i['FGAMMAW'] = self.Tarr[:,2]
+        self.ll_i['FGAMMAR'] = self.Tarr[:,3]
+        self.ll_i['FGAMMAS'] = self.Tarr[:,4]
+        self.ll_i.write('LL'+self.outputfile[4:-3]+'fits',format='fits',overwrite=True) 
 
-        # # WRITE LL WITH PARR INFO
-        # self.ll_i = self.fm.ll.copy()
-        # self.ll_i['FWL']     = self.Tarr[:,0]
-        # self.ll_i['FGFLOG']  = self.Tarr[:,1]
-        # self.ll_i['FGAMMAW'] = self.Tarr[:,2]
-        # self.ll_i['FGAMMAR'] = self.Tarr[:,3]
-        # self.ll_i['FGAMMAS'] = self.Tarr[:,4]
-        # self.ll_i.write('LL'+self.outputfile[4:-3]+'fits',format='fits',overwrite=True) 
+        # Initialize HDF5 File for SAMP
+        self.outspec = Table()
+        self.outspec['SOL_WAVE'] = self.solobswave
+        self.outspec['SOL_FLUX'] = self.solobsflux
+        self.outspec['ARC_WAVE'] = self.arcobswave
+        self.outspec['ARC_FLUX'] = self.arcobsflux
+        self.outspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='obs',overwrite=True)
 
+        # compute zero spectrum with all the previous shifts applied
+        ogspecdict = {}
+        for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
+            _spec,_ll = fmdict[ID_i].runsynthe(timeit=True,linelist='readlast',parr=self.fmll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW'])
+            _spectab = Table(_spec)
+            _spectab.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path=star_i+'_zero',overwrite=True,append=True)
 
-        # # compute zero spectrum with all the previous shifts applied
-        # ogspec_s = Table(self.fm(self.fm.ll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW'],writespec=False,reusell=True,verbose=False,speed='fast'))
-
-        # # Initialize HDF5 File for SAMP
-        # self.outspec = Table()
-        # self.outspec['WAVE'] = self.obswave
-        # self.outspec['FLUX'] = self.obsflux
-        # self.outspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='sol',overwrite=True)
-
-        # # write zero spectrum to HDF5 file for SAMP
-        # ogspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='zero_i',overwrite=True,append=True)
-        # ogspec_s.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='zero',overwrite=True,append=True)
-
-        # # write original transmission spectrum into file
-        # transpec = Table()
-        # transpec['FLUX'] = self.transflux
-        # transpec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
+        # write original transmission spectrum into file
+        transpec = Table()
+        transpec['FLUX'] = self.transflux
+        transpec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
 
         return 
 
