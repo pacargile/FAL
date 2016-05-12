@@ -234,8 +234,9 @@ class FALmcmc(object):
         self.fmll = fmll
 
         # now run each stellar spectrum again and archive the results
+        print('Pro: {0} --> Archiving the results into working directories'.format(self.ID))
         for ID_i in self.IDlist:
-            _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=True,linelist=self.fmll,archive=True)
+            _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=False,linelist=self.fmll,archive=True)
 
         # run function to select which lines are modeled
         (self.parr,self.psig,self.pflag,self.Tarr) = FALlinesel.linesel(self.fmll,self.condst,self.minLINWL,self.maxLINWL)

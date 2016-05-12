@@ -285,15 +285,15 @@ class FALmod(object):
         # the case where all lines are free (i.e., no lineind index array)
         if lineind==None:
             del self.ll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW']
-            self.ll.add_columns(par.columns.values())
+            self.ll.add_columns(parr.columns.values())
         else:
             # else just replace the parameters for the lines that are indictated in lineind
             for pind,llind in enumerate(lineind):
-                self.ll['DWL'][llind] = par['DWL'][pind]
-                self.ll['DGFLOG'][llind] = par['DGFLOG'][pind]
-                self.ll['DGAMMAR'][llind] = par['DGAMMAR'][pind]
-                self.ll['DGAMMAS'][llind] = par['DGAMMAS'][pind]
-                self.ll['DGAMMAW'][llind] = par['DGAMMAW'][pind]
+                self.ll['DWL'][llind] = parr['DWL'][pind]
+                self.ll['DGFLOG'][llind] = parr['DGFLOG'][pind]
+                self.ll['DGAMMAR'][llind] = parr['DGAMMAR'][pind]
+                self.ll['DGAMMAS'][llind] = parr['DGAMMAS'][pind]
+                self.ll['DGAMMAW'][llind] = parr['DGAMMAW'][pind]
 
         # convert the table into the correct string format
         lpfmttab = self.glue.con_nptolp(self.ll)
