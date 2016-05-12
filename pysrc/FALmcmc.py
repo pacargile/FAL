@@ -390,7 +390,7 @@ class FALmcmc(object):
         transintrp = UnivariateSpline(trans_i['WAVE'].data,trans_i['FLUX'].data,s=0,k=1)(solobswave)
         transflux = transintrp
 
-        return (solobswave,solobsflux,arcobswave,arcobsflux,tranflux)
+        return (solobswave,solobsflux,arcobswave,arcobsflux,transflux)
 
     def initoutput(self):
         print("Pro: {0} --> Initializing Output Files".format(self.ID))
