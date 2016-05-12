@@ -384,7 +384,7 @@ class FALmcmc(object):
         arcobsflux = np.squeeze(np.array(AF[arcind]))
 
         # parse and interpolate transmission spectrum
-        trans_i = trans[ (trans['WAVE'] > solobswave.min()-0.1) & (trans['WAVE'] < obswave.max()+0.1) ]
+        trans_i = trans[ (trans['WAVE'] > solobswave.min()-0.1) & (trans['WAVE'] < solobswave.max()+0.1) ]
         if 'FLUX' not in trans_i.keys():
             trans_i['FLUX'] = trans_i['QMU1'] / trans_i['QMU2']
         transintrp = UnivariateSpline(trans_i['WAVE'].data,trans_i['FLUX'].data,s=0,k=1)(solobswave)
