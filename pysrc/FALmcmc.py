@@ -382,7 +382,7 @@ class FALmcmc(object):
             sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
             arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_HBAND_HINKLE.fits',format='fits')
             arc_i = Table()
-            arc_i['WAVE'] = arc_ii['Wavelength_air']/10.0
+            arc_i['WAVE'] = (arc_ii['Wavelength_air']/10.0)*(1.0+(-13.0/speedoflight))
             arc_i['FLUX'] = arc_ii['Flux']
             arc_i.sort('WAVE')
 
