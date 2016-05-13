@@ -16,16 +16,24 @@ import FALmod
 import FALGlue
 from FALGlue import *
 
-def lnprob(pin,args,verbose=False):
-    obswave,obsflux,transflux,fm,Tarr,minWL,maxWL = args
+def lnprob(pin,args,verbose=False,justprior=False):
+
+    # read in arguments
+    (solobswave,solobsflux,arcobswave,arcobsflux,transflux,fmdict,fmll,Tarr,minWL,maxWL) = args
+    # for printing to command line, generate an ID
+    ID = fmdict.keys()[0] - 10000000
+
+    # set up observed data dictionaries
+    obswave = {'Sun':solobswave,'Arcturus':arcobswave}
+    obsflux = {'Sun':solobsflux,'Arcturus':arcobsflux}
 
     # stick new p into Table
     p = Table()
-    p['DWL']     = np.array([pin[xx] if xx != -1 else fm.ll['DWL'][kk]     for kk,xx in enumerate(Tarr[...,0])])
-    p['DGFLOG']  = np.array([pin[xx] if xx != -1 else fm.ll['DGFLOG'][kk]  for kk,xx in enumerate(Tarr[...,1])])
-    p['DGAMMAW'] = np.array([pin[xx] if xx != -1 else fm.ll['DGAMMAW'][kk] for kk,xx in enumerate(Tarr[...,2])])
-    p['DGAMMAR'] = np.array([pin[xx] if xx != -1 else fm.ll['DGAMMAR'][kk] for kk,xx in enumerate(Tarr[...,3])])
-    p['DGAMMAS'] = np.array([pin[xx] if xx != -1 else fm.ll['DGAMMAR'][kk] for kk,xx in enumerate(Tarr[...,4])])
+    p['DWL']     = np.array([pin[xx] if xx != -1 else fmll['DWL'][kk]     for kk,xx in enumerate(Tarr[...,0])])
+    p['DGFLOG']  = np.array([pin[xx] if xx != -1 else fmll['DGFLOG'][kk]  for kk,xx in enumerate(Tarr[...,1])])
+    p['DGAMMAW'] = np.array([pin[xx] if xx != -1 else fmll['DGAMMAW'][kk] for kk,xx in enumerate(Tarr[...,2])])
+    p['DGAMMAR'] = np.array([pin[xx] if xx != -1 else fmll['DGAMMAR'][kk] for kk,xx in enumerate(Tarr[...,3])])
+    p['DGAMMAS'] = np.array([pin[xx] if xx != -1 else fmll['DGAMMAR'][kk] for kk,xx in enumerate(Tarr[...,4])])
 
     # transmission spectrum scaling and vel shift
     transcale = pin[-2]
@@ -38,23 +46,26 @@ def lnprob(pin,args,verbose=False):
         return -np.inf,[np.nan,np.nan]
 
     # calcluate prior
-    lp = lnprior(p,Tarr,fm,minWL,maxWL,verbose=verbose)
+    lp = lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=verbose)
     try:
         if np.isfinite(lp) == False:
                 return -np.inf, [np.nan,np.nan]
     except ValueError:
         pass
+    # give out for just calculating the prior probability
+    if justprior:
+        return lp
 
     # scale transmission spectrum, renormalize it
     transflux_i = ((transcale*transflux)-(transcale-1.0))
     # shfit transmission spectrum and resample it back to obswave
-    transflux_ii = UnivariateSpline(obswave*(1.0+(tranvel/speedoflight)),transflux_i,s=0,k=1)(obswave)
+    transflux_ii = UnivariateSpline(obswave['Sun']*(1.0+(tranvel/speedoflight)),transflux_i,s=0,k=1)(obswave['Sun'])
 
     # now divide the observed spectrum by the transmission spectrum
-    obsflux = obsflux / transflux_ii
+    obsflux['Sun'] = obsflux['Sun'] / transflux_ii
 
     # calculate lnl
-    lnl, mod = lnlike(p,obswave,obsflux,fm,minWL,maxWL)
+    lnl, mod = lnlike(p,obswave,obsflux,fmdict,minWL,maxWL)
 
     # print(pin,gplp,lp,lnl)
 
@@ -64,39 +75,46 @@ def lnprob(pin,args,verbose=False):
     lnpr = lp + lnl
     return lnpr, modblob
     
-def lnlike(p,obswave,obsflux,fm,minWL,maxWL):
-    # sigma based on SNR = 1000
-    SNR = 1000.0
-    sig = 1.0 / SNR
-    # calculate model spectrum for p
-    modspec_i = Table(fm(p,writespec=False,reusell=True,verbose=False,speed='fast'))
-    # cut synthetic spectrum to the working region
-    # modspec = modspec_i[(modspec_i['WAVE'] < maxWL) & (modspec_i['WAVE'] > minWL)]
-    modspec = modspec_i[(modspec_i['WAVE'] <= fm.outspec['WAVE'].max()) & (modspec_i['WAVE'] >= fm.outspec['WAVE'].min())]
-    modflux = modspec['QMU1']/modspec['QMU2']
-    # modintrp = interp1d(modspec['WAVE'].data,modflux,kind='linear')(obswave)
-    modintrp = UnivariateSpline(modspec['WAVE'].data,modflux,s=0,k=1)(obswave)
-    # calculate residuals and lnprob
-    residsq = (np.subtract(obsflux,modintrp)**2.0)/(sig**2.0)
-    # resid = np.subtract(obsflux,modintrp)
+def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
+    # generate ID list
+    IDlist = fmdict.keys()
+    IDlist.sort()
 
-    lnp = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig**2.0))))
-    # lnp = -0.5*np.sum(residsq) 
-    # return lnprob of likelihood
+    # sigma based on SNR = 1000
+    sig = {}
+    sig = {'Sun':1.0/1000.0,'Arcturus':1.0/300.0}
+
+    modintrp = {}
+
+    # initialize lnp
+    lnp = 0
+    # loop over stars and calclate lnp_i
+    for ID_i,star_i in zip(IDlist,['Sun','Arcturus']):
+        # calculate model spectrum for p
+        _spec,_ll = fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=p)
+        _spectab_i = Table(_spec)
+        _spectab = _spectab_i[(spectab_i['WAVE'] <= maxWL) & (modspec_i['WAVE'] >= minWL)]
+        _specflux = _spectab['QMU1']/_spectab['QMU2']
+        _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
+        modintrp[star_i] = _specintr
+        residsq = (np.subtract(obsflux[star_i],_specintr)**2.0)/(sig[star_i]**2.0)
+        lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
+        lnp = lnp+lnp_i
+
     return lnp, modintrp
 
 
 
-def lnprior(p,Tarr,fm,minWL,maxWL,verbose=False):
+def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
 
     # apply non-informative prior on wavelength to make sure
     # line is not shifted outside working segment
-    for ii,pp in enumerate(zip(p['DWL'][Tarr[...,0] != -1],fm.ll['WL'][Tarr[...,0] != -1])):
+    for ii,pp in enumerate(zip(p['DWL'][Tarr[...,0] != -1],fmll['WL'][Tarr[...,0] != -1])):
         if (np.abs(pp[0]) > 0.0) & (pp[1] > minWL) & (pp[1] < maxWL):
             wlshift = pp[1]+pp[0]
             if (wlshift < minWL-0.05) or (wlshift > maxWL+0.05):
                 if verbose:
-                    print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE SPECTRUM BOUNDS, LINE SHIFTED TO: {1}'.format(fm.IDraw,wlshift))
+                    print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE SPECTRUM BOUNDS, LINE SHIFTED TO: {1}'.format(ID,wlshift))
                 return -np.inf
 
     # Prior on gamma using beta function
@@ -112,7 +130,7 @@ def lnprior(p,Tarr,fm,minWL,maxWL,verbose=False):
         any(np.isinf(gammarprior)) or 
         any(np.isinf(gammasprior))) :
         if verbose:
-            print('Pro: {0} --> CAUGHT A GAMMA SHIFT OUTSIDE THE PRIORS'.format(fm.IDraw))
+            print('Pro: {0} --> CAUGHT A GAMMA SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
     # Prior on gf using beta function
@@ -124,11 +142,11 @@ def lnprior(p,Tarr,fm,minWL,maxWL,verbose=False):
     # check to see if it returns any priors outside uniform prior
     if any(np.isinf(gfprior)):
         if verbose:
-            print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(fm.IDraw))
+            print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
     velshift = 75.0 #km/s
-    wsh = fm.ll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
+    wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
     maxwll = wsh_max
@@ -140,7 +158,7 @@ def lnprior(p,Tarr,fm,minWL,maxWL,verbose=False):
         if verbose:
             for ii,wlp in enumerate(wlprior):
                 if np.isinf(wlp):
-                    print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE THE PRIORS: line {2} shifted by {1} nm'.format(fm.IDraw,p['DWL'][ii],fm.ll['WL'][ii]))
+                    print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE THE PRIORS: line {2} shifted by {1} nm'.format(ID,p['DWL'][ii],fmll['WL'][ii]))
         return -np.inf
 
     # check to see if arrays are empty, if so add 0.0 so that the sumation works
@@ -230,6 +248,12 @@ class FALmcmc(object):
         fmll.sort(tabpars+['RESID'])
         fmll = unique(fmll,tabpars)
 
+        # # inject fake lines
+        # fmll = self.injectfake(fmll.copy())
+
+        # # inject previous parameters
+        # fmll = self.injectprev(fmll.copy())
+
         # set it into self
         self.fmll = fmll
 
@@ -262,12 +286,6 @@ class FALmcmc(object):
         print("Pro: {0} --> Number of Free Line Parameters...".format(self.ID),self.ndim)
         print("Pro: {0} --> Fitting Transmission Spectrum (scaling and velocity)".format(self.ID))
         self.ndim = self.ndim + 2
-
-        # # inject fake lines
-        # self.injectfake()
-
-        # # inject previous parameters
-        # self.injectprev()
 
         # get observed data and transmission spectrum
         (self.solobswave,self.solobsflux,self.arcobswave,self.arcobsflux,self.transflux) = self.getspecdata()
@@ -466,7 +484,7 @@ class FALmcmc(object):
         # compute zero spectrum with all the previous shifts applied
         ogspecdict = {}
         for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
-            _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=True,linelist='readlast',parr=self.fmll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW'])
+            _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=self.fmll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW'])
             _spectab = Table(_spec)
             _spectab.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path=star_i+'_zero',overwrite=True,append=True)
 
@@ -476,7 +494,6 @@ class FALmcmc(object):
         transpec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
 
         return 
-
 
     def buildsampler(self,nwalkers=0,threads=0):
         if nwalkers == 0:
@@ -489,9 +506,13 @@ class FALmcmc(object):
         print('Pro: {0} --> Number of walkers being used: {1}'.format(self.ID,self.nwalkers))
 
         # build sampler object
-        args = ([(self.obswave,self.obsflux,self.transflux,self.fm,self.Tarr,self.minWL,self.maxWL)])
+        args = ([(self.solobswave,self.solobsflux,
+            self.arcobswave,self.arcobsflux,
+            self.transflux,
+            self.fmdict,self.fmll,self.Tarr,
+            self.minWL,self.maxWL)])
         self.sampler = emcee.EnsembleSampler(
-            self.nwalkers,self.ndim+self.nGPpar,
+            self.nwalkers,self.ndim,
             lnprob,
             args=args,
             threads=threads,
@@ -502,7 +523,7 @@ class FALmcmc(object):
         while True:
                 # self.p0 = emcee.utils.sample_ball(self.parr,self.psig,self.nwalkers)
                 self.p0 = self.buildball()
-                testlp = [lnprob(pp,(self.obswave,self.obsflux,self.transflux,self.fm,self.Tarr,self.minWL,self.maxWL),verbose=True)[0] for pp in self.p0]
+                testlp = [lnprob(pp,args[0],verbose=True,justprior=True) for pp in self.p0]
                 if any(np.isinf(testlp)):
                     print('Pro: {0} --> ---- Need to redo p0 calculation'.format(self.ID))
                     print('Pro: {0} --> Problematic PAR: '.format(self.ID))
