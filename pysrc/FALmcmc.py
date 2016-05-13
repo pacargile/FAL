@@ -84,7 +84,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     sig = {}
     sig = {'Sun':1.0/1000.0,'Arcturus':1.0/300.0}
 
-    modintrp = []
+    modintrp = {}
 
     # initialize lnp
     lnp = 0
@@ -96,7 +96,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         _spectab = _spectab_i[(_spectab_i['WAVE'] <= maxWL) & (_spectab_i['WAVE'] >= minWL)]
         _specflux = _spectab['QMU1']/_spectab['QMU2']
         _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
-        modintrp.append(_specintr)
+        modintrp[star_i] = _specintr
         residsq = (np.subtract(obsflux[star_i],_specintr)**2.0)/(sig[star_i]**2.0)
         lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
         lnp = lnp+lnp_i
@@ -682,8 +682,10 @@ class FALmcmc(object):
             outf.write("\n".join(["\t".join([str(q) for q in p]) for p in steparray]))
             outf.write("\n")
 
-            print(blobs)
-            outspec.create_dataset('{0}'.format(ii),data=blob,compression='gzip')
+            blob_s = [x['Sun'] for x in blob]
+            blob_a = [x['Arcturus'] for x in blob]
+            outspec.create_dataset('SUN_{0}'.format(ii),data=blob_s,compression='gzip')
+            outspec.create_dataset('ARC_{0}'.format(ii),data=blob_a,compression='gzip')
 
     		# handle SIGURS1 signal as a command to dump output file
             # try:
