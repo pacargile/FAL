@@ -96,7 +96,6 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         _spectab = _spectab_i[(_spectab_i['WAVE'] <= maxWL) & (_spectab_i['WAVE'] >= minWL)]
         _specflux = _spectab['QMU1']/_spectab['QMU2']
         _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
-        print(star_i,_specintr)
         modintrp[star_i] = _specintr
         residsq = (np.subtract(obsflux[star_i],_specintr)**2.0)/(sig[star_i]**2.0)
         lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
@@ -382,6 +381,7 @@ class FALmcmc(object):
             print("Pro: {0} --> Working with H-Band Spectrum".format(self.ID))
             sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
             arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_HBAND_HINKLE.fits',format='fits')
+            print(arc_ii)
             arc_i = Table()
             arc_i['WAVE'] = arc_ii['Wavelength_air']
             arc_i['FLUX'] = arc_ii['Flux']
