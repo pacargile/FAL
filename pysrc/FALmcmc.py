@@ -93,7 +93,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         # calculate model spectrum for p
         _spec,_ll = fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=p)
         _spectab_i = Table(_spec)
-        _spectab = _spectab_i[(spectab_i['WAVE'] <= maxWL) & (modspec_i['WAVE'] >= minWL)]
+        _spectab = _spectab_i[(_spectab_i['WAVE'] <= maxWL) & (_spectab_i['WAVE'] >= minWL)]
         _specflux = _spectab['QMU1']/_spectab['QMU2']
         _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
         modintrp[star_i] = _specintr
@@ -234,7 +234,7 @@ class FALmcmc(object):
             # initialize the class
             fm_i = FALmod.FALmod(ID=ID_i,waverange=self.waverange,starpars=star_i)
             # run SYNTHE using the master line list to grab all important lines
-            spec_i,ll_i = fm_i.runsynthe(timeit=True,linelist='readmaster')
+            spec_i,ll_i = fm_i.runsynthe(timeit=False,linelist='readmaster')
             self.fmdict[ID_i] = fm_i
             origsyndict[ID_i] = [Table(spec_i),ll_i]
 
