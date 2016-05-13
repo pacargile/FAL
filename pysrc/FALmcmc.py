@@ -101,7 +101,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
         lnp = lnp+lnp_i
 
-    return lnp, modintrp
+    return lnp, np.array(modintrp)
 
 
 
@@ -682,6 +682,7 @@ class FALmcmc(object):
             outf.write("\n".join(["\t".join([str(q) for q in p]) for p in steparray]))
             outf.write("\n")
 
+            print(blobs)
             outspec.create_dataset('{0}'.format(ii),data=blob,compression='gzip')
 
     		# handle SIGURS1 signal as a command to dump output file
