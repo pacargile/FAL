@@ -385,7 +385,6 @@ class FALmcmc(object):
             arc_i['WAVE'] = arc_ii['Wavelength_air']
             arc_i['FLUX'] = arc_ii['Flux']
             arc_i.sort('WAVE')
-            print(arc_i)
 
             # read in transmission spectrum
             transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_HBAND_10_22_15.h5','r')
@@ -408,6 +407,7 @@ class FALmcmc(object):
         arcind = np.argwhere( (AW > self.minWL) & (AW < self.maxWL) )
         arcobswave = np.squeeze(np.array(AW[arcind]))
         arcobsflux = np.squeeze(np.array(AF[arcind]))
+        print(arcobswave,arcobsflux)
 
         # parse and interpolate transmission spectrum
         trans_i = trans[ (trans['WAVE'] > solobswave.min()-0.1) & (trans['WAVE'] < solobswave.max()+0.1) ]
