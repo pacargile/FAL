@@ -382,7 +382,7 @@ class FALmcmc(object):
             sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
             arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_HBAND_HINKLE.fits',format='fits')
             arc_i = Table()
-            arc_i['WAVE'] = arc_ii['Wavelength_air']
+            arc_i['WAVE'] = arc_ii['Wavelength_air']/10.0
             arc_i['FLUX'] = arc_ii['Flux']
             arc_i.sort('WAVE')
 
@@ -407,7 +407,6 @@ class FALmcmc(object):
         arcind = np.argwhere( (AW > self.minWL) & (AW < self.maxWL) )
         arcobswave = np.squeeze(np.array(AW[arcind]))
         arcobsflux = np.squeeze(np.array(AF[arcind]))
-        print(arcobswave,arcobsflux)
 
         # parse and interpolate transmission spectrum
         trans_i = trans[ (trans['WAVE'] > solobswave.min()-0.1) & (trans['WAVE'] < solobswave.max()+0.1) ]
