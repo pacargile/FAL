@@ -682,13 +682,13 @@ class FALmcmc(object):
             outf.write("\n".join(["\t".join([str(q) for q in p]) for p in steparray]))
             outf.write("\n")
 
+            print(blob)
+
             blob_s = [x['Sun'] for x in blob]
             blob_a = [x['Arcturus'] for x in blob]
             print(blob_s)
             outspec.create_dataset('SUN_{0}'.format(ii),data=blob_s,compression='gzip')
             outspec.create_dataset('ARC_{0}'.format(ii),data=blob_a,compression='gzip')
-
-            print('WROTE HDF5')
 
     		# handle SIGURS1 signal as a command to dump output file
             # try:
