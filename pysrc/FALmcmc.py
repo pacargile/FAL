@@ -688,6 +688,8 @@ class FALmcmc(object):
             outspec.create_dataset('SUN_{0}'.format(ii),data=blob_s,compression='gzip')
             outspec.create_dataset('ARC_{0}'.format(ii),data=blob_a,compression='gzip')
 
+            print('WROTE HDF5')
+
     		# handle SIGURS1 signal as a command to dump output file
             # try:
             #     assert GOT_SIG == False
