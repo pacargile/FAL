@@ -682,7 +682,7 @@ class FALmcmc(object):
             outf.write("\n".join(["\t".join([str(q) for q in p]) for p in steparray]))
             outf.write("\n")
 
-            print(blob)
+            print(blob[0])
 
             blob_s = [x['Sun'] for x in blob]
             blob_a = [x['Arcturus'] for x in blob]
