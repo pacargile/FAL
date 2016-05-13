@@ -101,7 +101,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
         lnp = lnp+lnp_i
 
-    return lnp, np.array(modintrp)
+    return lnp, modintrp
 
 
 
