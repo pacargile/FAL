@@ -84,7 +84,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     sig = {}
     sig = {'Sun':1.0/1000.0,'Arcturus':1.0/300.0}
 
-    modintrp = {}
+    modintrp = Table()
 
     # initialize lnp
     lnp = 0
@@ -101,7 +101,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
         lnp = lnp+lnp_i
 
-    return lnp, modintrp
+    return lnp, np.array(modintrp)
 
 
 
@@ -683,7 +683,7 @@ class FALmcmc(object):
             outf.write("\n")
 
             outspec.create_dataset('{0}'.format(ii),data=blob,compression='gzip')
-            
+
     		# handle SIGURS1 signal as a command to dump output file
             # try:
             #     assert GOT_SIG == False
