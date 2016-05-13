@@ -381,11 +381,11 @@ class FALmcmc(object):
             print("Pro: {0} --> Working with H-Band Spectrum".format(self.ID))
             sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
             arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_HBAND_HINKLE.fits',format='fits')
-            print(arc_ii)
             arc_i = Table()
             arc_i['WAVE'] = arc_ii['Wavelength_air']
             arc_i['FLUX'] = arc_ii['Flux']
             arc_i.sort('WAVE')
+            print(arc_i)
 
             # read in transmission spectrum
             transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_HBAND_10_22_15.h5','r')
