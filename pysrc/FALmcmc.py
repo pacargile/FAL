@@ -696,7 +696,7 @@ class FALmcmc(object):
             #     GOT_SIG = False
 
             # flush the buffer every X iterations
-            if ((ii % 15 == 0.0) or (ii == niter)):
+            if ((ii % 5 == 0.0) or (ii == niter)):
                 outf.flush()
                 sys.stdout.flush()
                 outspec.flush()
@@ -722,10 +722,10 @@ class FALmcmc(object):
             if ( (lasttime-self.starttime) > (self.walltime-120.0) ):
                 print('Pro: {0} --> Stopping 2 min before walltime'.format(self.ID))
                 finalflag = 1
-		outf.flush()
-		outspec.flush()
-		outf.close()
-		outspec.close()
+                outf.flush()
+                outspec.flush()
+                outf.close()
+                outspec.close()
                 break
         if finalflag == 0:
             print('Pro: {0} --> Stopping at max iterations'.format(self.ID))            
