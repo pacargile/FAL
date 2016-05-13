@@ -682,6 +682,8 @@ class FALmcmc(object):
             outf.write("\n".join(["\t".join([str(q) for q in p]) for p in steparray]))
             outf.write("\n")
 
+            print(blob)
+
             outspec.create_dataset('SUN_{0}'.format(ii),data=blob['Sun'],compression='gzip')
             outspec.create_dataset('ARC_{0}'.format(ii),data=blob['Arcturus'],compression='gzip')
 
