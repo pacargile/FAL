@@ -217,7 +217,7 @@ class FALmod(object):
                 self.lasttime = time.time()
             return
 
-        elif str(linelist) == 'readall':
+        elif linelist == 'readall':
             # read all individual line lists
             rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":True} # atoms, molecules + H2O & TiO
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
@@ -228,7 +228,7 @@ class FALmod(object):
                 self.lasttime = time.time()
             return
 
-        elif str(linelist) == 'readmaster':
+        elif linelist == 'readmaster':
             # read the masterline lists (cargile or kurucz plus H2O+TiO)
             self.SYNTHE.readlines(rtype='readmaster',verbose=verbose_i)
             self.speed = 'fast'
@@ -237,7 +237,7 @@ class FALmod(object):
                 self.lasttime = time.time()
             return
 
-        elif str(linelist) == 'readlast':
+        elif linelist == 'readlast':
             # read the previously created line list in directory
             self.SYNTHE.readlines(rtype='readlast',verbose=verbose_i)
             self.speed = 'fast'
