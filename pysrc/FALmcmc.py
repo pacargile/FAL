@@ -674,7 +674,7 @@ class FALmcmc(object):
             p0,lnprob0=lnprob0,rstate0=rstate0,iterations=niter,storechain=False
             ):
             # set up output arrays
-            pos_matrix=pos.reshape(self.nwalkers,self.ndim+self.nGPpar)
+            pos_matrix=pos.reshape(self.nwalkers,self.ndim)
             # pos_matrix=np.append(walkernum,pos_matrix,axis=1)
             prob_array=np.squeeze(prob.reshape(self.nwalkers,1))
             steparray =np.column_stack([walkernum,pos_matrix,prob_array])
