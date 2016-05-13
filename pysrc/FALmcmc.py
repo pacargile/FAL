@@ -84,7 +84,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     sig = {}
     sig = {'Sun':1.0/1000.0,'Arcturus':1.0/300.0}
 
-    modintrp = Table()
+    modintrp = {}
 
     # initialize lnp
     lnp = 0
@@ -93,6 +93,8 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         # calculate model spectrum for p
         _spec,_ll = fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=p)
         _spectab_i = Table(_spec)
+
+        print(star_i,_spectab_i)
         _spectab = _spectab_i[(_spectab_i['WAVE'] <= maxWL) & (_spectab_i['WAVE'] >= minWL)]
         _specflux = _spectab['QMU1']/_spectab['QMU2']
         _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
@@ -101,7 +103,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
         lnp = lnp+lnp_i
 
-    return lnp, np.array(modintrp)
+    return lnp, modintrp
 
 
 
