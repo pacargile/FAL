@@ -461,6 +461,8 @@ class FALmcmc(object):
             f.write('lnprob\n')
 
         # WRITE LL WITH PARR INFO
+        if os.path.exists('LL'+self.outputfile[4:-3]+'fits'):
+            os.remove('LL'+self.outputfile[4:-3]+'fits')
         self.ll_i = self.fmll.copy()
         self.ll_i['FWL']     = self.Tarr[:,0]
         self.ll_i['FGFLOG']  = self.Tarr[:,1]
@@ -470,6 +472,8 @@ class FALmcmc(object):
         self.ll_i.write('LL'+self.outputfile[4:-3]+'fits',format='fits',overwrite=True) 
 
         # Initialize HDF5 File for SAMP & write Sun observed spec
+        if os.path.exists('SAMP'+self.outputfile[4:-3]+'h5'):
+            os.remove('SAMP'+self.outputfile[4:-3]+'h5')
         self.soloutspec = Table()
         self.soloutspec['SOL_WAVE'] = self.solobswave
         self.soloutspec['SOL_FLUX'] = self.solobsflux
