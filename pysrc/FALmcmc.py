@@ -91,7 +91,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     # loop over stars and calclate lnp_i
     for ID_i,star_i in zip(IDlist,['Sun','Arcturus']):
         # calculate model spectrum for p
-        _spec,_ll = fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=p)
+        _spec,_ll = fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=p,verbose='readlines')
         _spectab_i = Table(_spec)
         _spectab = _spectab_i[(_spectab_i['WAVE'] <= maxWL) & (_spectab_i['WAVE'] >= minWL)]
         _specflux = _spectab['QMU1']/_spectab['QMU2']
