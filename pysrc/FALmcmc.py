@@ -1,5 +1,5 @@
 from __future__ import print_function
-import sys,time
+import sys,time,os
 from datetime import datetime
 import emcee
 import h5py
