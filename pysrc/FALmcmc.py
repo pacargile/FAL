@@ -547,7 +547,7 @@ class FALmcmc(object):
     def buildball(self):
         p0out = []
         scalefact = 1.0
-        velshift = 0.01 #km/s
+        velshift = 0.1 #km/s
 
         for _ in range(self.nwalkers):
             temparr = []            
@@ -603,8 +603,8 @@ class FALmcmc(object):
                     temparr.append(gflogshift)
 
                 elif pf in ['GW','GS','GR']:
-                    mingamma = -0.01
-                    maxgamma = 0.01
+                    mingamma = -0.1
+                    maxgamma = 0.1
                     rangegamma = maxgamma-mingamma
                     if pf == 'GW':
                         fmll_i = self.ll_i[self.ll_i['FGAMMAW'] == ii]
