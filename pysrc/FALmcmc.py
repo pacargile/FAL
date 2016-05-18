@@ -603,8 +603,8 @@ class FALmcmc(object):
                     temparr.append(gflogshift)
 
                 elif pf in ['GW','GS','GR']:
-                    mingamma = -0.1
-                    maxgamma = 0.1
+                    mingamma = -0.01
+                    maxgamma = 0.01
                     rangegamma = maxgamma-mingamma
                     if pf == 'GW':
                         fmll_i = self.ll_i[self.ll_i['FGAMMAW'] == ii]
