@@ -132,13 +132,6 @@ class FALmod(object):
         if archive:
             self.SYNTHE.archive()
 
-        # read in line list
-        if (verbose == True or verbose == 'readlines'):
-            verbose_i = True
-        else:
-            verbose_i = False
-        self._readline(linelist,verbose_i)
-
         # adjust any delta values if parr has been provided
         if (verbose == True or verbose == 'adjustlines'):
             verbose_i = True
@@ -149,6 +142,14 @@ class FALmod(object):
                 llo = self._adjustpar(parr,ll=self.orgll,verbose=verbose_i)
             else:
                 llo = self._adjustpar(parr,verbose=verbose_i)
+
+        # read in line list
+        if (verbose == True or verbose == 'readlines'):
+            verbose_i = True
+        else:
+            verbose_i = False
+        self._readline(linelist,verbose_i)
+
 
         # do synthesis calc
         if type(verbose) == type(True):
