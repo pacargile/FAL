@@ -178,12 +178,18 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
     return np.sum(np.hstack([gammawprior,gammarprior,gammasprior,gfprior,wlprior,gf_wl_prior]))
 
 class FALmcmc(object):
-    def __init__(self,minWLin=605.2,maxWLin=605.8,
-        minlinWL=None,maxlinWL=None,
-        IDin=1,
-        starttime=None,walltime=None,
-        initlines=None,injectlines=None,
-        outputfile=None):
+    def __init__(self,**kwargs):
+
+        minWLin     = kwargs.get("minWLin",605.2)
+        maxWLin     = kwargs.get("maxWLin",605.8)
+        minlinWL    = kwargs.get("minlinWL",None)
+        maxlinWL    = kwargs.get("maxlinWL",None)
+        IDin        = kwargs.get("IDin",1)
+        starttime   = kwargs.get("starttime",None)
+        walltime    = kwargs.get("walltime",None)
+        initlines   = kwargs.get("initlines",None)
+        injectlines = kwargs.get("injectlines",None)
+        outputfile  = kwargs.get("outputfile",None)
 
         # change the following lines to be inputs when you init the class
         self.minWL = minWLin
@@ -699,7 +705,7 @@ class FALmcmc(object):
             #     GOT_SIG = False
 
             # flush the buffer every X iterations
-            if ((ii % 5 == 0.0) or (ii == niter)):
+            if ((ii % 15 == 0.0) or (ii == niter)):
                 outf.flush()
                 sys.stdout.flush()
                 outspec.flush()
