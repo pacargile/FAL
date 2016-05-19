@@ -16,6 +16,10 @@ import FALmod
 import FALGlue
 from FALGlue import *
 
+import warnings
+warnings.simplefilter(action='ignore',category=FutureWarning)
+
+
 def lnprob(pin,args,verbose=False,justprior=False):
 
     # read in arguments

@@ -5,8 +5,11 @@ import time, shutil, os, multiprocessing
 import numpy as np
 # import psutil
 from astropy.table import Table
-
 import traceback
+
+import warnings
+warnings.simplefilter(action='ignore',category=FutureWarning)
+
 
 def runFAL(indict):
 	starttime = indict['starttime']
@@ -60,7 +63,7 @@ def runFAL(indict):
 		if testrun:
 			return MCMC
 		else:
-			print("Seg{0} - Working on {1}".format(MCMC.fm.ID,multiprocessing.current_process().name))
+			print("Seg{0} - Working on {1}".format(IDin,multiprocessing.current_process().name))
 
 			# 100 walkers, 500 steps
 

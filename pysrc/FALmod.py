@@ -8,6 +8,9 @@ import numpy as np
 import sys,glob,time,shutil
 import broaden
 
+import warnings
+warnings.simplefilter(action='ignore',category=FutureWarning)
+
 class FALmod(object):
     """
     Class to take delta line parameters and return a synthesized

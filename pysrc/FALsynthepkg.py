@@ -12,6 +12,9 @@ import numpy as np
 from FALselMOD import selmod
 import FALGlue
 
+import warnings
+warnings.simplefilter(action='ignore',category=FutureWarning)
+
 __all__ = ["synthepkg"]
 
 
