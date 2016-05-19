@@ -58,16 +58,21 @@ def runFAL(indict):
 		outputfile=outputfile)
 	try:
 		if testrun:
-			return None#MCMC
+			return MCMC
 		else:
 			print("Seg{0} - Working on {1}".format(MCMC.fm.ID,multiprocessing.current_process().name))
 
 			# 100 walkers, 500 steps
 
+			# # build samplers
+			# MCMC.buildsampler(nwalkers=100,threads=0)
+			# # run MCMC
+			# MCMC.run_MCMC(500,burnin=False,nburn=0)
+
 			# build samplers
 			MCMC.buildsampler(nwalkers=100,threads=0)
 			# run MCMC
-			MCMC.run_MCMC(500,burnin=False,nburn=0)
+			MCMC.run_MCMC(5,burnin=False,nburn=0)
 			
 			# clean up directories
 			shutil.rmtree('./{0}'.format(str(MCMC.fm.ID)))
@@ -109,7 +114,6 @@ def makeinlist(infilename):
 			'minWLin':float(rf_i['WLstart']),'maxWLin':float(rf_i['WLend']),
 			'minlinWL':float(rf_i['LINWLstart']),'maxlinWL':float(rf_i['LINWLend']),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
-			'testrun':True,
 			'RUNID':ii})
 
 		indictlist.append(tempdict)
