@@ -49,7 +49,7 @@ def runFAL(indict):
 
 	# sleep if running more than 8 jobs at one time, to keep from 
 	# maxing out memory
-	if runID > 4:
+	if runID > 8:
 		time.sleep(300)
 
 	# setup FALmcmc
