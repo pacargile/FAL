@@ -58,7 +58,7 @@ def runFAL(indict):
 		outputfile=outputfile)
 	try:
 		if testrun:
-			return MCMC
+			return None#MCMC
 		else:
 			print("Seg{0} - Working on {1}".format(MCMC.fm.ID,multiprocessing.current_process().name))
 
