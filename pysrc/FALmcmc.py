@@ -80,9 +80,8 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     IDlist = fmdict.keys()
     IDlist.sort()
 
-    # sigma based on SNR = 1000
     sig = {}
-    sig = {'Sun':1.0/1000.0,'Arcturus':1.0/300.0}
+    sig = {'Sun':1.0/750.0,'Arcturus':1.0/100.0}
 
     modintrp = {}
 
