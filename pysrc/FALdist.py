@@ -75,16 +75,12 @@ def runFAL(indict):
 			# build samplers
 			MCMC.buildsampler(nwalkers=100,threads=0)
 			# run MCMC
-			MCMC.run_MCMC(5,burnin=False,nburn=0)
+			MCMC.run_MCMC(350,burnin=False,nburn=0)
 			
-			# clean up directories
-			shutil.rmtree('./{0}'.format(str(MCMC.fm.ID)))
-			shutil.rmtree('/dev/shm/FAL/{0}'.format(str(MCMC.fm.ID)))
-
 			return 	"RUN TOOK {0:10.5f}".format(time.time()-MCMC.starttime)
 
 	except Exception as e:
-		print('Caught Exception in worker thread (Seg{0} - Working on {1})'.format(MCMC.fm.ID,multiprocessing.current_process().name))
+		print('Caught Exception in worker thread (Seg{0} - Working on {1})'.format(IDin,multiprocessing.current_process().name))
 		traceback.print_exc()
 		print()
 		raise e
