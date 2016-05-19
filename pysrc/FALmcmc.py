@@ -546,11 +546,11 @@ class FALmcmc(object):
                     print('Pro: {0} --> ---- Reducing initial ball size by a factor of 1/2'.format(self.ID))
                     self.psig = self.psig * 0.5                        
                 else:
-                    print('Pro: {0} --> Initial Ball has following ranges...'.format(self.ID))
-                    ballmin = np.amin(self.p0,axis=0)
-                    ballmax = np.amax(self.p0,axis=0)
-                    for ii in range(self.ndim):
-                        print('Pro: {0} --> Par {1}: min = {2}, max = {3}'.format(self.ID,ii,ballmin[ii],ballmax[ii]))
+                    # print('Pro: {0} --> Initial Ball has following ranges...'.format(self.ID))
+                    # ballmin = np.amin(self.p0,axis=0)
+                    # ballmax = np.amax(self.p0,axis=0)
+                    # for ii in range(self.ndim):
+                    #     print('Pro: {0} --> Par {1}: min = {2}, max = {3}'.format(self.ID,ii,ballmin[ii],ballmax[ii]))
                     break
 
     def buildball(self):
