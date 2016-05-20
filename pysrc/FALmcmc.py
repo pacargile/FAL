@@ -85,7 +85,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     IDlist.sort()
 
     sig = {}
-    sig = {'Sun':1.0/750.0,'Arcturus':1.0/100.0}
+    sig = {'Sun':1.0/400.0,'Arcturus':1.0/200.0}
 
     modintrp = {}
 
@@ -148,7 +148,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
             print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
-    velshift = 75.0 #km/s
+    velshift = 100.0 #km/s
     wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
@@ -174,7 +174,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
 
     # 2-D gaussian prior on delta(log(gf)) and delta(lambda)
     # reparameterize such that they move on space evenly
-    sig_dgflog = 0.5
+    sig_dgflog = 1.0
     sig_dWL = 1.0
     gf_wl_prior = (-0.5*((p['DGFLOG'][Tarr[...,1] != -1]/sig_dgflog)**2.0)*((p['DWL'][Tarr[...,0] != -1]/sig_dWL)**2.0)) #- 0.5*np.log(2.0*np.pi*(sig_coup**2.0))
 
@@ -391,7 +391,7 @@ class FALmcmc(object):
             sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
             arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_HBAND_HINKLE.fits',format='fits')
             arc_i = Table()
-            arc_i['WAVE'] = (arc_ii['Wavelength_air'].copy()/10.0)*(1.0+(-13.1/speedoflight))
+            arc_i['WAVE'] = (arc_ii['Wavelength_air'].copy()/10.0)*(1.0+(-12.1/speedoflight))
             arc_i['FLUX'] = arc_ii['Flux'].copy()
             arc_i.sort('WAVE')
 
@@ -556,7 +556,7 @@ class FALmcmc(object):
     def buildball(self):
         p0out = []
         scalefact = 1.0
-        velshift = 0.1 #km/s
+        velshift = 10.0 #km/s
 
         for _ in range(self.nwalkers):
             temparr = []            
@@ -597,10 +597,10 @@ class FALmcmc(object):
 
                 elif pf == "GF":
                     fmll_i = self.ll_i[self.ll_i['FGFLOG'] == ii]
-                    mingflog = -0.1
-                    maxgflog = 0.1
+                    mingflog = -3.0
+                    maxgflog = 1.0
                     rangegflog = maxgflog-mingflog
-                    gflogshift = beta.rvs(4.0,4.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
+                    gflogshift = beta.rvs(1.0,1.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
                     if gflogshift >= 1.75:
                         # gflogshift = fmll_i['DGFLOG'][0] + 0.00001 * np.random.randn()
                         # gflogshift = np.zeros_like(fmll_i['DGFLOG'][0]) + 1.0*np.random.randn()
