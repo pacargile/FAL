@@ -85,7 +85,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     IDlist.sort()
 
     sig = {}
-    sig = {'Sun':1.0/400.0,'Arcturus':1.0/200.0}
+    sig = {'Sun':1.0/500.0,'Arcturus':1.0/200.0}
 
     modintrp = {}
 
@@ -148,7 +148,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
             print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
-    velshift = 100.0 #km/s
+    velshift = 10.0 #km/s
     wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
@@ -210,7 +210,7 @@ class FALmcmc(object):
         self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
         # Define synthesis wavelength range
-        self.waverange = [self.minWL-0.1,self.maxWL+0.1]
+        self.waverange = [self.minWL-0.2,self.maxWL+0.2]
 
         # setting cut for line selection
         self.condst = [{'LP':'RESID','OP':np.less,'LV':0.99}]
@@ -556,7 +556,7 @@ class FALmcmc(object):
     def buildball(self):
         p0out = []
         scalefact = 1.0
-        velshift = 10.0 #km/s
+        velshift = 5.0 #km/s
 
         for _ in range(self.nwalkers):
             temparr = []            
