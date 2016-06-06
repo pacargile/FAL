@@ -16,6 +16,10 @@ import FALmod
 import FALGlue
 from FALGlue import *
 
+import warnings
+warnings.simplefilter(action='ignore',category=FutureWarning)
+
+
 def lnprob(pin,args,verbose=False,justprior=False):
 
     # read in arguments
@@ -80,9 +84,8 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     IDlist = fmdict.keys()
     IDlist.sort()
 
-    # sigma based on SNR = 1000
     sig = {}
-    sig = {'Sun':1.0/1000.0,'Arcturus':1.0/300.0}
+    sig = {'Sun':1.0/500.0,'Arcturus':1.0/200.0}
 
     modintrp = {}
 
@@ -171,7 +174,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
 
     # 2-D gaussian prior on delta(log(gf)) and delta(lambda)
     # reparameterize such that they move on space evenly
-    sig_dgflog = 0.5
+    sig_dgflog = 1.0
     sig_dWL = 1.0
     gf_wl_prior = (-0.5*((p['DGFLOG'][Tarr[...,1] != -1]/sig_dgflog)**2.0)*((p['DWL'][Tarr[...,0] != -1]/sig_dWL)**2.0)) #- 0.5*np.log(2.0*np.pi*(sig_coup**2.0))
 
@@ -179,12 +182,18 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
     return np.sum(np.hstack([gammawprior,gammarprior,gammasprior,gfprior,wlprior,gf_wl_prior]))
 
 class FALmcmc(object):
-    def __init__(self,minWLin=605.2,maxWLin=605.8,
-        minlinWL=None,maxlinWL=None,
-        IDin=1,
-        starttime=None,walltime=None,
-        initlines=None,injectlines=None,
-        outputfile=None):
+    def __init__(self,**kwargs):
+
+        minWLin     = kwargs.get("minWLin",605.2)
+        maxWLin     = kwargs.get("maxWLin",605.8)
+        minlinWL    = kwargs.get("minlinWL",None)
+        maxlinWL    = kwargs.get("maxlinWL",None)
+        IDin        = kwargs.get("IDin",1)
+        starttime   = kwargs.get("starttime",None)
+        walltime    = kwargs.get("walltime",None)
+        initlines   = kwargs.get("initlines",None)
+        injectlines = kwargs.get("injectlines",None)
+        outputfile  = kwargs.get("outputfile",None)
 
         # change the following lines to be inputs when you init the class
         self.minWL = minWLin
@@ -201,7 +210,7 @@ class FALmcmc(object):
         self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
         # Define synthesis wavelength range
-        self.waverange = [self.minWL-0.15,self.maxWL+0.15]
+        self.waverange = [self.minWL-0.2,self.maxWL+0.2]
 
         # setting cut for line selection
         self.condst = [{'LP':'RESID','OP':np.less,'LV':0.99}]
@@ -388,7 +397,7 @@ class FALmcmc(object):
             sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
             arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_HBAND_HINKLE.fits',format='fits')
             arc_i = Table()
-            arc_i['WAVE'] = (arc_ii['Wavelength_air'].copy()/10.0)*(1.0+(-13.1/speedoflight))
+            arc_i['WAVE'] = (arc_ii['Wavelength_air'].copy()/10.0)*(1.0+(-12.1/speedoflight))
             arc_i['FLUX'] = arc_ii['Flux'].copy()
             arc_i.sort('WAVE')
 
@@ -543,17 +552,17 @@ class FALmcmc(object):
                     print('Pro: {0} --> ---- Reducing initial ball size by a factor of 1/2'.format(self.ID))
                     self.psig = self.psig * 0.5                        
                 else:
-                    print('Pro: {0} --> Initial Ball has following ranges...'.format(self.ID))
-                    ballmin = np.amin(self.p0,axis=0)
-                    ballmax = np.amax(self.p0,axis=0)
-                    for ii in range(self.ndim):
-                        print('Pro: {0} --> Par {1}: min = {2}, max = {3}'.format(self.ID,ii,ballmin[ii],ballmax[ii]))
+                    # print('Pro: {0} --> Initial Ball has following ranges...'.format(self.ID))
+                    # ballmin = np.amin(self.p0,axis=0)
+                    # ballmax = np.amax(self.p0,axis=0)
+                    # for ii in range(self.ndim):
+                    #     print('Pro: {0} --> Par {1}: min = {2}, max = {3}'.format(self.ID,ii,ballmin[ii],ballmax[ii]))
                     break
 
     def buildball(self):
         p0out = []
         scalefact = 1.0
-        velshift = 0.1 #km/s
+        velshift = 5.0 #km/s
 
         for _ in range(self.nwalkers):
             temparr = []            
@@ -587,17 +596,17 @@ class FALmcmc(object):
                             rangewll = 2.0*minoff
                         else:
                             rangewll = maxwll-minwll
-                    wlshift = float(beta.rvs(3.0,3.0,loc=(minwll+fmll_i['DWL'][0])*scalefact,scale=rangewll*scalefact))
+                    wlshift = float(beta.rvs(4.0,4.0,loc=(minwll+fmll_i['DWL'][0])*scalefact,scale=rangewll*scalefact))
                     if (wlshift+fmll_i['WL'][0] < self.minWL-0.05) or (wlshift+fmll_i['WL'][0] > self.maxWL+0.05):
                         wlshift = np.zeros_like(fmll_i['DWL'][0]) + 0.0001*np.random.randn()
                     temparr.append(wlshift)
 
                 elif pf == "GF":
                     fmll_i = self.ll_i[self.ll_i['FGFLOG'] == ii]
-                    mingflog = -0.1
-                    maxgflog = 0.1
+                    mingflog = -3.0
+                    maxgflog = 1.0
                     rangegflog = maxgflog-mingflog
-                    gflogshift = beta.rvs(4.0,4.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
+                    gflogshift = beta.rvs(1.0,1.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
                     if gflogshift >= 1.75:
                         # gflogshift = fmll_i['DGFLOG'][0] + 0.00001 * np.random.randn()
                         # gflogshift = np.zeros_like(fmll_i['DGFLOG'][0]) + 1.0*np.random.randn()
@@ -706,7 +715,7 @@ class FALmcmc(object):
             #     GOT_SIG = False
 
             # flush the buffer every X iterations
-            if ((ii % 5 == 0.0) or (ii == niter)):
+            if ((ii % 15 == 0.0) or (ii == niter)):
                 outf.flush()
                 sys.stdout.flush()
                 outspec.flush()

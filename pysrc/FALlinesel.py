@@ -1,5 +1,8 @@
 import numpy as np
 
+import warnings
+warnings.simplefilter(action='ignore',category=FutureWarning)
+
 # FUNCTION THAT TAKES A FM.LL + CONDITIONAL STATEMENT AND RETURNS A P ARRAY, P_SIGMA ARRAY, AND T ARRAY
 
 def linesel(LL,condst,minWL,maxWL):
