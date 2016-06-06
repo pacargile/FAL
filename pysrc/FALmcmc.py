@@ -145,7 +145,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
             print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
-    velshift = 75.0 #km/s
+    velshift = 20.0 #km/s
     wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
@@ -201,7 +201,7 @@ class FALmcmc(object):
         self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
         # Define synthesis wavelength range
-        self.waverange = [self.minWL-0.1,self.maxWL+0.1]
+        self.waverange = [self.minWL-0.15,self.maxWL+0.15]
 
         # setting cut for line selection
         self.condst = [{'LP':'RESID','OP':np.less,'LV':0.99}]
@@ -292,6 +292,12 @@ class FALmcmc(object):
 
         # initialize output files
         self.initoutput()
+
+        # now that the output files have been written...
+        # for arcturus, remove troublesome pixels in observed spectrum (flux < 0.001 & flux > 0.99)
+        prunearc = (self.arcobsflux < 0.001) & (self.arcobsflux > 0.99)
+        self.arcobsflux = self.arcobsflux[prunearc]
+        self.arcobswave = self.arcobswave[prunearc]
 
         print("Pro: {0} --> Finished Setup".format(self.ID))
 
@@ -581,7 +587,7 @@ class FALmcmc(object):
                             rangewll = 2.0*minoff
                         else:
                             rangewll = maxwll-minwll
-                    wlshift = float(beta.rvs(2.0,2.0,loc=(minwll+fmll_i['DWL'][0])*scalefact,scale=rangewll*scalefact))
+                    wlshift = float(beta.rvs(3.0,3.0,loc=(minwll+fmll_i['DWL'][0])*scalefact,scale=rangewll*scalefact))
                     if (wlshift+fmll_i['WL'][0] < self.minWL-0.05) or (wlshift+fmll_i['WL'][0] > self.maxWL+0.05):
                         wlshift = np.zeros_like(fmll_i['DWL'][0]) + 0.0001*np.random.randn()
                     temparr.append(wlshift)
