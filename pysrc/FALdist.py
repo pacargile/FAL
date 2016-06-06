@@ -75,7 +75,7 @@ def runFAL(indict):
 			# build samplers
 			MCMC.buildsampler(nwalkers=150,threads=0)
 			# run MCMC
-			MCMC.run_MCMC(450,burnin=False,nburn=0)
+			MCMC.run_MCMC(500,burnin=False,nburn=0)
 			
 			return 	"RUN TOOK {0:10.5f}".format(time.time()-MCMC.starttime)
 
