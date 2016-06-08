@@ -308,6 +308,9 @@ class FALmcmc(object):
         self.arcobsflux = self.arcobsflux[np.array(prunearc)]
         self.arcobswave = self.arcobswave[np.array(prunearc)]
 
+        print("Pro: {0} --> Number of Pixels in Obs Sol ...".format(self.ID),len(self.solobswave))
+        print("Pro: {0} --> Number of Pixels in Obs Arc ...".format(self.ID),len(self.arcobswave))
+
         print("Pro: {0} --> Finished Setup".format(self.ID))
 
     def injectfake(self):
