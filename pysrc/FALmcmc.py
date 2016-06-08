@@ -304,9 +304,9 @@ class FALmcmc(object):
 
         # now that the output files have been written...
         # for arcturus, remove troublesome pixels in observed spectrum (flux < 0.001 & flux > 0.99)
-        prunearc = (self.arcobsflux < 0.001) & (self.arcobsflux > 0.99)
-        self.arcobsflux = self.arcobsflux[prunearc]
-        self.arcobswave = self.arcobswave[prunearc]
+        prunearc = (self.arcobsflux >= 0.001) & (self.arcobsflux <= 0.99)
+        self.arcobsflux = self.arcobsflux[np.array(prunearc)]
+        self.arcobswave = self.arcobswave[np.array(prunearc)]
 
         print("Pro: {0} --> Finished Setup".format(self.ID))
 
