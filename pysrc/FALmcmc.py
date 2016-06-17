@@ -121,8 +121,8 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
                 return -np.inf
 
     # Prior on gamma using beta function
-    mingamma = -1.0
-    maxgamma = 1.0
+    mingamma = -1.5
+    maxgamma = 0.5
     rangegamma = maxgamma-mingamma
     gammawprior = beta.logpdf(p['DGAMMAW'][Tarr[...,2] != -1],1.0,1.0,loc=mingamma,scale=rangegamma)
     gammarprior = beta.logpdf(p['DGAMMAR'][Tarr[...,3] != -1],1.0,1.0,loc=mingamma,scale=rangegamma)
@@ -148,7 +148,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
             print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
-    velshift = 20.0 #km/s
+    velshift = 10.0 #km/s
     wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
@@ -174,8 +174,8 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
 
     # 2-D gaussian prior on delta(log(gf)) and delta(lambda)
     # reparameterize such that they move on space evenly
-    sig_dgflog = 1.0
-    sig_dWL = 1.0
+    sig_dgflog = 0.5
+    sig_dWL = 0.05
     gf_wl_prior = (-0.5*((p['DGFLOG'][Tarr[...,1] != -1]/sig_dgflog)**2.0)*((p['DWL'][Tarr[...,0] != -1]/sig_dWL)**2.0)) #- 0.5*np.log(2.0*np.pi*(sig_coup**2.0))
 
     # RETURN WITH COUPLED PRIOR
@@ -565,7 +565,7 @@ class FALmcmc(object):
     def buildball(self):
         p0out = []
         scalefact = 1.0
-        velshift = 5.0 #km/s
+        velshift = 6.0 #km/s
 
         for _ in range(self.nwalkers):
             temparr = []            
@@ -609,7 +609,7 @@ class FALmcmc(object):
                     mingflog = -3.0
                     maxgflog = 1.0
                     rangegflog = maxgflog-mingflog
-                    gflogshift = beta.rvs(1.0,1.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
+                    gflogshift = beta.rvs(4.0,2.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
                     if gflogshift >= 1.75:
                         # gflogshift = fmll_i['DGFLOG'][0] + 0.00001 * np.random.randn()
                         # gflogshift = np.zeros_like(fmll_i['DGFLOG'][0]) + 1.0*np.random.randn()
