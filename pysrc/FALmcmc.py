@@ -23,7 +23,7 @@ warnings.simplefilter(action='ignore',category=FutureWarning)
 def lnprob(pin,args,verbose=False,justprior=False):
 
     # read in arguments
-    (solobswave,solobsflux,arcobswave,arcobsflux,transflux,fmdict,fmll,Tarr,minWL,maxWL) = args
+    (solobswave,solobsflux,arcobswave,arcobsflux,transflux,fmdict,fmll,Tarr,minWL,maxWL,minLWL,maxLWL) = args
     # for printing to command line, generate an ID
     ID = fmdict.keys()[0] - 10000000
 
@@ -50,7 +50,7 @@ def lnprob(pin,args,verbose=False,justprior=False):
         return -np.inf,[np.nan,np.nan]
 
     # calcluate prior
-    lp = lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=verbose)
+    lp = lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=verbose)
     try:
         if np.isfinite(lp) == False:
                 return -np.inf, [np.nan,np.nan]
@@ -108,14 +108,14 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
 
 
 
-def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
+def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
 
     # apply non-informative prior on wavelength to make sure
     # line is not shifted outside working segment
     for ii,pp in enumerate(zip(p['DWL'][Tarr[...,0] != -1],fmll['WL'][Tarr[...,0] != -1])):
         if (np.abs(pp[0]) > 0.0) & (pp[1] > minWL) & (pp[1] < maxWL):
             wlshift = pp[1]+pp[0]
-            if (wlshift < minWL-0.05) or (wlshift > maxWL+0.05):
+            if (wlshift < minLWL-0.025) or (wlshift > maxLWL+0.025):
                 if verbose:
                     print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE SPECTRUM BOUNDS, LINE SHIFTED TO: {1}'.format(ID,wlshift))
                 return -np.inf
@@ -148,7 +148,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,verbose=False):
             print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
-    velshift = 10.0 #km/s
+    velshift = 6.0 #km/s
     wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
@@ -532,7 +532,9 @@ class FALmcmc(object):
             self.arcobswave,self.arcobsflux,
             self.transflux,
             self.fmdict,self.fmll,self.Tarr,
-            self.minWL,self.maxWL)])
+            self.minWL,self.maxWL,
+            self.minLINWL,self.maxLINWL
+            )])
         self.sampler = emcee.EnsembleSampler(
             self.nwalkers,self.ndim,
             lnprob,
@@ -565,7 +567,7 @@ class FALmcmc(object):
     def buildball(self):
         p0out = []
         scalefact = 1.0
-        velshift = 6.0 #km/s
+        velshift = 1.0 #km/s
 
         for _ in range(self.nwalkers):
             temparr = []            
@@ -606,10 +608,10 @@ class FALmcmc(object):
 
                 elif pf == "GF":
                     fmll_i = self.ll_i[self.ll_i['FGFLOG'] == ii]
-                    mingflog = -3.0
-                    maxgflog = 1.0
+                    mingflog = -0.25
+                    maxgflog = 0.25
                     rangegflog = maxgflog-mingflog
-                    gflogshift = beta.rvs(4.0,2.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
+                    gflogshift = beta.rvs(2.0,2.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
                     if gflogshift >= 1.75:
                         # gflogshift = fmll_i['DGFLOG'][0] + 0.00001 * np.random.randn()
                         # gflogshift = np.zeros_like(fmll_i['DGFLOG'][0]) + 1.0*np.random.randn()
