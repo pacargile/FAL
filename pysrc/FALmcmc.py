@@ -39,6 +39,10 @@ def lnprob(pin,args,verbose=False,justprior=False):
     p['DGAMMAR'] = np.array([pin[xx] if xx != -1 else fmll['DGAMMAR'][kk] for kk,xx in enumerate(Tarr[...,3])])
     p['DGAMMAS'] = np.array([pin[xx] if xx != -1 else fmll['DGAMMAR'][kk] for kk,xx in enumerate(Tarr[...,4])])
 
+    # arcturus scaling and vel shift
+    arcscale = pin[-4]
+    arcvel = pin[-3]
+
     # transmission spectrum scaling and vel shift
     transcale = pin[-2]
     tranvel   = pin[-1]
@@ -47,6 +51,12 @@ def lnprob(pin,args,verbose=False,justprior=False):
     if transcale < 0.0:
         return -np.inf,[np.nan,np.nan]
     if (tranvel < -1.0) or (tranvel > 1.0):
+        return -np.inf,[np.nan,np.nan]
+
+    # check arcturus scalings
+    if (arcscale > 1.05) or (arcscale < 0.95):
+        return -np.inf,[np.nan,np.nan]
+    if (arcvel < -1.0) or (arcvel > 1.0):
         return -np.inf,[np.nan,np.nan]
 
     # calcluate prior
@@ -67,6 +77,10 @@ def lnprob(pin,args,verbose=False,justprior=False):
 
     # now divide the observed spectrum by the transmission spectrum
     obsflux['Sun'] = obsflux['Sun'] / transflux_ii
+
+    # scale arcturus spectrum
+    obsflux['Arcturus'] = obsflux['Arcturus']*arcscale
+    obswave['Arcturus'] = obswave['Arcturus']*(1.0+(arcvel/speedoflight))
 
     # calculate lnl
     lnl, mod = lnlike(p,obswave,obsflux,fmdict,minWL,maxWL)
@@ -655,6 +669,11 @@ class FALmcmc(object):
                     temparr.append(gammashift)
                 else:
                     pass
+
+            # scaling for arcturus
+            temparr.append(beta.rvs(1.0,1.0,loc=0.975,scale=0.05))
+            # arcturus velocity shift
+            temparr.append(beta.rvs(1.0,1.0,loc=-0.5,scale=1.0))
 
             # scaling for transmission spectrum
             temparr.append(0.1*np.random.randn()+1.0)
