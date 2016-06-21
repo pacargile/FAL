@@ -19,6 +19,7 @@ def runFAL(indict):
 	maxWLin = indict['maxWLin']
 	minlinWL=indict['minlinWL']
 	maxlinWL=indict['maxlinWL']
+	arcscale = indict['arcscale']
 	runID = indict['RUNID']
 
 	print('... Setting up Seg{0}'.format(IDin))
@@ -58,6 +59,7 @@ def runFAL(indict):
 		minlinWL=minlinWL,maxlinWL=maxlinWL,
 		IDin=IDin,
 		starttime=starttime,walltime=walltime,
+		arcscale=arcscale,
 		outputfile=outputfile)
 	try:
 		if testrun:
@@ -104,7 +106,7 @@ def makeinlist(infilename):
 	# http://docs.scipy.org/doc/numpy/reference/routines.logic.html
 	
 	# read slicer file
-	regfile = Table.read(infilename,names=['ID','WLstart','WLend','LINWLstart','LINWLend','WLRAN','NUMLINES'],format='ascii')
+	regfile = Table.read(infilename,names=['ID','WLstart','WLend','LINWLstart','LINWLend','WLRAN','NUMLINES','ARCSCALE'],format='ascii')
 
 	indictlist = []
 
@@ -112,6 +114,7 @@ def makeinlist(infilename):
 		tempdict = ({'starttime':starttime,'walltime':walltime,'IDin':int(rf_i['ID']),
 			'minWLin':float(rf_i['WLstart']),'maxWLin':float(rf_i['WLend']),
 			'minlinWL':float(rf_i['LINWLstart']),'maxlinWL':float(rf_i['LINWLend']),
+			'arcscale':float(rf_i['ARCSCALE']),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
 			'RUNID':ii})
 

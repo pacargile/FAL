@@ -194,6 +194,7 @@ class FALmcmc(object):
         initlines   = kwargs.get("initlines",None)
         injectlines = kwargs.get("injectlines",None)
         outputfile  = kwargs.get("outputfile",None)
+        arcscale    = kwargs.get("arcscale",None)
 
         # change the following lines to be inputs when you init the class
         self.minWL = minWLin
@@ -217,6 +218,11 @@ class FALmcmc(object):
 
         # set output file name
         self.outputfile = outputfile
+
+        if arcscale == None:
+            self.arcscale = 1.0
+        else:
+            self.arcscale = arcscale
 
         # define a general start time so that the code can stop short of the wall time and save everything
         if starttime == None:
@@ -302,14 +308,17 @@ class FALmcmc(object):
         # initialize output files
         self.initoutput()
 
-        # now that the output files have been written...
-        # for arcturus, remove troublesome pixels in observed spectrum (flux < 0.001 & flux > 0.99)
-        prunearc = (self.arcobsflux >= 0.001) & (self.arcobsflux <= 0.99)
-        self.arcobsflux = self.arcobsflux[np.array(prunearc)]
-        self.arcobswave = self.arcobswave[np.array(prunearc)]
+        # # now that the output files have been written...
+        # # for arcturus, remove troublesome pixels in observed spectrum (flux < 0.001 & flux > 0.99)
+        # prunearc = (self.arcobsflux >= 0.001) & (self.arcobsflux <= 0.99)
+        # self.arcobsflux = self.arcobsflux[np.array(prunearc)]
+        # self.arcobswave = self.arcobswave[np.array(prunearc)]
+
+        self.arcobsflux = self.arcobsflux*self.arcscale
 
         print("Pro: {0} --> Number of Pixels in Obs Sol ...".format(self.ID),len(self.solobswave))
         print("Pro: {0} --> Number of Pixels in Obs Arc ...".format(self.ID),len(self.arcobswave))
+        print("Pro: {0} --> Using an initial scaling of {1} for Obs Arc ...".format(self.ID,self.arcscale))
 
         print("Pro: {0} --> Finished Setup".format(self.ID))
 
