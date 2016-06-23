@@ -270,6 +270,7 @@ class FALmcmc(object):
         # Assemble working line list (union of ll_i from last for-loop)
         print('Pro: {0} --> Assemble working line list'.format(self.ID))
         # stack the tables
+        print([len(origsyndict[ID_i][1]) for ID_i in self.IDlist])
         fmll = vstack([origsyndict[ID_i][1] for ID_i in self.IDlist])
         # fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
         # sort tables on all collumns, include RESID as that way the stronger line will be listed first and will be set as a fit parameter
