@@ -706,7 +706,8 @@ class FALmcmc(object):
             "Pro: {ID} --> Sampler's average acceptance fraction: {AF:5.2f}                  \n"+
             "Pro: {ID} --> Std(ln(Pr))/Avg(ln(Pr)) of Walker ln(Pr): {STAT:n}"
             )
-
+        # flush STDOUT before chain starts, just to pring info to log
+        sys.stdout.flush()
         # get a walker number array
         walkernum = np.squeeze(np.arange(1,self.nwalkers+1,1).reshape(self.nwalkers,1))
 
