@@ -750,7 +750,7 @@ class FALmcmc(object):
             #     GOT_SIG = False
 
             # flush the buffer every X iterations
-            if ((ii % 3 == 0.0) or (ii == niter)):
+            if ((ii % 15 == 0.0) or (ii == niter)):
                 outf.flush()
                 sys.stdout.flush()
                 outspec.flush()
