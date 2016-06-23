@@ -315,6 +315,8 @@ class FALmcmc(object):
         print("Pro: {0} --> Number of Free Line Parameters...".format(self.ID),self.ndim)
         print("Pro: {0} --> Fitting Transmission Spectrum (scaling and velocity)".format(self.ID))
         self.ndim = self.ndim + 2
+        print("Pro: {0} --> Fitting Arcturus Spectrum scaling and velocity".format(self.ID))
+        self.ndim = self.ndim + 2
 
         # get observed data and transmission spectrum
         (self.solobswave,self.solobsflux,self.arcobswave,self.arcobsflux,self.transflux) = self.getspecdata()
