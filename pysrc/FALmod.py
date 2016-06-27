@@ -239,7 +239,8 @@ class FALmod(object):
             if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1350.0):
                 MASTERLL = ['/work/02349/cargilpa/FAL/MASTERLL/OPTSEG/KuruczLL_450_1350.bin']
             elif (self.starpars['WSTART'] > 1400.0) & (self.starpars['WEND'] < 1900.0):
-                MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin',
+                # MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin',
+                MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/CargileLL_1400_1900.bin',
                 '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczH2OLL_1400_1900.bin'])
             else:
                 raise ValueError('DID NOT UNDERSTAND MASTERLL')
