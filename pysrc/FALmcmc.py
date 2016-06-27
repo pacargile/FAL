@@ -410,7 +410,7 @@ class FALmcmc(object):
             sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_4750_8270.fits',format='fits')            
             arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_3800_9300_HINKLE.fits',format='fits')
             arc_i = Table()
-            arc_i['WAVE'] = arc_ii['WAVELENGTH']
+            arc_i['WAVE'] = arc_ii['WAVELENGTH']/10.0
             arc_i['FLUX'] = arc_ii['ARCTURUS']
 
             # read in transmission spectrum
