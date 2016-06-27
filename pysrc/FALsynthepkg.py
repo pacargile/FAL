@@ -369,7 +369,7 @@ class synthe(object):
 
         return (self.synbegout,self.ID)
 
-    def readlines(self,rtype=None,rlinedict=None,verbose=None):
+    def readlines(self,rtype=None,rlinedict=None,verbose=None,MASTERLL=None):
         """
         function that determines if you should use a punch500 or 
         read in all the individual lines
@@ -378,13 +378,13 @@ class synthe(object):
         if (rtype == "readlast"):
             self.rgfalldel(verbose=verbose,reuse_ll=True)
         elif (rtype == 'readmaster'):
-            self.rmaster(verbose=verbose)
+            self.rmaster(MASTERLL=MASTERLL,verbose=verbose)
         elif (rtype == 'readall'):
             self.rlinefunc(rlinedict,verbose=verbose)
         else:
             self.rgfalldel(verbose=verbose,reuse_ll=False,userll=rtype)
 
-    def rmaster(self,MASTERLL=None,MASTERMOLLL=None,verbose=None):
+    def rmaster(self,MASTERLL=None,verbose=None):
         """
         Run RPUNCHBIN code
 
@@ -401,32 +401,23 @@ class synthe(object):
         New Out: 
             None
         """
-        # link master line list file
-        if os.path.isfile("fort.11"):
-            self._rmsym('fort.11',verbose=verbose)
-
         # Master lines file is gigantic, so don't copy into memory just sym link it
         if MASTERLL == None:
             # MASTERLL = '/work/02349/cargilpa/FAL/MASTERLL/HBAND/CargileLL_1400_1900.bin'
-            MASTERLL = '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin'
+            MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin',
+                '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczH2OLL_1400_1900.bin'])
 
-        os.symlink(MASTERLL,'fort.11')
+        # for each line list in MASTERLL, run rpunchbin
+        for MLL in MASTERLL:
 
-        # run read master list program
-        self.rmasterout = self._callpro("rpunchbin",verbose=verbose)
+            # link master line list file
+            if os.path.isfile("fort.11"):
+                self._rmsym('fort.11',verbose=verbose)
+            os.symlink(MLL,'fort.11')
 
-        # link master line list file
-        if os.path.isfile("fort.11"):
-            self._rmsym('fort.11',verbose=verbose)
+            # run read master list program
+            self.rmasterout = self._callpro("rpunchbin",verbose=verbose)
 
-        if MASTERMOLLL == None:
-            MASTERMOLLL = '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczH2OLL_1400_1900.bin'
-
-        # H2O+TiO lines file is gigantic, so don't copy into memory just sym link it
-        os.symlink(MASTERMOLLL,'fort.11')
-
-        # run read master list program
-        self.rmasterout = self._callpro("rpunchbin",verbose=verbose)
 
         # move fort.14 to fort.99 and clean up
         self._mvsym('fort.14','fort.99')
