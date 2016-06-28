@@ -162,13 +162,13 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
             print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
-    velshift = 75.0 #km/s
+    velshift = 10.0 #km/s
     wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
     maxwll = wsh_max
     rangewll = maxwll-minwll
-    wlprior = beta.logpdf(p['DWL'][Tarr[...,0] != -1],3.0,3.0,loc=minwll,scale=rangewll)
+    wlprior = beta.logpdf(p['DWL'][Tarr[...,0] != -1],1.0,1.0,loc=minwll,scale=rangewll)
 
     # check to see if it returns any priors outside uniform prior
     if any(np.isinf(wlprior)):
@@ -189,7 +189,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
     # 2-D gaussian prior on delta(log(gf)) and delta(lambda)
     # reparameterize such that they move on space evenly
     sig_dgflog = 0.5
-    sig_dWL = 0.03
+    sig_dWL = 0.01
     gf_wl_prior = (-0.5*((p['DGFLOG'][Tarr[...,1] != -1]/sig_dgflog)**2.0)*((p['DWL'][Tarr[...,0] != -1]/sig_dWL)**2.0)) #- 0.5*np.log(2.0*np.pi*(sig_coup**2.0))
 
     # RETURN WITH COUPLED PRIOR
@@ -285,6 +285,9 @@ class FALmcmc(object):
 
         # set it into self
         self.fmll = fmll
+
+        # change all DWL back to zero, hack for pervious solar-only fit
+        self.fmll['DWL'] = np.zeros_like(self.fmll['DWL'])
 
         # now run each stellar spectrum again and archive the results
         print('Pro: {0} --> Archiving the results into working directories'.format(self.ID))
