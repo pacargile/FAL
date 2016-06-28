@@ -127,7 +127,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
     # apply non-informative prior on wavelength to make sure
     # line is not shifted outside working segment
     for ii,pp in enumerate(zip(p['DWL'][Tarr[...,0] != -1],fmll['WL'][Tarr[...,0] != -1])):
-        if (np.abs(pp[0]) > 0.0) & (pp[1] > minLWL) & (pp[1] < maxLWL):
+        if (np.abs(pp[0]) > 0.0) & (pp[1] > minWL) & (pp[1] < maxWL):
             wlshift = pp[1]+pp[0]
             if (wlshift < minLWL-0.025) or (wlshift > maxLWL+0.025):
                 if verbose:
@@ -162,13 +162,13 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
             print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
-    velshift = 6.0 #km/s
+    velshift = 75.0 #km/s
     wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
     maxwll = wsh_max
     rangewll = maxwll-minwll
-    wlprior = beta.logpdf(p['DWL'][Tarr[...,0] != -1],2.0,2.0,loc=minwll,scale=rangewll)
+    wlprior = beta.logpdf(p['DWL'][Tarr[...,0] != -1],3.0,3.0,loc=minwll,scale=rangewll)
 
     # check to see if it returns any priors outside uniform prior
     if any(np.isinf(wlprior)):
@@ -189,7 +189,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
     # 2-D gaussian prior on delta(log(gf)) and delta(lambda)
     # reparameterize such that they move on space evenly
     sig_dgflog = 0.5
-    sig_dWL = 0.05
+    sig_dWL = 0.03
     gf_wl_prior = (-0.5*((p['DGFLOG'][Tarr[...,1] != -1]/sig_dgflog)**2.0)*((p['DWL'][Tarr[...,0] != -1]/sig_dWL)**2.0)) #- 0.5*np.log(2.0*np.pi*(sig_coup**2.0))
 
     # RETURN WITH COUPLED PRIOR
