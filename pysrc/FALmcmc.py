@@ -127,7 +127,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
     # apply non-informative prior on wavelength to make sure
     # line is not shifted outside working segment
     for ii,pp in enumerate(zip(p['DWL'][Tarr[...,0] != -1],fmll['WL'][Tarr[...,0] != -1])):
-        if (np.abs(pp[0]) > 0.0) & (pp[1] > minWL) & (pp[1] < maxWL):
+        if (np.abs(pp[0]) > 0.0) & (pp[1] > minLWL) & (pp[1] < maxLWL):
             wlshift = pp[1]+pp[0]
             if (wlshift < minLWL-0.025) or (wlshift > maxLWL+0.025):
                 if verbose:
