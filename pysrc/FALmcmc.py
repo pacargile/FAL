@@ -99,7 +99,10 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     IDlist.sort()
 
     sig = {}
-    sig = {'Sun':1.0/500.0,'Arcturus':1.0/500.0}
+    # sig = {'Sun':1.0/500.0,'Arcturus':1.0/500.0}
+
+    sig['Sun'] = obsflux['Sun']/500.0
+    sig['Arcturus'] = obsflux['Arcturus']/300.0
 
     modintrp = {}
 
@@ -114,8 +117,13 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         _specflux = _spectab['QMU1']/_spectab['QMU2']
         _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
         modintrp[star_i] = _specintr
-        residsq = (np.subtract(obsflux[star_i],_specintr)**2.0)/(sig[star_i]**2.0)
-        lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
+        # residsq = (np.subtract(obsflux[star_i],_specintr)**2.0)/(sig[star_i]**2.0)
+        # lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
+        # lnp = lnp+lnp_i
+
+        residsq = np.divide((np.subtract(obsflux[star_i],_specintr)**2.0),(sig[star_i]**2.0))
+        residsqnorm = np.add(-0.5*residsq,np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
+        lnp_i = np.sum(residsqnorm) 
         lnp = lnp+lnp_i
 
     return lnp, modintrp
