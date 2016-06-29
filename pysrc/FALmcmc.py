@@ -99,7 +99,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     IDlist.sort()
 
     sig = {}
-    sig = {'Sun':1.0/300.0,'Arcturus':1.0/100.0}
+    sig = {'Sun':1.0/500.0,'Arcturus':1.0/500.0}
 
     modintrp = {}
 
