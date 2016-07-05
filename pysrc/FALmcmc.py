@@ -142,7 +142,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
     for ii,pp in enumerate(zip(p['DWL'][Tarr[...,0] != -1],fmll['WL'][Tarr[...,0] != -1])):
         if (np.abs(pp[0]) > 0.0) & (pp[1] > minWL) & (pp[1] < maxWL):
             wlshift = pp[1]+pp[0]
-            if (wlshift < minLWL-0.025) or (wlshift > maxLWL+0.025):
+            if (wlshift < minLWL-0.1) or (wlshift > maxLWL+0.1):
                 if verbose:
                     print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE SPECTRUM BOUNDS {1}-{2}, {3} LINE SHIFTED TO: {4}'.format(ID,minLWL-0.025,maxLWL+0.025,pp[1],wlshift))
                 return -np.inf
