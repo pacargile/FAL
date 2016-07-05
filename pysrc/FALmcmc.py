@@ -144,7 +144,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
             wlshift = pp[1]+pp[0]
             if (wlshift < minLWL-0.025) or (wlshift > maxLWL+0.025):
                 if verbose:
-                    print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE SPECTRUM BOUNDS, LINE SHIFTED TO: {1}'.format(ID,wlshift))
+                    print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE SPECTRUM BOUNDS, {1} LINE SHIFTED TO: {2}'.format(ID,pp[1],wlshift))
                 return -np.inf
 
     # Prior on gamma using beta function
