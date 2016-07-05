@@ -165,7 +165,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
 
     # Prior on gf using beta function
     mingflog = -10.0
-    maxgflog = 0.75
+    maxgflog = 1.5
     rangegflog = maxgflog-mingflog
     gfprior = beta.logpdf(p['DGFLOG'][Tarr[...,1] != -1],1.0,1.0,loc=mingflog,scale=rangegflog)
 
