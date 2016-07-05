@@ -100,14 +100,14 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
 
     sig = {}
 
-    # sig['Sun'] = np.ones_like(obsflux['Sun'])/500.0
-    # sig['Arcturus'] = np.ones_like(obsflux['Arcturus'])/300.0
+    sig['Sun'] = np.ones_like(obsflux['Sun'])/500.0
+    sig['Arcturus'] = np.ones_like(obsflux['Arcturus'])/250.0
 
     # sig['Sun'] = obsflux['Sun']/500.0
     # sig['Arcturus'] = obsflux['Arcturus']/300.0
 
-    sig['Sun'] = obsflux['Sun']/300.0
-    sig['Arcturus'] = obsflux['Arcturus']/300.0
+    # sig['Sun'] = obsflux['Sun']/300.0
+    # sig['Arcturus'] = obsflux['Arcturus']/300.0
 
     modintrp = {}
 
@@ -165,7 +165,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
 
     # Prior on gf using beta function
     mingflog = -10.0
-    maxgflog = 2.0
+    maxgflog = 0.75
     rangegflog = maxgflog-mingflog
     gfprior = beta.logpdf(p['DGFLOG'][Tarr[...,1] != -1],1.0,1.0,loc=mingflog,scale=rangegflog)
 
@@ -175,7 +175,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
             print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
-    velshift = 10.0 #km/s
+    velshift = 100.0 #km/s
     wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
@@ -608,7 +608,7 @@ class FALmcmc(object):
     def buildball(self):
         p0out = []
         scalefact = 1.0
-        velshift = 1.0 #km/s
+        velshift = 50.0 #km/s
 
         for _ in range(self.nwalkers):
             temparr = []            
@@ -642,21 +642,21 @@ class FALmcmc(object):
                             rangewll = 2.0*minoff
                         else:
                             rangewll = maxwll-minwll
-                    wlshift = float(beta.rvs(4.0,4.0,loc=(minwll+fmll_i['DWL'][0])*scalefact,scale=rangewll*scalefact))
+                    wlshift = float(beta.rvs(1.0,1.0,loc=(minwll+fmll_i['DWL'][0])*scalefact,scale=rangewll*scalefact))
                     if (wlshift+fmll_i['WL'][0] < self.minWL-0.05) or (wlshift+fmll_i['WL'][0] > self.maxWL+0.05):
                         wlshift = np.zeros_like(fmll_i['DWL'][0]) + 0.0001*np.random.randn()
                     temparr.append(wlshift)
 
                 elif pf == "GF":
                     fmll_i = self.ll_i[self.ll_i['FGFLOG'] == ii]
-                    mingflog = -0.25
-                    maxgflog = 0.25
+                    mingflog = -0.2
+                    maxgflog = 0.2
                     rangegflog = maxgflog-mingflog
                     gflogshift = beta.rvs(2.0,2.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
-                    if gflogshift >= 1.75:
+                    if gflogshift >= 0.75:
                         # gflogshift = fmll_i['DGFLOG'][0] + 0.00001 * np.random.randn()
                         # gflogshift = np.zeros_like(fmll_i['DGFLOG'][0]) + 1.0*np.random.randn()
-                        gflogshift = 1.25*np.ones_like(fmll_i['DGFLOG'][0]) + 0.1*np.random.randn()
+                        gflogshift = 0.25*np.ones_like(fmll_i['DGFLOG'][0]) + 0.1*np.random.randn()
                     if gflogshift <= -10.0:
                         gflogshift = -7.0*np.ones_like(fmll_i['DGFLOG'][0]) + 0.1*np.random.randn()
 
