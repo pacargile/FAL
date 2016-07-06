@@ -592,7 +592,6 @@ class FALmcmc(object):
                 # self.p0 = emcee.utils.sample_ball(self.parr,self.psig,self.nwalkers)
                 self.p0 = self.buildball()
                 testlp = [lnprob(pp,args[0],verbose=True,justprior=True) for pp in self.p0]
-                print(testlp)
                 try:
                     if any(np.isinf(testlp)):
                         print('Pro: {0} --> ---- Need to redo p0 calculation'.format(self.ID))
