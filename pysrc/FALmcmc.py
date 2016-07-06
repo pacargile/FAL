@@ -592,6 +592,7 @@ class FALmcmc(object):
                 # self.p0 = emcee.utils.sample_ball(self.parr,self.psig,self.nwalkers)
                 self.p0 = self.buildball()
                 testlp = [lnprob(pp,args[0],verbose=True,justprior=True) for pp in self.p0]
+                print(testlp)
                 try:
                     if any(np.isinf(testlp)):
                         print('Pro: {0} --> ---- Need to redo p0 calculation'.format(self.ID))
@@ -651,7 +652,7 @@ class FALmcmc(object):
                         else:
                             rangewll = maxwll-minwll
                     wlshift = float(beta.rvs(1.0,1.0,loc=(minwll+fmll_i['DWL'][0])*scalefact,scale=rangewll*scalefact))
-                    if (wlshift+fmll_i['WL'][0] < self.minWL-0.05) or (wlshift+fmll_i['WL'][0] > self.maxWL+0.05):
+                    if (wlshift+fmll_i['WL'][0] < self.minLWL-0.05) or (wlshift+fmll_i['WL'][0] > self.maxLWL+0.05):
                         wlshift = np.zeros_like(fmll_i['DWL'][0]) + 0.0001*np.random.randn()
                     temparr.append(wlshift)
 
