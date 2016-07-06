@@ -300,7 +300,7 @@ class FALmcmc(object):
         self.fmll = fmll
 
         # remove all predicted lines
-        self.fmll = self.fmll[(self.fmll['LABEL'] != '') & (self.fmll['LABELP'] != '')]
+        # self.fmll = self.fmll[(self.fmll['LABEL'] != '') & (self.fmll['LABELP'] != '')]
 
         # change all DWL back to zero, hack for pervious solar-only fit
         self.fmll['DWL'] = np.zeros_like(self.fmll['DWL'])
@@ -592,21 +592,26 @@ class FALmcmc(object):
                 # self.p0 = emcee.utils.sample_ball(self.parr,self.psig,self.nwalkers)
                 self.p0 = self.buildball()
                 testlp = [lnprob(pp,args[0],verbose=True,justprior=True) for pp in self.p0]
-                if any(np.isinf(testlp)):
-                    print('Pro: {0} --> ---- Need to redo p0 calculation'.format(self.ID))
-                    print('Pro: {0} --> Problematic PAR: '.format(self.ID))
-                    for li, lp_i in enumerate(testlp):
-                        if np.isinf(lp_i):
-                            print(self.p0[li],lp_i)
-                    print('Pro: {0} --> ---- Reducing initial ball size by a factor of 1/2'.format(self.ID))
-                    self.psig = self.psig * 0.5                        
-                else:
-                    # print('Pro: {0} --> Initial Ball has following ranges...'.format(self.ID))
-                    # ballmin = np.amin(self.p0,axis=0)
-                    # ballmax = np.amax(self.p0,axis=0)
-                    # for ii in range(self.ndim):
-                    #     print('Pro: {0} --> Par {1}: min = {2}, max = {3}'.format(self.ID,ii,ballmin[ii],ballmax[ii]))
-                    break
+                try:
+                    if any(np.isinf(testlp)):
+                        print('Pro: {0} --> ---- Need to redo p0 calculation'.format(self.ID))
+                        print('Pro: {0} --> Problematic PAR: '.format(self.ID))
+                        for li, lp_i in enumerate(testlp):
+                            if np.isinf(lp_i):
+                                print(self.p0[li],lp_i)
+                        print('Pro: {0} --> ---- Reducing initial ball size by a factor of 1/2'.format(self.ID))
+                        self.psig = self.psig * 0.5                        
+                    else:
+                        # print('Pro: {0} --> Initial Ball has following ranges...'.format(self.ID))
+                        # ballmin = np.amin(self.p0,axis=0)
+                        # ballmax = np.amax(self.p0,axis=0)
+                        # for ii in range(self.ndim):
+                        #     print('Pro: {0} --> Par {1}: min = {2}, max = {3}'.format(self.ID,ii,ballmin[ii],ballmax[ii]))
+                        break
+                except ValueError:
+                    print('Pro: {0} --> PROBLEM WITH DEFINING A STARTING BALL'.format(self.ID))
+                    sys.stdout.flush()
+                    raise ValueError
 
     def buildball(self):
         p0out = []
