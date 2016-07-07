@@ -597,11 +597,9 @@ class FALmcmc(object):
         for ppii, pp in enumerate(self.p0):
             testlp = lnprob(pp,args[0],verbose=True,justprior=True)
             if np.isinf(testlp):
-                print(pp,testlp)
                 while True:
                     self.p0[ppii] = self.buildball(psigscale=psigscale)
                     testlp = lnprob(self.p0[ppii],args[0],verbose=True,justprior=True)
-                    print(self.p0[ppii],testlp)
                     if np.isinf(testlp):
                         psigscale = psigscale * 0.9
                     else:
