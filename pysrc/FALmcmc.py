@@ -591,7 +591,7 @@ class FALmcmc(object):
 
         # get p0 array and check for all finite values
         print('Pro: {0} --> Get inital walker positions'.format(self.ID))
-        self.p0 = [self.buildball() for _ in self.nwalkers]
+        self.p0 = [self.buildball() for _ in range(self.nwalkers)]
 
         psigscale = 0.9
         for ppii, pp in enumerate(self.p0):
