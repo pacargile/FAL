@@ -633,12 +633,12 @@ class FALmcmc(object):
         #             raise ValueError
 
     def buildball(self,psigscale=1.0):
-        scalefact = 1.0
+        scalefact = psigscale
         velshift = 50.0 #km/s
 
         temparr = []            
         for ii,p in enumerate(self.parr):
-            ps = self.psig[ii]*psigscale
+            ps = self.psig[ii]
             pf = self.pflag[ii]
 
             if pf == 'WL':
