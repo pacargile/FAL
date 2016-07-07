@@ -591,129 +591,137 @@ class FALmcmc(object):
 
         # get p0 array and check for all finite values
         print('Pro: {0} --> Get inital walker positions'.format(self.ID))
-        while True:
-                # self.p0 = emcee.utils.sample_ball(self.parr,self.psig,self.nwalkers)
-                self.p0 = self.buildball()
-                testlp = [lnprob(pp,args[0],verbose=True,justprior=True) for pp in self.p0]
-                print(testlp)
-                try:
-                    if any(np.isinf(testlp)):
-                        print('Pro: {0} --> ---- Need to redo p0 calculation'.format(self.ID))
-                        print('Pro: {0} --> Problematic PAR: '.format(self.ID))
-                        for li, lp_i in enumerate(testlp):
-                            if np.isinf(lp_i):
-                                print(self.p0[li],lp_i)
-                        print('Pro: {0} --> ---- Reducing initial ball size by a factor of 1/2'.format(self.ID))
-                        self.psig = self.psig * 0.5                        
-                    else:
-                        # print('Pro: {0} --> Initial Ball has following ranges...'.format(self.ID))
-                        # ballmin = np.amin(self.p0,axis=0)
-                        # ballmax = np.amax(self.p0,axis=0)
-                        # for ii in range(self.ndim):
-                        #     print('Pro: {0} --> Par {1}: min = {2}, max = {3}'.format(self.ID,ii,ballmin[ii],ballmax[ii]))
-                        break
-                except ValueError:
-                    print('Pro: {0} --> PROBLEM WITH DEFINING A STARTING BALL'.format(self.ID))
-                    sys.stdout.flush()
-                    raise ValueError
+        self.p0 = [self.buildball() for _ in self.nwalkers]
 
-    def buildball(self):
-        p0out = []
+        psigscale = 0.9
+        for ppii, pp in enumerate(self.p0):
+            testlp = lnprob(pp,args[0],verbose=True,justprior=True)
+            if np.isinf(testlp):
+                while True:
+                    self.p0[ppii] = self.buildball(psigscale=psigscale)
+                    testlp = lnprob(pp,args[0],verbose=True,justprior=True)
+                    if np.isinf(testlp):
+                        psigscale = psigscale * 0.9
+                    else:
+                        break
+
+
+        # while True:
+        #         # self.p0 = emcee.utils.sample_ball(self.parr,self.psig,self.nwalkers)
+        #         testlp = [lnprob(pp,args[0],verbose=True,justprior=True) for pp in self.p0]
+        #         try:
+        #             if any(np.isinf(testlp)):
+        #                 print('Pro: {0} --> ---- Need to redo p0 calculation'.format(self.ID))
+        #                 print('Pro: {0} --> Problematic PAR: '.format(self.ID))
+        #                 for li, lp_i in enumerate(testlp):
+        #                     if np.isinf(lp_i):
+        #                         print(self.p0[li],lp_i)
+        #                 print('Pro: {0} --> ---- Reducing initial ball size by 10%'.format(self.ID))
+        #                 self.psig = self.psig * 0.9                       
+        #             else:
+        #                 # print('Pro: {0} --> Initial Ball has following ranges...'.format(self.ID))
+        #                 # ballmin = np.amin(self.p0,axis=0)
+        #                 # ballmax = np.amax(self.p0,axis=0)
+        #                 # for ii in range(self.ndim):
+        #                 #     print('Pro: {0} --> Par {1}: min = {2}, max = {3}'.format(self.ID,ii,ballmin[ii],ballmax[ii]))
+        #                 break
+        #         except ValueError:
+        #             print('Pro: {0} --> PROBLEM WITH DEFINING A STARTING BALL'.format(self.ID))
+        #             sys.stdout.flush()
+        #             raise ValueError
+
+    def buildball(self,psigscale=1.0):
         scalefact = 1.0
         velshift = 50.0 #km/s
 
-        for _ in range(self.nwalkers):
-            temparr = []            
-            for ii,p in enumerate(self.parr):
-                ps = self.psig[ii]
-                pf = self.pflag[ii]
+        temparr = []            
+        for ii,p in enumerate(self.parr):
+            ps = self.psig[ii]*psigscale
+            pf = self.pflag[ii]
 
-                if pf == 'WL':
-                    fmll_i = self.ll_i[self.ll_i['FWL'] == ii]
-                    if len(fmll_i) > 1:
-                        wsh = max( fmll_i['WL'].data*(velshift/speedoflight) )
-                        minwll = -1.0*wsh
-                        maxwll = wsh
-                        if (min( (fmll_i['WL']+fmll_i['DWL'])+minwll) < self.minWL) or (max( (fmll_i['WL']+fmll_i['DWL'])+maxwll) > self.maxWL):
-                            minoff = min(
-                                [min([np.abs(x+minwll-self.minWL) for x in (fmll_i['WL']+fmll_i['DWL'])]),
-                                min([np.abs(x+maxwll-self.maxWL) for x in (fmll_i['WL']+fmll_i['DWL'])])]
-                                )
-                            minwll = -1.0*minoff
-                            rangewll = 2.0*minoff
-                        else:
-                            rangewll = maxwll-minwll
-
+            if pf == 'WL':
+                fmll_i = self.ll_i[self.ll_i['FWL'] == ii]
+                if len(fmll_i) > 1:
+                    wsh = max( fmll_i['WL'].data*(velshift/speedoflight) )
+                    minwll = -1.0*wsh
+                    maxwll = wsh
+                    if (min( (fmll_i['WL']+fmll_i['DWL'])+minwll) < self.minWL) or (max( (fmll_i['WL']+fmll_i['DWL'])+maxwll) > self.maxWL):
+                        minoff = min(
+                            [min([np.abs(x+minwll-self.minWL) for x in (fmll_i['WL']+fmll_i['DWL'])]),
+                            min([np.abs(x+maxwll-self.maxWL) for x in (fmll_i['WL']+fmll_i['DWL'])])]
+                            )
+                        minwll = -1.0*minoff
+                        rangewll = 2.0*minoff
                     else:
-                        wsh = (fmll_i['WL']*(velshift/speedoflight))
-                        minwll = -1.0*wsh
-                        maxwll = wsh
-                        if ( (fmll_i['WL']+fmll_i['DWL'])+minwll < self.minWL) or ((fmll_i['WL']+fmll_i['DWL'])+maxwll > self.maxWL):
-                            minoff = min([np.abs( (fmll_i['WL']+fmll_i['DWL'])+minwll-self.minWL),np.abs( (fmll_i['WL']+fmll_i['DWL'])+maxwll-self.maxWL)])
-                            minwll = -1.0*minoff
-                            rangewll = 2.0*minoff
-                        else:
-                            rangewll = maxwll-minwll
-                    wlshift = float(beta.rvs(1.0,1.0,loc=(minwll+fmll_i['DWL'][0])*scalefact,scale=rangewll*scalefact))
-                    if (wlshift+fmll_i['WL'][0] < self.minWL+0.05) or (wlshift+fmll_i['WL'][0] > self.maxWL-0.05):
-                        wlshift = np.zeros_like(fmll_i['DWL'][0]) + 0.0001*np.random.randn()
-                    temparr.append(wlshift)
+                        rangewll = maxwll-minwll
 
-                elif pf == "GF":
-                    fmll_i = self.ll_i[self.ll_i['FGFLOG'] == ii]
-                    mingflog = -0.2
-                    maxgflog = 0.2
-                    rangegflog = maxgflog-mingflog
-                    gflogshift = beta.rvs(2.0,2.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
-                    if gflogshift >= 0.75:
-                        # gflogshift = fmll_i['DGFLOG'][0] + 0.00001 * np.random.randn()
-                        # gflogshift = np.zeros_like(fmll_i['DGFLOG'][0]) + 1.0*np.random.randn()
-                        gflogshift = 0.25*np.ones_like(fmll_i['DGFLOG'][0]) + 0.1*np.random.randn()
-                    if gflogshift <= -10.0:
-                        gflogshift = -7.0*np.ones_like(fmll_i['DGFLOG'][0]) + 0.1*np.random.randn()
-
-                    # temparr.append(beta.rvs(4.0,4.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact))
-                    temparr.append(gflogshift)
-
-                elif pf in ['GW','GS','GR']:
-                    mingamma = -0.01
-                    maxgamma = 0.01
-                    rangegamma = maxgamma-mingamma
-                    if pf == 'GW':
-                        fmll_i = self.ll_i[self.ll_i['FGAMMAW'] == ii]
-                        offsetgamma = fmll_i['DGAMMAW'][0]
-                    elif pf == 'GS':
-                        fmll_i = self.ll_i[self.ll_i['FGAMMAS'] == ii]
-                        offsetgamma = fmll_i['DGAMMAS'][0]
-                    elif pf == 'GR':
-                        fmll_i = self.ll_i[self.ll_i['FGAMMAR'] == ii]
-                        offsetgamma = fmll_i['DGAMMAR'][0]
-                    else:
-                        print('Pro: {0} --> ---- PROBELM WITH SETTING GAMMA OFFSET'.format(self.ID))
-                        offsetgamma = 0.0
-                    gammashift = beta.rvs(4.0,4.0,loc=(mingamma+offsetgamma)*scalefact,scale=rangegamma*scalefact)
-                    if gammashift >= 0.9:
-                        gammashift = 0.1*np.ones_like(offsetgamma) + 0.0001*np.random.randn()
-                    if gammashift <= -0.9:
-                        gammashift = -0.1*np.ones_like(offsetgamma) + 0.0001*np.random.randn()
-                    temparr.append(gammashift)
                 else:
-                    pass
+                    wsh = (fmll_i['WL']*(velshift/speedoflight))
+                    minwll = -1.0*wsh
+                    maxwll = wsh
+                    if ( (fmll_i['WL']+fmll_i['DWL'])+minwll < self.minWL) or ((fmll_i['WL']+fmll_i['DWL'])+maxwll > self.maxWL):
+                        minoff = min([np.abs( (fmll_i['WL']+fmll_i['DWL'])+minwll-self.minWL),np.abs( (fmll_i['WL']+fmll_i['DWL'])+maxwll-self.maxWL)])
+                        minwll = -1.0*minoff
+                        rangewll = 2.0*minoff
+                    else:
+                        rangewll = maxwll-minwll
+                wlshift = float(beta.rvs(1.0,1.0,loc=(minwll+fmll_i['DWL'][0])*scalefact,scale=rangewll*scalefact))
+                if (wlshift+fmll_i['WL'][0] < self.minWL+0.05) or (wlshift+fmll_i['WL'][0] > self.maxWL-0.05):
+                    wlshift = np.zeros_like(fmll_i['DWL'][0]) + 0.0001*np.random.randn()
+                temparr.append(wlshift)
 
-            # scaling for arcturus
-            temparr.append(beta.rvs(1.0,1.0,loc=0.975,scale=0.05))
-            # arcturus velocity shift
-            temparr.append(beta.rvs(1.0,1.0,loc=-0.5,scale=1.0))
+            elif pf == "GF":
+                fmll_i = self.ll_i[self.ll_i['FGFLOG'] == ii]
+                mingflog = -0.2
+                maxgflog = 0.2
+                rangegflog = maxgflog-mingflog
+                gflogshift = beta.rvs(2.0,2.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
+                if gflogshift >= 0.75:
+                    # gflogshift = fmll_i['DGFLOG'][0] + 0.00001 * np.random.randn()
+                    # gflogshift = np.zeros_like(fmll_i['DGFLOG'][0]) + 1.0*np.random.randn()
+                    gflogshift = 0.25*np.ones_like(fmll_i['DGFLOG'][0]) + 0.1*np.random.randn()
+                if gflogshift <= -10.0:
+                    gflogshift = -7.0*np.ones_like(fmll_i['DGFLOG'][0]) + 0.1*np.random.randn()
 
-            # scaling for transmission spectrum
-            temparr.append(0.1*np.random.randn()+1.0)
-            # scaling for transmission velocity shift
-            temparr.append(0.001*np.random.randn())
+                # temparr.append(beta.rvs(4.0,4.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact))
+                temparr.append(gflogshift)
 
-            # append the array to P0
-            p0out.append(temparr)
+            elif pf in ['GW','GS','GR']:
+                mingamma = -0.01
+                maxgamma = 0.01
+                rangegamma = maxgamma-mingamma
+                if pf == 'GW':
+                    fmll_i = self.ll_i[self.ll_i['FGAMMAW'] == ii]
+                    offsetgamma = fmll_i['DGAMMAW'][0]
+                elif pf == 'GS':
+                    fmll_i = self.ll_i[self.ll_i['FGAMMAS'] == ii]
+                    offsetgamma = fmll_i['DGAMMAS'][0]
+                elif pf == 'GR':
+                    fmll_i = self.ll_i[self.ll_i['FGAMMAR'] == ii]
+                    offsetgamma = fmll_i['DGAMMAR'][0]
+                else:
+                    print('Pro: {0} --> ---- PROBELM WITH SETTING GAMMA OFFSET'.format(self.ID))
+                    offsetgamma = 0.0
+                gammashift = beta.rvs(4.0,4.0,loc=(mingamma+offsetgamma)*scalefact,scale=rangegamma*scalefact)
+                if gammashift >= 0.9:
+                    gammashift = 0.1*np.ones_like(offsetgamma) + 0.0001*np.random.randn()
+                if gammashift <= -0.9:
+                    gammashift = -0.1*np.ones_like(offsetgamma) + 0.0001*np.random.randn()
+                temparr.append(gammashift)
+            else:
+                pass
 
-        return p0out
+        # scaling for arcturus
+        temparr.append(beta.rvs(1.0,1.0,loc=0.975,scale=0.05))
+        # arcturus velocity shift
+        temparr.append(beta.rvs(1.0,1.0,loc=-0.5,scale=1.0))
+
+        # scaling for transmission spectrum
+        temparr.append(0.1*np.random.randn()+1.0)
+        # scaling for transmission velocity shift
+        temparr.append(0.001*np.random.randn())
+
+        return temparr
 
 
     def run_MCMC(self,nsteps,burnin=True,nburn=100):
