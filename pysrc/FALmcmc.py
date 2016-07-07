@@ -63,6 +63,9 @@ def lnprob(pin,args,verbose=False,justprior=False):
     lp = lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=verbose)
     try:
         if np.isfinite(lp) == False:
+            if justprior:
+                return -np.inf
+            else:
                 return -np.inf, [np.nan,np.nan]
     except ValueError:
         pass
