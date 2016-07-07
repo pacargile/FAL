@@ -603,6 +603,7 @@ class FALmcmc(object):
                     if np.isinf(testlp):
                         psigscale = psigscale * 0.9
                     else:
+                        print('Pro: {0} --> Fixed problematic inital ball position'.format(self.ID))
                         break
 
 
