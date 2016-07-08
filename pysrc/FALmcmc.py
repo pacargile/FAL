@@ -178,7 +178,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
             print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
-    velshift = 100.0 #km/s
+    velshift = 50.0 #km/s
     wsh = fmll['WL'][Tarr[...,0] != -1]*(velshift/speedoflight)
     wsh_max = max(wsh)
     minwll = -1.0*wsh_max
@@ -205,7 +205,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
     # 2-D gaussian prior on delta(log(gf)) and delta(lambda)
     # reparameterize such that they move on space evenly
     sig_dgflog = 0.5
-    sig_dWL = 0.01
+    sig_dWL = 0.05
     gf_wl_prior = (-0.5*((p['DGFLOG'][Tarr[...,1] != -1]/sig_dgflog)**2.0)*((p['DWL'][Tarr[...,0] != -1]/sig_dWL)**2.0)) #- 0.5*np.log(2.0*np.pi*(sig_coup**2.0))
 
     # RETURN WITH COUPLED PRIOR
@@ -607,33 +607,9 @@ class FALmcmc(object):
                         break
 
 
-        # while True:
-        #         # self.p0 = emcee.utils.sample_ball(self.parr,self.psig,self.nwalkers)
-        #         testlp = [lnprob(pp,args[0],verbose=True,justprior=True) for pp in self.p0]
-        #         try:
-        #             if any(np.isinf(testlp)):
-        #                 print('Pro: {0} --> ---- Need to redo p0 calculation'.format(self.ID))
-        #                 print('Pro: {0} --> Problematic PAR: '.format(self.ID))
-        #                 for li, lp_i in enumerate(testlp):
-        #                     if np.isinf(lp_i):
-        #                         print(self.p0[li],lp_i)
-        #                 print('Pro: {0} --> ---- Reducing initial ball size by 10%'.format(self.ID))
-        #                 self.psig = self.psig * 0.9                       
-        #             else:
-        #                 # print('Pro: {0} --> Initial Ball has following ranges...'.format(self.ID))
-        #                 # ballmin = np.amin(self.p0,axis=0)
-        #                 # ballmax = np.amax(self.p0,axis=0)
-        #                 # for ii in range(self.ndim):
-        #                 #     print('Pro: {0} --> Par {1}: min = {2}, max = {3}'.format(self.ID,ii,ballmin[ii],ballmax[ii]))
-        #                 break
-        #         except ValueError:
-        #             print('Pro: {0} --> PROBLEM WITH DEFINING A STARTING BALL'.format(self.ID))
-        #             sys.stdout.flush()
-        #             raise ValueError
-
     def buildball(self,psigscale=1.0):
         scalefact = psigscale
-        velshift = 50.0 #km/s
+        velshift = 10.0 #km/s
 
         temparr = []            
         for ii,p in enumerate(self.parr):
