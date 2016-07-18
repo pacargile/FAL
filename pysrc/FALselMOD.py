@@ -102,8 +102,8 @@ def selmod(starpars):
 		instparstr['HBAND'] = {"SINC":sincpar_hband,"GAUSSIAN":gausspar_hband}
 
 		# set model atmosphere to use
-		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
-		modatm = '/work/02349/cargilpa/FAL/TESTING/YSmod/YSsol.atm'
+		modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
+		# modatm = '/work/02349/cargilpa/FAL/TESTING/YSmod/YSsol.atm'
 
 	else:
 		# set up some object specific strings
