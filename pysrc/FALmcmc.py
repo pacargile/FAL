@@ -225,6 +225,7 @@ class FALmcmc(object):
         injectlines = kwargs.get("injectlines",None)
         outputfile  = kwargs.get("outputfile",None)
         arcscale    = kwargs.get("arcscale",None)
+        previousball = kwargs.get("previousball",None)
 
         # change the following lines to be inputs when you init the class
         self.minWL = minWLin
@@ -238,6 +239,7 @@ class FALmcmc(object):
 
         self.ID = IDin
         self.numstars = 2
+        self.previousball = previousball
         self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
         # Define synthesis wavelength range
@@ -591,21 +593,33 @@ class FALmcmc(object):
 
         # get p0 array and check for all finite values
         print('Pro: {0} --> Get inital walker positions'.format(self.ID))
-        self.p0 = [self.buildball() for _ in range(self.nwalkers)]
 
-        psigscale = 0.9
-        for ppii, pp in enumerate(self.p0):
-            testlp = lnprob(pp,args[0],verbose=True,justprior=True)
-            if np.isinf(testlp):
-                while True:
-                    self.p0[ppii] = self.buildball(psigscale=psigscale)
-                    testlp = lnprob(self.p0[ppii],args[0],verbose=True,justprior=True)
-                    if np.isinf(testlp):
-                        psigscale = psigscale * 0.9
-                    else:
-                        print('Pro: {0} --> Fixed problematic inital ball position'.format(self.ID))
-                        break
+        if self.previousball == None:
+            self.p0 = [self.buildball() for _ in range(self.nwalkers)]
 
+            psigscale = 0.9
+            for ppii, pp in enumerate(self.p0):
+                testlp = lnprob(pp,args[0],verbose=True,justprior=True)
+                if np.isinf(testlp):
+                    while True:
+                        self.p0[ppii] = self.buildball(psigscale=psigscale)
+                        testlp = lnprob(self.p0[ppii],args[0],verbose=True,justprior=True)
+                        if np.isinf(testlp):
+                            psigscale = psigscale * 0.9
+                        else:
+                            print('Pro: {0} --> Fixed problematic inital ball position'.format(self.ID))
+                            break
+
+        else:
+            lastrun = Table.read(self.previousball,format='ascii')
+            lastrun_i = lastrun[-self.nwalkers:]
+            lastrun_i.remove_columns(['WN','lnprob'])
+            lastrunstats = {}
+            for pp in lastrun_i.keys():
+                medlr = np.median(lastrun_i[pp])
+                lastrunstats[pp] = [medlr,np.median(np.abs(lastrun_i[pp]-medlr))]
+
+            self.p0 = [[lastrunstats[pp][0]+np.random.randn()*lastrunstats[pp][1] for pp in lastrun_i.keys()] for _ in range(self.nwalkers)]
 
     def buildball(self,psigscale=1.0):
         scalefact = psigscale
