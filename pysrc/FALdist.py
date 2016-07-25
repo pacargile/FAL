@@ -75,7 +75,7 @@ def runFAL(indict):
 			# MCMC.run_MCMC(500,burnin=False,nburn=0)
 
 			# build samplers
-			MCMC.buildsampler(nwalkers=150,threads=0)
+			MCMC.buildsampler(nwalkers=100,threads=0)
 			# run MCMC
 			MCMC.run_MCMC(500,burnin=False,nburn=0)
 			
@@ -150,15 +150,6 @@ if __name__ == '__main__':
 
 		pool = multiprocessing.Pool(processes=pool_size)
 
-
-
-	# # ONE RUN TEST:
-	# resultprt = runFAL({'starttime':starttime,'walltime':walltime,'IDin':3,
-	# 	'minWLin':596.0,'maxWLin':598.0,
-	# 	'initlines':'/work/02349/cargilpa/FAL/DATA/SLpars.dat',
-	# 	'condst':seg3cond,
-	# 	'outputfile':'MCMC_5960_5980.dat'})
-	# print resultprt
 
 	# set up CPU precentage reader
 	# psutil.cpu_percent(interval=1, percpu=True)

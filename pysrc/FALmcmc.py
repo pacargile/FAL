@@ -769,25 +769,11 @@ class FALmcmc(object):
             outspec.create_dataset('SUN_{0}'.format(ii),data=blob_s,compression='gzip')
             outspec.create_dataset('ARC_{0}'.format(ii),data=blob_a,compression='gzip')
 
-    		# handle SIGURS1 signal as a command to dump output file
-            # try:
-            #     assert GOT_SIG == False
-            #     pass
-            # except AssertionError:
-            #     outf.flush()
-            #     GOT_SIG = False
-
             # flush the buffer every X iterations
             if ((ii % 15 == 0.0) or (ii == niter)):
                 outf.flush()
                 sys.stdout.flush()
                 outspec.flush()
-            # # WRITE RESIDUAL TO OUTSPEC EVERY X iterations
-            # if ((ii % 15 == 0.0) or (ii == niter)):
-            #     outspec.flush()
-
-            # print how the chains are doing
-            #if ((ii % prf == 0.0) or (ii == niter)):
             print(
                 text.format(
                     ID=self.ID,
