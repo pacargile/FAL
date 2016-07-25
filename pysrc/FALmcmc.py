@@ -299,7 +299,7 @@ class FALmcmc(object):
         # fmll = self.injectfake(fmll.copy())
 
         # # inject previous parameters
-        # fmll = self.injectprev(fmll.copy())
+        fmll = self.injectprev(fmll.copy(),presetll=None)
 
         # set it into self
         self.fmll = fmll
@@ -373,59 +373,58 @@ class FALmcmc(object):
         #     print("Pro: {0} --> NO FAKE LINES FOUND IN SEGMENT".format(self.ID))
         return
 
-    def injectprev(self):
+    def injectprev(self,fmll,presetll=None):
         # # determine if there are any pre-initialized lines (from previous run) and set those free parameters
-        # if initlines != None:
-        #     # make a unique ID for each line
-        #     fmllcode = np.empty(len(self.fm.ll),dtype=object)
-        #     for nnn,ill in enumerate(self.fm.ll):
-        #         fmllcode[nnn] = "".join(
-        #             [str(ill['WL']),
-        #             ill['CODE'],
-        #             ill['E'],ill['EP'],
-        #             ill['XJ'],ill['XJP'],
-        #             ill['REF'],
-        #             ill['ISO1'],ill['X1'],
-        #             ill['ISO2'],ill['X2'],
-        #             ill['OTHER']]
-        #             ).replace(" ","")
+        # make a unique ID for each line
+        fmllcode = np.empty(len(fmll),dtype=object)
+        for nnn,ill in enumerate(fmll):
+            fmllcode[nnn] = "".join(
+                [str(ill['WL']),
+                ill['CODE'],
+                ill['E'],ill['EP'],
+                ill['XJ'],ill['XJP'],
+                ill['REF'],
+                ill['ISO1'],ill['X1'],
+                ill['ISO2'],ill['X2'],
+                ill['OTHER']]
+                ).replace(" ","")
 
-        #     # Read previous table: LINE INFO, DWL, DGFLOG, DGAMMA (will figure out which GAMMA after the fact)
-        #     ilines = Table(np.array(h5py.File(initlines,'r')['data']))
+        # Read previous table: LINE INFO, DWL, DGFLOG, DGAMMA (will figure out which GAMMA after the fact)
+        if presetll == None:
+            initlines = '/work/02349/cargilpa/FAL/DATA/SL_pars4.h5'
+        else:
+            initlines = presetll
+        ilines = Table(np.array(h5py.File(initlines,'r')['data']))
 
-        #     ilines.sort('WL')
-        #     # ilines = Table.read(initlines,format='fits')
-        #     ilines['UNIQ_ID'] = np.empty(len(ilines),dtype=object)
-        #     for nnn,ill in enumerate(ilines):
-        #         ilines['UNIQ_ID'][nnn] = "".join(
-        #             [str(ill['WL']),
-        #             ill['CODE'],
-        #             ill['E'],ill['EP'],
-        #             ill['XJ'],ill['XJP'],
-        #             ill['REF'],
-        #             ill['ISO1'],ill['X1'],
-        #             ill['ISO2'],ill['X2'],
-        #             ill['OTHER']]
-        #         ).replace(" ","")
-        #     numpreset = 0
-        #     for ii,fmlc in enumerate(fmllcode):
-        #         cond_intl = np.in1d(ilines['UNIQ_ID'],fmlc,assume_unique=True)
-        #         if any(cond_intl):
-        #             numpreset = numpreset + 1
-        #             # print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(self.fm.ll['WL'][ii])))
-        #             self.fm.ll['DWL'][ii] = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
-        #             self.fm.ll['DGFLOG'][ii] = float('{0:6.4f}'.format(float(ilines['DGFLOG'][cond_intl])))
-        #             if self.fm.gammaswitch['switch'][ii] == 'W':
-        #                 self.fm.ll['DGAMMAW'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
-        #             elif self.fm.gammaswitch['switch'][ii] == 'R':
-        #                 self.fm.ll['DGAMMAR'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
-        #             elif self.fm.gammaswitch['switch'][ii] == 'S':
-        #                 self.fm.ll['DGAMMAS'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
-        #             else:
-        #                 pass
-        #     print("Pro: {0} --> Setting Previous Pars for {1} lines".format(self.ID,numpreset))
+        # make unique ID for lines in preset linelist
+        ilines.sort('WL')
+        ilines['UNIQ_ID'] = np.empty(len(ilines),dtype=object)
+        for nnn,ill in enumerate(ilines):
+            ilines['UNIQ_ID'][nnn] = "".join(
+                [str(ill['WL']),
+                ill['CODE'],
+                ill['E'],ill['EP'],
+                ill['XJ'],ill['XJP'],
+                ill['REF'],
+                ill['ISO1'],ill['X1'],
+                ill['ISO2'],ill['X2'],
+                ill['OTHER']]
+            ).replace(" ","")
 
-        return
+        # cycle through line list and find matches
+        numpreset = 0
+        for ii,fmlc in enumerate(fmllcode):
+            cond_intl = np.in1d(ilines['UNIQ_ID'],fmlc,assume_unique=True)
+            if any(cond_intl):
+                numpreset = numpreset + 1
+                # print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(self.fm.ll['WL'][ii])))
+                fmll['DWL'][ii] = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
+                fmll['DGFLOG'][ii] = float('{0:6.4f}'.format(float(ilines['DGFLOG'][cond_intl])))
+                fmll['DGAMMAW'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
+
+        print("Pro: {0} --> Setting Previous Pars for {1} lines".format(self.ID,numpreset))
+
+        return fmll
 
     def getspecdata(self):
         if ((self.minWL > 470.0) & (self.maxWL < 800.0)):
