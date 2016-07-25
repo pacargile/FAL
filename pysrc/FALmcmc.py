@@ -663,8 +663,8 @@ class FALmcmc(object):
 
             elif pf == "GF":
                 fmll_i = self.ll_i[self.ll_i['FGFLOG'] == ii]
-                mingflog = -0.2
-                maxgflog = 0.2
+                mingflog = -0.5
+                maxgflog = 0.5
                 rangegflog = maxgflog-mingflog
                 gflogshift = beta.rvs(2.0,2.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
                 if gflogshift >= 0.75:
@@ -678,8 +678,8 @@ class FALmcmc(object):
                 temparr.append(gflogshift)
 
             elif pf in ['GW','GS','GR']:
-                mingamma = -0.01
-                maxgamma = 0.01
+                mingamma = -0.2
+                maxgamma = 0.2
                 rangegamma = maxgamma-mingamma
                 if pf == 'GW':
                     fmll_i = self.ll_i[self.ll_i['FGAMMAW'] == ii]
@@ -693,7 +693,7 @@ class FALmcmc(object):
                 else:
                     print('Pro: {0} --> ---- PROBELM WITH SETTING GAMMA OFFSET'.format(self.ID))
                     offsetgamma = 0.0
-                gammashift = beta.rvs(4.0,4.0,loc=(mingamma+offsetgamma)*scalefact,scale=rangegamma*scalefact)
+                gammashift = beta.rvs(2.0,2.0,loc=(mingamma+offsetgamma)*scalefact,scale=rangegamma*scalefact)
                 if gammashift >= 0.9:
                     gammashift = 0.1*np.ones_like(offsetgamma) + 0.0001*np.random.randn()
                 if gammashift <= -0.9:
