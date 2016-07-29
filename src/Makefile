@@ -35,6 +35,8 @@ synthe:
 	$(FC) $(LDFLAGS) -o rotate.exe rotate.o
 	$(FC) $(FFLAGS) -o syntoascanga.o syntoascanga.for
 	$(FC) $(LDFLAGS)  -o syntoascanga.exe syntoascanga.o
+	$(FC) $(FFLAGS) -o globaladj.o globaladj.for
+	$(FC) $(LDFLAGS) -o globaladj.exe globaladj.o
 
 testing:
 	$(FC) $(FFLAGS)  -o rpunchxx.o rpunchxx.for  
