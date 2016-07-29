@@ -94,10 +94,10 @@ CCCCCCCCCCCCCC
 C           DO THE CORRECTION
             GFLOG = LOG10(GF)
             IF(ISO1.EQ.ISOFRACISO1)THEN
-              GFLOG = GFLOG+0.005+LOG10(1.0+(1.0/ISOFRAC))
+              GFLOG = GFLOG+0.005-LOG10(1.0+(1.0/ISOFRAC))
             ENDIF
             IF(ISO1.EQ.ISOFRACISO2)THEN
-              GFLOG = GFLOG+1.955+LOG10(1.0+ISOFRAC)
+              GFLOG = GFLOG+1.955-LOG10(1.0+ISOFRAC)
             ENDIF
             GF = 10.0**(GFLOG)
 
@@ -126,7 +126,7 @@ C           DO THE CORRECTION
               print *, LOG10(1.0+(1.0/ISOFRAC))
             ENDIF
             IF(ISO1.EQ.ISOFRACISO2)THEN
-              GFLOG = GFLOG-1.955-LOG10(1.0+ISOFRAC)
+              GFLOG = GFLOG+1.955-LOG10(1.0+ISOFRAC)
               print *, LOG10(1.0+ISOFRAC)
             ENDIF
 
