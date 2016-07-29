@@ -39,8 +39,8 @@ synthe:
 	$(FC) $(LDFLAGS) -o globaladj.exe globaladj.o
 
 testing:
-	$(FC) $(FFLAGS)  -o rpunchxx.o rpunchxx.for  
-	$(FC) $(LDFLAGS) -o rpunchxx.exe rpunchxx.o
+	$(FC) $(FFLAGS) -o globaladj.o globaladj.for
+	$(FC) $(LDFLAGS) -o globaladj.exe globaladj.o
 install:
 	/bin/mv *.exe ../bin
 
