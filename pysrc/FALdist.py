@@ -38,6 +38,11 @@ def runFAL(indict):
 	else:
 		outputfile = None
 
+	if 'outputdir' in indict.keys():
+		outputdir = indict['outputdir']
+	else:
+		outputdir = None
+
 	# remove old working directory if it exisits
 	try:
 	    shutil.rmtree('./{0}'.format(str(IDin).rjust(8,str(0))))
@@ -60,7 +65,8 @@ def runFAL(indict):
 		IDin=IDin,
 		starttime=starttime,walltime=walltime,
 		arcscale=arcscale,
-		outputfile=outputfile)
+		outputfile=outputfile,
+		outputdir=outputdir)
 	try:
 		if testrun:
 			return MCMC
@@ -117,6 +123,7 @@ def makeinlist(infilename):
 			# 'arcscale':float(rf_i['ARCSCALE']),
 			'arcscale':float(1.0),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
+			'outputdir':'/work/02349/cargilpa/FAL/TESTING/NEWCODE/',
 			'RUNID':ii})
 
 		indictlist.append(tempdict)

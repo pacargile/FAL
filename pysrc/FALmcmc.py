@@ -224,6 +224,7 @@ class FALmcmc(object):
         initlines   = kwargs.get("initlines",None)
         injectlines = kwargs.get("injectlines",None)
         outputfile  = kwargs.get("outputfile",None)
+        outputdir  = kwargs.get("outputdir",None)
         arcscale    = kwargs.get("arcscale",None)
         previousball = kwargs.get("previousball",None)
 
@@ -250,6 +251,7 @@ class FALmcmc(object):
 
         # set output file name
         self.outputfile = outputfile
+        self.outputdir = outputdir
 
         if arcscale == None:
             self.arcscale = 1.0
@@ -502,8 +504,10 @@ class FALmcmc(object):
         # set up outfile
         if self.outputfile == None:
             self.outputfile = 'MCMC_{0:n}.dat'.format(time.time())
+        if self.outputdir == None:
+            self.outputdir = './'
 
-        with open(self.outputfile, "w") as f:
+        with open(self.outputdir+self.outputfile, "w") as f:
             f.write(
                 '# RUN DATE/TIME: {0}, NumFP: {1} ,'.format(
                     datetime.today(),self.ndim))
@@ -541,36 +545,36 @@ class FALmcmc(object):
             f.write('lnprob\n')
 
         # WRITE LL WITH PARR INFO
-        if os.path.exists('LL'+self.outputfile[4:-3]+'fits'):
-            os.remove('LL'+self.outputfile[4:-3]+'fits')
+        if os.path.exists(self.outputdir+'LL'+self.outputfile[4:-3]+'fits'):
+            os.remove(self.outputdir+'LL'+self.outputfile[4:-3]+'fits')
         self.ll_i = self.fmll.copy()
         self.ll_i['FWL']     = self.Tarr[:,0]
         self.ll_i['FGFLOG']  = self.Tarr[:,1]
         self.ll_i['FGAMMAW'] = self.Tarr[:,2]
         self.ll_i['FGAMMAR'] = self.Tarr[:,3]
         self.ll_i['FGAMMAS'] = self.Tarr[:,4]
-        self.ll_i.write('LL'+self.outputfile[4:-3]+'fits',format='fits',overwrite=True) 
+        self.ll_i.write(self.outputdir+'LL'+self.outputfile[4:-3]+'fits',format='fits',overwrite=True) 
 
         # Initialize HDF5 File for SAMP & write Sun observed spec
-        if os.path.exists('SAMP'+self.outputfile[4:-3]+'h5'):
-            os.remove('SAMP'+self.outputfile[4:-3]+'h5')
+        if os.path.exists(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5'):
+            os.remove(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5')
         self.soloutspec = Table()
         self.soloutspec['SOL_WAVE'] = self.solobswave
         self.soloutspec['SOL_FLUX'] = self.solobsflux
-        self.soloutspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='solobs',overwrite=True)
+        self.soloutspec.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='solobs',overwrite=True)
 
         # write arcturus obs spec
         self.arcoutspec = Table()
         self.arcoutspec['ARC_WAVE'] = self.arcobswave
         self.arcoutspec['ARC_FLUX'] = self.arcobsflux
-        self.arcoutspec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='arcobs',overwrite=True,append=True)
+        self.arcoutspec.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='arcobs',overwrite=True,append=True)
 
         # compute zero spectrum with all the previous shifts applied
         ogspecdict = {}
         for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
             _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=self.fmll['DWL','DGFLOG','DGAMMAR','DGAMMAS','DGAMMAW'])
             _spectab = Table(_spec)
-            _spectab.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path=star_i+'_zero',overwrite=True,append=True)
+            _spectab.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path=star_i+'_zero',overwrite=True,append=True)
 
         # write original transmission spectrum into file
         transpec = Table()
