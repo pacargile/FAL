@@ -300,6 +300,8 @@ class FALmcmc(object):
         # # inject fake lines
         # fmll = self.injectfake(fmll.copy())
 
+        sys.exit()
+
         # # inject previous parameters
         fmll = self.injectprev(fmll.copy(),presetll=None)
 
