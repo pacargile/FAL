@@ -112,7 +112,11 @@ def makeinlist(infilename):
 	# http://docs.scipy.org/doc/numpy/reference/routines.logic.html
 	
 	# read slicer file
-	regfile = Table.read(infilename,names=['ID','WLstart','WLend','LINWLstart','LINWLend','WLRAN','NUMLINES'],format='ascii')
+	try:
+		regfile = Table.read(infilename,names=['ID','WLstart','WLend','LINWLstart','LINWLend','WLRAN','NUMLINES'],format='ascii')
+		regfile['ARCSCALE'] = np.ones_like(regfile['WLstart'])
+	except:
+		regfile = Table.read(infilename,names=['ID','WLstart','WLend','LINWLstart','LINWLend','WLRAN','NUMLINES','ARCSCALE'],format='ascii')
 
 	indictlist = []
 
@@ -120,8 +124,7 @@ def makeinlist(infilename):
 		tempdict = ({'starttime':starttime,'walltime':walltime,'IDin':int(rf_i['ID']),
 			'minWLin':float(rf_i['WLstart']),'maxWLin':float(rf_i['WLend']),
 			'minlinWL':float(rf_i['LINWLstart']),'maxlinWL':float(rf_i['LINWLend']),
-			# 'arcscale':float(rf_i['ARCSCALE']),
-			'arcscale':float(1.0),
+			'arcscale':float(rf_i['ARCSCALE']),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
 			'outputdir':'/work/02349/cargilpa/FAL/TESTING/NEWCODE/',
 			'RUNID':ii})
