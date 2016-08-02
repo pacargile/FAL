@@ -300,8 +300,6 @@ class FALmcmc(object):
         # # inject fake lines
         # fmll = self.injectfake(fmll.copy())
 
-        print(fmll[0])
-
         # # inject previous parameters
         fmll = self.injectprev(fmll.copy(),presetll=None)
 
@@ -399,11 +397,11 @@ class FALmcmc(object):
             fmllcode[nnn] = "".join(
                 [str(ill['WL']),
                 ill['CODE'],
-                ill['E'],ill['EP'],
-                ill['XJ'],ill['XJP'],
+                str(ill['E']),str(ill['EP']),
+                str(ill['XJ']),str(ill['XJP']),
                 ill['REF'],
-                ill['ISO1'],ill['X1'],
-                ill['ISO2'],ill['X2'],
+                str(ill['ISO1']),str(ill['X1']),
+                str(ill['ISO2']),str(ill['X2']),
                 ill['OTHER']]
                 ).replace(" ","")
 
@@ -421,11 +419,11 @@ class FALmcmc(object):
             ilines['UNIQ_ID'][nnn] = "".join(
                 [str(ill['WL']),
                 ill['CODE'],
-                ill['E'],ill['EP'],
-                ill['XJ'],ill['XJP'],
+                str(ill['E']),str(ill['EP']),
+                str(ill['XJ']),str(ill['XJP']),
                 ill['REF'],
-                ill['ISO1'],ill['X1'],
-                ill['ISO2'],ill['X2'],
+                str(ill['ISO1']),str(ill['X1']),
+                str(ill['ISO2']),str(ill['X2']),
                 ill['OTHER']]
             ).replace(" ","")
 
