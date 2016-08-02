@@ -328,7 +328,7 @@ class FALmcmc(object):
             else:
                 fmll_i = self.fmll.copy()
 
-            print(fmll_i)
+            print(fmll_i['WL','CODE','GFLOG','ISO1','ISO2','RESID'])
 
             _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=False,linelist=fmll_i,archive=True)
             # reset orgll to fmll because we don't want to use the synthe parsed ll
