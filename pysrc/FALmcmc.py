@@ -317,17 +317,18 @@ class FALmcmc(object):
         for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
             if star_i == 'Arcturus':
                 print('Pro: {0} --> Changing C12/C13 abundance fraction for Arcturus'.format(self.ID))
+                C12C13 = 1000.0
                 fmll_i = self.fmll.copy()
                 for ll_ii in fmll_i:
                     if ll_ii['ISO1'] == 12:
-                        ll_ii['GFLOG'] = ll_ii['GFLOG']+0.005-np.log10(1.0+(1.0/7.4))
+                        ll_ii['GFLOG'] = ll_ii['GFLOG']+0.005-np.log10(1.0+(1.0/C12C13))
                     elif ll_ii['ISO1'] == 13:
-                        ll_ii['GFLOG'] = ll_ii['GFLOG']+1.955-np.log10(1.0+7.4)
+                        ll_ii['GFLOG'] = ll_ii['GFLOG']+1.955-np.log10(1.0+C12C13)
                     else:
                         pass
             else:
                 fmll_i = self.fmll.copy()
-                
+
             _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=False,linelist=fmll_i,archive=True)
             # reset orgll to fmll because we don't want to use the synthe parsed ll
             self.fmdict[ID_i].orgll = self.fmll
