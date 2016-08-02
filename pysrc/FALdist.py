@@ -96,7 +96,10 @@ def runFAL(indict):
 def makeinlist(infilename):
 	# timing info
 	starttime = time.time()
-	walltime = time.time() + float(os.environ.get('SLURM_TACC_RUNLIMIT_MINS'))*60.0
+	try:
+		walltime = time.time() + float(os.environ.get('SLURM_TACC_RUNLIMIT_MINS'))*60.0
+	except TypeError:
+		walltime = time.time() + 10000000000.0
 
 	# set up input dictionary
 
