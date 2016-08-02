@@ -580,7 +580,7 @@ class FALmcmc(object):
         # write original transmission spectrum into file
         transpec = Table()
         transpec['FLUX'] = self.transflux
-        transpec.write('SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
+        transpec.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
 
         return 
 
@@ -763,9 +763,9 @@ class FALmcmc(object):
         deltaT = 0.0
 
         # define output file to append
-        outf = open(self.outputfile,'a')
+        outf = open(self.outputdir+self.outputfile,'a')
 
-        outspec = h5py.File('SAMP'+self.outputfile[4:-3]+'h5','a')
+        outspec = h5py.File(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5','a')
 
         # set flag for final print
         finalflag = 0
