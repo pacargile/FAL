@@ -12,7 +12,8 @@ def selmod(starpars):
 		gausspar_hband = 100000.0
 		instparstr = {"OPT":{"GAUSSIAN":gausspar_opt},"HBAND":{"GAUSSIAN":gausspar_hband}}
 
-		modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/Arcturus_NEWpars_V4.dat"
+		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/Arcturus_NEWpars_V4.dat"
+		modatm = '/work/02349/cargilpa/FAL/DATA/arcturus_at12.atm'
 
 	elif starpars['OBJECT'] == 'Sun':
 		# set synbeg string to use
@@ -102,8 +103,9 @@ def selmod(starpars):
 		instparstr['HBAND'] = {"SINC":sincpar_hband,"GAUSSIAN":gausspar_hband}
 
 		# set model atmosphere to use
-		modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
+		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
 		# modatm = '/work/02349/cargilpa/FAL/TESTING/YSmod/YSsol.atm'
+		modatm = '/work/02349/cargilpa/FAL/DATA/solar_at12.atm'
 
 	else:
 		# set up some object specific strings
