@@ -315,7 +315,7 @@ class FALmcmc(object):
         for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
             if star_i == 'Arcturus':
                 print('Pro: {0} --> Changing C12/C13 abundance fraction for Arcturus'.format(self.ID))
-                C12C13 = 1000.0
+                C12C13 = 7.4
                 fmll_i = self.fmll.copy()
                 for ll_ii in fmll_i:
                     if ll_ii['ISO1'] == 12:
