@@ -109,6 +109,8 @@ class FALmod(object):
         verbose = kwargs.get('verbose',False)
         # print out the optical depth information
         self.tau_i = kwargs.get('tau_i',False)
+        # definte master line list
+        self.masterll = kwargs.get('masterll',None)
 
         # change into working directory
         os.chdir('{0}'.format(self.ID))
@@ -235,14 +237,17 @@ class FALmod(object):
 
         elif linelist == 'readmaster':
             # determine which readmaster line list to use base on wavelength range
-            if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1350.0):
-                MASTERLL = ['/work/02349/cargilpa/FAL/MASTERLL/OPTSEG/KuruczLL_450_1350.bin']
-            elif (self.starpars['WSTART'] > 1400.0) & (self.starpars['WEND'] < 1900.0):
-                # MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/CargileLL_1400_1900.bin',
-                MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin',
-                '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczH2OLL_1400_1900.bin'])
+            if self.masterll == None:
+                if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1350.0):
+                    MASTERLL = ['/work/02349/cargilpa/FAL/MASTERLL/OPTSEG/KuruczLL_450_1350.bin']
+                elif (self.starpars['WSTART'] > 1400.0) & (self.starpars['WEND'] < 1900.0):
+                    # MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/CargileLL_1400_1900.bin',
+                    MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin',
+                    '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczH2OLL_1400_1900.bin'])
+                else:
+                    raise ValueError('DID NOT UNDERSTAND MASTERLL')
             else:
-                raise ValueError('DID NOT UNDERSTAND MASTERLL')
+                MASTERLL = self.masterll
 
             # read the masterline lists (cargile or kurucz plus H2O+TiO)
             self.SYNTHE.readlines(rtype='readmaster',verbose=verbose_i,MASTERLL=MASTERLL)
