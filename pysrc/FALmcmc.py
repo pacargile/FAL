@@ -331,6 +331,9 @@ class FALmcmc(object):
             # reset orgll to fmll because we don't want to use the synthe parsed ll
             self.fmdict[ID_i].orgll = self.fmll
 
+
+        sys.exit(0)
+        
         # run function to select which lines are modeled
         (self.parr,self.psig,self.pflag,self.Tarr) = FALlinesel.linesel(self.fmll,self.condst,self.minLINWL,self.maxLINWL)
 
