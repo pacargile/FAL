@@ -129,7 +129,7 @@ def makeinlist(infilename):
 			'minlinWL':float(rf_i['LINWLstart']),'maxlinWL':float(rf_i['LINWLend']),
 			'arcscale':float(rf_i['ARCSCALE']),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
-			'outputdir':'/work/02349/cargilpa/FAL/TESTING/SIMMOD/TEST13/',
+			'outputdir':'/work/02349/cargilpa/FAL/TESTING/SIMMOD/TEST13/TEST/',
 			'RUNID':ii})
 
 		indictlist.append(tempdict)
