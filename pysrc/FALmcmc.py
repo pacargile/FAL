@@ -305,7 +305,8 @@ class FALmcmc(object):
         self.fmll = fmll
 
         # remove all predicted lines
-        self.fmll = self.fmll[(self.fmll['LABEL'] != '          ') & (self.fmll['LABELP'] != '          ') & (self.fmll['RESID'] < 0.99)]
+        plinesind = (self.fmll['LABEL'] == '          ') & (self.fmll['LABELP'] == '          ') & (self.fmll['RESID'] < 0.99)
+        self.fmll = self.fmll[not plinesind]
 
         # change all DWL back to zero, hack for pervious solar-only fit
         self.fmll['DWL'] = np.zeros_like(self.fmll['DWL'])
