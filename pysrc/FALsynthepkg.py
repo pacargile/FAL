@@ -403,7 +403,6 @@ class synthe(object):
         """
         # Master lines file is gigantic, so don't copy into memory just sym link it
         if MASTERLL == None:
-            # MASTERLL = '/work/02349/cargilpa/FAL/MASTERLL/HBAND/CargileLL_1400_1900.bin'
             MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin',
                 '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczH2OLL_1400_1900.bin'])
 
