@@ -639,7 +639,7 @@ class FALmcmc(object):
 
     def buildball(self,psigscale=1.0):
         scalefact = psigscale
-        velshift = 10.0 #km/s
+        velshift = 2.0 #km/s
 
         temparr = []            
         for ii,p in enumerate(self.parr):
@@ -682,7 +682,7 @@ class FALmcmc(object):
                 mingflog = -0.5
                 maxgflog = 0.5
                 rangegflog = maxgflog-mingflog
-                gflogshift = beta.rvs(2.0,2.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
+                gflogshift = beta.rvs(4.0,4.0,loc=(mingflog+fmll_i['DGFLOG'][0])*scalefact,scale=rangegflog*scalefact)
                 if gflogshift >= 0.75:
                     # gflogshift = fmll_i['DGFLOG'][0] + 0.00001 * np.random.randn()
                     # gflogshift = np.zeros_like(fmll_i['DGFLOG'][0]) + 1.0*np.random.randn()
@@ -709,7 +709,7 @@ class FALmcmc(object):
                 else:
                     print('Pro: {0} --> ---- PROBELM WITH SETTING GAMMA OFFSET'.format(self.ID))
                     offsetgamma = 0.0
-                gammashift = beta.rvs(2.0,2.0,loc=(mingamma+offsetgamma)*scalefact,scale=rangegamma*scalefact)
+                gammashift = beta.rvs(4.0,4.0,loc=(mingamma+offsetgamma)*scalefact,scale=rangegamma*scalefact)
                 if gammashift >= 0.9:
                     gammashift = 0.1*np.ones_like(offsetgamma) + 0.0001*np.random.randn()
                 if gammashift <= -0.9:
