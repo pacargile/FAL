@@ -136,6 +136,9 @@ class FALmod(object):
         else:
             pass
 
+        exit()
+
+
         if archive:
             self.SYNTHE.archive()
 
