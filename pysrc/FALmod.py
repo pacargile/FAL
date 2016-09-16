@@ -135,10 +135,7 @@ class FALmod(object):
             self.SYNTHE.synbeg(self.starpars,clobber=True,verbose=verbose_i)
         else:
             pass
-
-        exit()
-
-
+        
         if archive:
             self.SYNTHE.archive()
 
