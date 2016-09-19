@@ -120,7 +120,7 @@ C           DO THE CORRECTION
             FREQ=2.99792458D17/WL
             GF = CONGF*FREQ*1.77245D0/.026538D0
             GFLOGI = LOG10(GF)
-            
+
             IF(ISO1.EQ.ISOFRACISO1)THEN
               GFLOGI = GFLOGI+0.005-LOG10(1.0+(1.0/ISOFRAC))
               print *, LOG10(1.0+(1.0/ISOFRAC))
