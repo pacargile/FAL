@@ -135,7 +135,7 @@ class FALmod(object):
             self.SYNTHE.synbeg(self.starpars,clobber=True,verbose=verbose_i)
         else:
             pass
-        
+
         if archive:
             self.SYNTHE.archive()
 
@@ -157,6 +157,8 @@ class FALmod(object):
             verbose_i = False
         self._readline(linelist,verbose_i)
         
+        exit()
+
         # do synthesis calc
         if type(verbose) == type(True):
             if (verbose == True):

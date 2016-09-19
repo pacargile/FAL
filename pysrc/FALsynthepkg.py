@@ -867,10 +867,10 @@ class synthe(object):
             os.unlink('fort.9')
         if os.path.isfile('/dev/shm/FAL/{0}/fort.9'.format(self.ID)):
             os.remove('/dev/shm/FAL/{0}/fort.9'.format(self.ID))
-        # if os.path.isfile('fort.20'):
-        #     os.unlink('fort.20')
-        # if os.path.isfile('/dev/shm/FAL/{0}/fort.20'.format(self.ID)):
-        #     os.remove('/dev/shm/FAL/{0}/fort.20'.format(self.ID))
+        if os.path.isfile('fort.20'):
+            os.unlink('fort.20')
+        if os.path.isfile('/dev/shm/FAL/{0}/fort.20'.format(self.ID)):
+            os.remove('/dev/shm/FAL/{0}/fort.20'.format(self.ID))
         
         self._mvsym('fort.7','fort.sol')
         if tau:
