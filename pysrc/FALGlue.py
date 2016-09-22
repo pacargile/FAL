@@ -272,6 +272,7 @@ class glue(object):
 				else:
 					outstr = ''.join(tab[ii])+'\n'					
 				outfile.write(outstr)
+			outfile.write('\n')
 		return None
 	
 	def con_lptonp(self,strtab):
