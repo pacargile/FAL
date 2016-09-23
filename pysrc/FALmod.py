@@ -157,8 +157,6 @@ class FALmod(object):
             verbose_i = False
         self._readline(linelist,verbose_i)
         
-        exit()
-
         # do synthesis calc
         if type(verbose) == type(True):
             if (verbose == True):
