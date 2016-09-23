@@ -786,7 +786,7 @@ class FALmcmc(object):
             outspec.create_dataset('ARC_{0}'.format(ii),data=blob_a,compression='gzip')
 
             # flush the buffer every X iterations
-            if ((ii % 15 == 0.0) or (ii == niter)):
+            if ((ii % 2 == 0.0) or (ii == niter)):
                 outf.flush()
                 sys.stdout.flush()
                 outspec.flush()
