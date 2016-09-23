@@ -256,7 +256,7 @@ class FALmod(object):
             self.SYNTHE.readlines(rtype='readmaster',verbose=verbose_i,MASTERLL=MASTERLL)
             self.speed = 'fast'
             if self.timeit:
-                print("Pro: {1} --> Read in master line list -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                print("Pro: {1} --> Read in master line list: {2} -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw,MASTERLL[0]))
                 self.lasttime = time.time()
             return
 
