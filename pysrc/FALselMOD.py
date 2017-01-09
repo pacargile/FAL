@@ -13,7 +13,7 @@ def selmod(starpars):
 		instparstr = {"OPT":{"GAUSSIAN":gausspar_opt},"HBAND":{"GAUSSIAN":gausspar_hband}}
 
 		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/Arcturus_NEWpars_V4.dat"
-		modatm = '/work/02349/cargilpa/FAL/DATA/arcturus_at12.atm'
+		modatm = '/n/conroyfs1/pac/FAL/data/ATM/arcturus_at12.atm'
 
 	elif starpars['OBJECT'] == 'Sun':
 		# set synbeg string to use
@@ -105,7 +105,7 @@ def selmod(starpars):
 		# set model atmosphere to use
 		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
 		# modatm = '/work/02349/cargilpa/FAL/TESTING/YSmod/YSsol.atm'
-		modatm = '/work/02349/cargilpa/FAL/DATA/solar_at12.atm'
+		modatm = '/n/conroyfs1/pac/FAL/data/ATM/solar_at12.atm'
 
 	else:
 		# set up some object specific strings
@@ -116,6 +116,7 @@ def selmod(starpars):
 		instparstr['HBAND'] = None
 
 		# set model atmosphere to use **USING SOLAR BECAUSE THIS WILL CHANGE TO AN INTERPOLATOR**
-		modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
+		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
+		modatm = '/n/conroyfs1/pac/FAL/data/ATM/solar_at12.atm'
 
 	return (synbegvar,instparstr,modatm)
