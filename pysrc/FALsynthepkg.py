@@ -59,11 +59,13 @@ class synthe(object):
             self.starpars = starpars
 
         # Set up exec directory and data directory
-        self.HOMEDIR = os.path.expandvars("$HOME")
-        self.WORKDIR = os.path.expandvars("$WORK")
-        self.exedir = self.HOMEDIR+"/GITREPO/FAL/bin/"
-        self.datadir = self.HOMEDIR+"/FAL/PYTHON/data/"
-        self.bigdatadir = self.WORKDIR+"/FAL/DATA/"
+        # self.HOMEDIR = os.path.expandvars("$HOME")
+        # self.WORKDIR = os.path.expandvars("$WORK")
+        self.HOMEDIR = '/n/conroyfs1/pac/FAL'
+        self.WORKDIR = '/n/conroyfs1/pac/FAL'
+        self.exedir = self.HOMEDIR+"/bin/"
+        self.datadir = self.HOMEDIR+"/data/"
+        self.bigdatadir = self.WORKDIR+"/DATA/"
 
         # create the glue  
         self.glue = FALGlue.glue()
@@ -403,8 +405,8 @@ class synthe(object):
         """
         # Master lines file is gigantic, so don't copy into memory just sym link it
         if MASTERLL == None:
-            MASTERLL = (['/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin',
-                '/work/02349/cargilpa/FAL/MASTERLL/HBAND/KuruczH2OLL_1400_1900.bin'])
+            MASTERLL = (['/n/conroyfs1/pac/FAL/data/LL/KuruczLL_1400_1900.bin',
+                '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
 
         # for each line list in MASTERLL, run rpunchbin
         for MLL in MASTERLL:
