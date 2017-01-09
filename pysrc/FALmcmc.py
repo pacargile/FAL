@@ -406,7 +406,7 @@ class FALmcmc(object):
 
         # Read previous table: LINE INFO, DWL, DGFLOG, DGAMMA (will figure out which GAMMA after the fact)
         if presetll == None:
-            initlines = '/work/02349/cargilpa/FAL/DATA/SL_pars4.h5'
+            initlines = '/n/conroyfs1/pac/FAL/data/LL/SL_pars4.h5'
         else:
             initlines = presetll
         ilines = Table(np.array(h5py.File(initlines,'r')['data']))
@@ -445,14 +445,14 @@ class FALmcmc(object):
         if ((self.minWL > 470.0) & (self.maxWL < 800.0)):
             print("Pro: {0} --> Working with Optical Spectrum".format(self.ID))
             # read in observed data for the Sun and Acturus
-            sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_4750_8270.fits',format='fits')            
-            arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_3800_9300_HINKLE.fits',format='fits')
+            sol_i = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/SOL_4750_8270.fits',format='fits')            
+            arc_ii = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/ARC_3800_9300_HINKLE.fits',format='fits')
             arc_i = Table()
             arc_i['WAVE'] = arc_ii['WAVELENGTH']/10.0
             arc_i['FLUX'] = arc_ii['ARCTURUS']
 
             # read in transmission spectrum
-            transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_OPT_10_22_15.h5','r')
+            transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_OPT_10_22_15.h5','r')
             trans = Table(np.array(transh5['spec']))
             trans.sort('WAVE')
             # correct for slight doppler shift
@@ -460,15 +460,14 @@ class FALmcmc(object):
 
         elif ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
             print("Pro: {0} --> Working with H-Band Spectrum".format(self.ID))
-            sol_i = Table.read('/work/02349/cargilpa/FAL/DATA/SOL_HBAND_Kur_8_26_15.fits',format='fits')
-            arc_ii = Table.read('/work/02349/cargilpa/FAL/DATA/ARC_HBAND_HINKLE.fits',format='fits')
+            sol_i = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/SOL_HBAND_Kur_8_26_15.fits',format='fits')
+            arc_ii = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/ARC_HBAND_HINKLE.fits',format='fits')
             arc_i = Table()
             arc_i['WAVE'] = (arc_ii['Wavelength_air'].copy()/10.0)*(1.0+(-12.1/speedoflight))
             arc_i['FLUX'] = arc_ii['Flux'].copy()
-            arc_i.sort('WAVE')
 
             # read in transmission spectrum
-            transh5 = h5py.File('/work/02349/cargilpa/FAL/DATA/TRANS/TRANS_HBAND_10_22_15.h5','r')
+            transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_HBAND_10_22_15.h5','r')
             trans = Table(np.array(transh5['spec']))
             trans.sort('WAVE')
 
