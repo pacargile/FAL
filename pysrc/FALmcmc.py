@@ -50,6 +50,9 @@ def lnprob(pin,args,verbose=False,justprior=False):
     # check to make sure transcale is > 0.0
     if transcale < 0.0:
         return -np.inf,[np.nan,np.nan]
+    # apply gaussian prior to transscale
+    tsprior = -0.5*( ((transscale-1.0)**2.0)/(0.001**2.0))
+
     if (tranvel < -1.0) or (tranvel > 1.0):
         return -np.inf,[np.nan,np.nan]
 
@@ -69,6 +72,10 @@ def lnprob(pin,args,verbose=False,justprior=False):
                 return -np.inf, [np.nan,np.nan]
     except ValueError:
         pass
+
+    # add transscale prior to lp
+    lp = lp + tsprior
+
     # give out for just calculating the prior probability
     if justprior:
         return lp
