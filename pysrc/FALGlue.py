@@ -38,6 +38,8 @@ class glue(object):
 		# array to convert arrays into actual dtypes
 		# keep some arrays as strings because we won't
 		# change those.
+
+		# when generating new MASTER BINARY FILES FROM ASCII, BE SURE TO CHANGE 11,5,2,2 -> 11,4,2,2
 		
 		self.fmtstr = (['11.4f','7.4f',
 				'7.3f','7.3f','8s',
