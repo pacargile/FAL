@@ -51,7 +51,7 @@ def lnprob(pin,args,verbose=False,justprior=False):
     if transcale < 0.0:
         return -np.inf,[np.nan,np.nan]
     # apply gaussian prior to transscale
-    tsprior = -0.5*( ((transscale-1.0)**2.0)/(0.001**2.0))
+    tsprior = -0.5*( ((transcale-1.0)**2.0)/(0.001**2.0))
 
     if (tranvel < -1.0) or (tranvel > 1.0):
         return -np.inf,[np.nan,np.nan]
