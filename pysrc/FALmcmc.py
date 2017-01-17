@@ -456,7 +456,8 @@ class FALmcmc(object):
             arc_ii = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/ARC_3800_9300_HINKLE.fits',format='fits')
             arc_i = Table()
             arc_i['WAVE'] = arc_ii['WAVELENGTH']/10.0
-            arc_i['FLUX'] = arc_ii['ARCTURUS']
+            arc_i['FLUX'] = arc_ii['ARCTURUS'].copy()
+            arc_i['FLUX'] = arc_i[arc_i['FLUX'] >= 0.0]
 
             # read in transmission spectrum
             transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_OPT_10_22_15.h5','r')
@@ -472,6 +473,7 @@ class FALmcmc(object):
             arc_i = Table()
             arc_i['WAVE'] = (arc_ii['Wavelength_air'].copy()/10.0)*(1.0+(-12.1/speedoflight))
             arc_i['FLUX'] = arc_ii['Flux'].copy()
+            arc_i['FLUX'] = arc_i[arc_i['FLUX'] >= 0.0]
 
             # read in transmission spectrum
             transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_HBAND_10_22_15.h5','r')
@@ -544,7 +546,7 @@ class FALmcmc(object):
             for pf in self.pflag:
                 f.write('{0} '.format(pf))
             f.write('\n')
-            f.write('WN ')
+            f.write('WN\t')
             for ii in range(self.ndim):
                 f.write('par{0}\t'.format(ii))
             f.write('lnprob\n')
