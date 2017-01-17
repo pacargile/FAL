@@ -457,7 +457,10 @@ class FALmcmc(object):
             arc_i = Table()
             arc_i['WAVE'] = arc_ii['WAVELENGTH']/10.0
             arc_i['FLUX'] = arc_ii['ARCTURUS'].copy()
-            arc_i['FLUX'] = arc_i[arc_i['FLUX'] >= 0.0]
+            fluxcond = arc_i['FLUX'] >= 0.0
+            fluxcond = np.array(fluxcond,dtype=bool)
+            print("Pro: {0} --> Number of pixels clipped out of Arcturus spectrum: {1}".format(self.ID,len(arc_i)-len(fluxcond.nonzero()[0])))
+            arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
             transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_OPT_10_22_15.h5','r')
@@ -473,7 +476,10 @@ class FALmcmc(object):
             arc_i = Table()
             arc_i['WAVE'] = (arc_ii['Wavelength_air'].copy()/10.0)*(1.0+(-12.1/speedoflight))
             arc_i['FLUX'] = arc_ii['Flux'].copy()
-            arc_i['FLUX'] = arc_i[arc_i['FLUX'] >= 0.0]
+            fluxcond = arc_i['FLUX'] >= 0.0
+            fluxcond = np.array(fluxcond,dtype=bool)
+            print("Pro: {0} --> Number of pixels clipped out of Arcturus spectrum: {1}".format(self.ID,len(arc_i)-len(fluxcond.nonzero()[0])))
+            arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
             transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_HBAND_10_22_15.h5','r')
