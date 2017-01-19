@@ -142,7 +142,7 @@ if __name__ == '__main__':
 
 	indict = indictlist[int(sys.argv[2])]
 
-	print("READ IN SEGMENT {0}".format(indict['IDin'])
+	print("READ IN SEGMENT {0}".format(indict['IDin']))
 	runFAL(indict)
 
 	# MPI = False
