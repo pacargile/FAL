@@ -140,40 +140,43 @@ if __name__ == '__main__':
 	# run makeinlist
 	indictlist = makeinlist(sys.argv[1])
 
-	print("READ IN {0} NUMBER OF SEGMENTS".format(len(indictlist)))
+	indict = indictlist[int(sys.argv[2])]
 
-	MPI = False
+	print("READ IN SEGMENT {0}".format(indict['IDin'])
+	runFAL(indict)
 
-	##### multiprocessing stuff #######
-	pool_size = multiprocessing.cpu_count()
-	# pool_size = 2*multiprocessing.cpu_count()
-	# pool_size = 8
+	# MPI = False
 
-	os.system("taskset -pc 0-%d %s" % (pool_size,os.getpid()))
+	# ##### multiprocessing stuff #######
+	# pool_size = multiprocessing.cpu_count()
+	# # pool_size = 2*multiprocessing.cpu_count()
+	# # pool_size = 8
 
-	if MPI:
-		# Initialize the MPI-based pool used for parallelization.
-		pool = MPIPool(debug=False)
+	# os.system("taskset -pc 0-%d %s" % (pool_size,os.getpid()))
 
-		if not pool.is_master():
-			# Wait for instructions from the master process.
-			pool.wait()
-			sys.exit(0)
+	# if MPI:
+	# 	# Initialize the MPI-based pool used for parallelization.
+	# 	pool = MPIPool(debug=False)
 
-	else:
+	# 	if not pool.is_master():
+	# 		# Wait for instructions from the master process.
+	# 		pool.wait()
+	# 		sys.exit(0)
 
-		pool = multiprocessing.Pool(processes=pool_size)
+	# else:
 
-
-	# set up CPU precentage reader
-	# psutil.cpu_percent(interval=1, percpu=True)
+	# 	pool = multiprocessing.Pool(processes=pool_size)
 
 
-	print("FOUND POOL SIZE OF {0} CPUS".format(pool_size))
+	# # set up CPU precentage reader
+	# # psutil.cpu_percent(interval=1, percpu=True)
 
-	pool.map(runFAL, indictlist)
-	pool.close() # no more tasks
-	pool.join()  # wrap up current tasks
+
+	# print("FOUND POOL SIZE OF {0} CPUS".format(pool_size))
+
+	# pool.map(runFAL, indictlist)
+	# pool.close() # no more tasks
+	# pool.join()  # wrap up current tasks
 
 	# print('... CPU Percentage Usage:')
 	# print(psutil.cpu_percent(percpu=True))
