@@ -139,7 +139,7 @@ def makeinlist(infilename):
 if __name__ == '__main__':
 	# run makeinlist
 	indictlist = makeinlist(sys.argv[1])
-	if int(sys.argv[1]) <= len(indictlist):
+	if int(sys.argv[2]) <= len(indictlist):
 		indict = indictlist[int(sys.argv[2])-1]
 		print("READ IN SEGMENT {0}".format(indict['IDin']))
 		runFAL(indict)
