@@ -129,7 +129,7 @@ def makeinlist(infilename):
 			'minlinWL':float(rf_i['LINWLstart']),'maxlinWL':float(rf_i['LINWLend']),
 			'arcscale':float(rf_i['ARCSCALE']),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
-			'outputdir':'./MCMCoutput/',
+			'outputdir':'/n/regal/conroy_lab/pac/FAL/OPTSEG/RUN1/MCMCoutput/',
 			'RUNID':ii})
 
 		indictlist.append(tempdict)
@@ -139,12 +139,12 @@ def makeinlist(infilename):
 if __name__ == '__main__':
 	# run makeinlist
 	indictlist = makeinlist(sys.argv[1])
-
-	indict = indictlist[int(sys.argv[2])]
-
-	print("READ IN SEGMENT {0}".format(indict['IDin']))
-	runFAL(indict)
-
+	if int(sys.argv[1]) <= len(indictlist):
+		indict = indictlist[int(sys.argv[2])-1]
+		print("READ IN SEGMENT {0}".format(indict['IDin']))
+		runFAL(indict)
+	else:
+		print("NOT ENOUGH LINES IN SEG FILE FOR THIS RUN!")
 	# MPI = False
 
 	# ##### multiprocessing stuff #######
