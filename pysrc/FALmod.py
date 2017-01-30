@@ -246,6 +246,7 @@ class FALmod(object):
                     MASTERLL = (['/n/conroyfs1/pac/FAL/data/LL/KuruczLL_1400_1900.bin',
                     '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
                 else:
+                    print(self.starpars['WSTART'],self.starpars['WEND'])
                     raise ValueError('DID NOT UNDERSTAND MASTERLL')
             else:
                 MASTERLL = self.masterll
