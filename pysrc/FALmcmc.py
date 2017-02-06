@@ -434,9 +434,10 @@ class FALmcmc(object):
                 print('store')
                 ilines_iii = Table(ilines_ii[selind])
                 if ii == 0:
-                    ilines = ilines_iii.copy()                
-                if len(ilines_iii) > 0:
-                    ilines = vstack([ilines,ilines_iii])
+                    ilines = ilines_iii.copy()
+                else:
+                    if len(ilines_iii) > 0:
+                        ilines = vstack([ilines,ilines_iii])
 
         # make unique ID for lines in preset linelist
         ilines.sort('WL')
