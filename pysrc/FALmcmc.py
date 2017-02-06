@@ -452,9 +452,6 @@ class FALmcmc(object):
                 ]
             ).replace(" ","")
 
-        print(fmllcode[fmll['WL'] == 475.1295])
-        print(ilines[ilines['WL'] == 475.1295])
-
         # cycle through line list and find matches
         numpreset = 0
         for ii,fmlc in enumerate(fmllcode):
@@ -462,8 +459,8 @@ class FALmcmc(object):
             if any(cond_intl):
                 numpreset = numpreset + 1
                 # print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(self.fm.ll['WL'][ii])))
-                fmll['DWL'][ii] = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
-                fmll['DGFLOG'][ii] = float('{0:6.4f}'.format(float(ilines['DGFLOG'][cond_intl])))
+                fmll['DWL'][ii]     = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
+                fmll['DGFLOG'][ii]  = float('{0:6.4f}'.format(float(ilines['DGFLOG'][cond_intl])))
                 fmll['DGAMMAW'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAW'][cond_intl])))
                 fmll['DGAMMAR'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAR'][cond_intl])))
                 fmll['DGAMMAS'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAS'][cond_intl])))
