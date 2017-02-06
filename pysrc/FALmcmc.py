@@ -414,9 +414,10 @@ class FALmcmc(object):
         # Read previous table: LINE INFO, DWL, DGFLOG, DGAMMA (will figure out which GAMMA after the fact)
         if presetll == None:
             initlines = '/n/conroyfs1/pac/FAL/data/LL/SL_pars4.h5'
+            ilines = Table(np.array(h5py.File(initlines,'r')['data']))
         else:
             initlines = presetll
-        ilines = Table(np.array(h5py.File(initlines,'r')['data']))
+            ilines = Table(np.array(h5py.File(initlines,'r')['ll']))
 
         # make unique ID for lines in preset linelist
         ilines.sort('WL')
