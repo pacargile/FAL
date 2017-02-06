@@ -441,7 +441,7 @@ class FALmcmc(object):
         # make unique ID for lines in preset linelist
         ilines.sort('WL')
         ilines = ilines[ilines['DWL'] != 0.0]
-        print(ilines)
+        print(ilines[ilines['WL'] == 475.0827])
         ilines['UNIQ_ID'] = np.empty(len(ilines),dtype=object)
         for nnn,ill in enumerate(ilines):
             ilines['UNIQ_ID'][nnn] = "".join(
