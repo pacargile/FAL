@@ -419,15 +419,21 @@ class FALmcmc(object):
         else:
             initlines = presetll
             print('READ IN PREVIOUS LINE PARAMETERS')
-            ilines = h5py.File(initlines,'r')['ll']
-            print('numpy it')
-            ilines = np.array(ilines)
+            ilines_i = h5py.File(initlines,'r')['ll']
 
-        # parse the ilines to only the lines with WL in fmll to save memory
-        print('PARSE ILINES')
-        selilines = np.in1d(ilines['WL'],fmll['WL'])
-        print('Turn into astropy Table')
-        ilines = Table(ilines[selilines])
+            print('create slice indies')
+            ilines_spaces = np.linspace(0,ilines_i.len(),10,dtype=int)
+
+            for ii in range(len(ilines_spaces)-1):
+                print('slice')
+                ilines_ii = np.array(ilines_i[ilines_spaces[ii]:ilines_spaces[ii+1]])
+                print('select')
+                selilines = np.in1d(ilines_ii['WL'],fmll['WL'])
+                print('store')
+                if ii == 0:
+                    ilines = Table(ilines_ii[selind])
+                else:
+                    ilines = vstack([ilines,ilines_ii[selind]])
 
         # make unique ID for lines in preset linelist
         ilines.sort('WL')
