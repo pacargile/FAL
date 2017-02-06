@@ -432,13 +432,14 @@ class FALmcmc(object):
                 print('store')
                 ilines_iii = Table(ilines_ii[selind])
                 if ii == 0:
-                    ilines = ilines_iii.copy()
-                
+                    ilines = ilines_iii.copy()                
                 if len(ilines_iii) > 0:
                     ilines = vstack([ilines,ilines_iii])
 
         # make unique ID for lines in preset linelist
         ilines.sort('WL')
+        ilines = ilines[ilines['DWL'] != 0.0]
+        print(ilines)
         ilines['UNIQ_ID'] = np.empty(len(ilines),dtype=object)
         for nnn,ill in enumerate(ilines):
             ilines['UNIQ_ID'][nnn] = "".join(
