@@ -419,7 +419,9 @@ class FALmcmc(object):
         else:
             initlines = presetll
             print('READ IN PREVIOUS LINE PARAMETERS')
-            ilines = np.array(h5py.File(initlines,'r')['ll'])
+            ilines = h5py.File(initlines,'r')['ll']
+            print('numpy it')
+            ilines = np.array(ilines)
 
         # parse the ilines to only the lines with WL in fmll to save memory
         print('PARSE ILINES')
