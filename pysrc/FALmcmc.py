@@ -430,10 +430,12 @@ class FALmcmc(object):
                 print('select')
                 selind = np.in1d(ilines_ii['WL'],fmll['WL'])
                 print('store')
+                ilines_iii = Table(ilines_ii[selind])
                 if ii == 0:
-                    ilines = Table(ilines_ii[selind])
-                else:
-                    ilines = vstack([ilines,ilines_ii[selind]])
+                    ilines = ilines_iii.copy()
+                
+                if len(ilines_iii) > 0:
+                    ilines = vstack([ilines,ilines_iii])
 
         # make unique ID for lines in preset linelist
         ilines.sort('WL')
