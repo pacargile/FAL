@@ -452,7 +452,7 @@ class FALmcmc(object):
                 ]
             ).replace(" ","")
 
-        print(fmll[fmll['WL'] == 475.1295])
+        print(fmllcode[fmll['WL'] == 475.1295])
         print(ilines[ilines['WL'] == 475.1295])
 
         # cycle through line list and find matches
