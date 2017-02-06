@@ -428,7 +428,7 @@ class FALmcmc(object):
                 print('slice')
                 ilines_ii = np.array(ilines_i[ilines_spaces[ii]:ilines_spaces[ii+1]])
                 print('select')
-                selilines = np.in1d(ilines_ii['WL'],fmll['WL'])
+                selind = np.in1d(ilines_ii['WL'],fmll['WL'])
                 print('store')
                 if ii == 0:
                     ilines = Table(ilines_ii[selind])
