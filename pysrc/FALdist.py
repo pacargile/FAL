@@ -43,6 +43,12 @@ def runFAL(indict):
 	else:
 		outputdir = None
 
+	if 'initlines' in indict.keys():
+		initlines = indict['initlines']
+	else:
+		initlines = None
+
+
 	# remove old working directory if it exisits
 	try:
 	    shutil.rmtree('./{0}'.format(str(IDin).rjust(8,str(0))))
@@ -66,7 +72,8 @@ def runFAL(indict):
 		starttime=starttime,walltime=walltime,
 		arcscale=arcscale,
 		outputfile=outputfile,
-		outputdir=outputdir)
+		outputdir=outputdir,
+		initlines=initlines)
 	try:
 		if testrun:
 			return MCMC
@@ -129,7 +136,8 @@ def makeinlist(infilename):
 			'minlinWL':float(rf_i['LINWLstart']),'maxlinWL':float(rf_i['LINWLend']),
 			'arcscale':float(rf_i['ARCSCALE']),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
-			'outputdir':'/n/regal/conroy_lab/pac/FAL/HBAND/RUN1/MCMCoutput/',
+			'outputdir':'/n/regal/conroy_lab/pac/FAL/OPTSEG/RUN2/MCMCoutput/',
+			'initlines':'/n/regal/conroy_lab/pac/FAL/OPTSEG/CarRun1_LL_475_750.h5',
 			'RUNID':ii})
 
 		indictlist.append(tempdict)

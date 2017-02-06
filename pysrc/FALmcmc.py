@@ -306,7 +306,7 @@ class FALmcmc(object):
         # fmll = self.injectfake(fmll.copy())
 
         # # inject previous parameters
-        fmll = self.injectprev(fmll.copy(),presetll=None)
+        fmll = self.injectprev(fmll.copy(),presetll=initlines)
 
         # set it into self
         self.fmll = fmll
