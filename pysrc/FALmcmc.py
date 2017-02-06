@@ -452,13 +452,14 @@ class FALmcmc(object):
                 ]
             ).replace(" ","")
 
+        print(fmll[fmll['WL'] == 475.1295])
+        print(ilines[ilines['WL'] == 475.1295])
+
         # cycle through line list and find matches
         numpreset = 0
         for ii,fmlc in enumerate(fmllcode):
             cond_intl = np.in1d(ilines['UNIQ_ID'],fmlc,assume_unique=True)
             if any(cond_intl):
-                print(fmll['WL','DWL'][ii])
-                print(ilines['WL','DWL'][cond_intl])
                 numpreset = numpreset + 1
                 # print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(self.fm.ll['WL'][ii])))
                 fmll['DWL'][ii] = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
