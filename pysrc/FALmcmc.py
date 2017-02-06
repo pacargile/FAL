@@ -417,11 +417,11 @@ class FALmcmc(object):
             ilines = Table(np.array(h5py.File(initlines,'r')['data']))
         else:
             initlines = presetll
-            ilines = Table(np.array(h5py.File(initlines,'r')['ll']))
+            ilines = np.array(h5py.File(initlines,'r')['ll'])
 
         # parse the ilines to only the lines with WL in fmll to save memory
         selilines = np.in1d(ilines['WL'],fmll['WL'])
-        ilines = ilines[selilines]
+        ilines = Table(ilines[selilines])
 
         # make unique ID for lines in preset linelist
         ilines.sort('WL')
