@@ -457,6 +457,8 @@ class FALmcmc(object):
         for ii,fmlc in enumerate(fmllcode):
             cond_intl = np.in1d(ilines['UNIQ_ID'],fmlc,assume_unique=True)
             if any(cond_intl):
+                print(fmll['DWL'][ii])
+                print(ilines['DWL'][cond_intl])
                 numpreset = numpreset + 1
                 # print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(self.fm.ll['WL'][ii])))
                 fmll['DWL'][ii] = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
