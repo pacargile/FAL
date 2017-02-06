@@ -420,18 +420,13 @@ class FALmcmc(object):
             ilines = Table(np.array(h5py.File(initlines,'r')['data']))
         else:
             initlines = presetll
-            print('READ IN PREVIOUS LINE PARAMETERS')
             ilines_i = h5py.File(initlines,'r')['ll']
 
-            print('create slice indies')
             ilines_spaces = np.linspace(0,ilines_i.len(),10,dtype=int)
 
             for ii in range(len(ilines_spaces)-1):
-                print('slice')
                 ilines_ii = np.array(ilines_i[ilines_spaces[ii]:ilines_spaces[ii+1]-1])
-                print('select')
                 selind = np.in1d(ilines_ii['WL'],fmll['WL'])
-                print('store')
                 ilines_iii = Table(ilines_ii[selind])
                 if ii == 0:
                     ilines = ilines_iii.copy()
@@ -442,7 +437,6 @@ class FALmcmc(object):
         # make unique ID for lines in preset linelist
         ilines.sort('WL')
         ilines = ilines[ilines['DWL'] != 0.0]
-        print(ilines[ilines['WL'] == 475.0827])
         ilines['UNIQ_ID'] = np.empty(len(ilines),dtype=object)
         for nnn,ill in enumerate(ilines):
             ilines['UNIQ_ID'][nnn] = "".join(
@@ -463,13 +457,13 @@ class FALmcmc(object):
         for ii,fmlc in enumerate(fmllcode):
             cond_intl = np.in1d(ilines['UNIQ_ID'],fmlc,assume_unique=True)
             if any(cond_intl):
-                print(fmll[ii])
-                print(ilines[cond_intl])
                 numpreset = numpreset + 1
                 # print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(self.fm.ll['WL'][ii])))
                 fmll['DWL'][ii] = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
                 fmll['DGFLOG'][ii] = float('{0:6.4f}'.format(float(ilines['DGFLOG'][cond_intl])))
-                fmll['DGAMMAW'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMA'][cond_intl])))
+                fmll['DGAMMAW'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAW'][cond_intl])))
+                fmll['DGAMMAR'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAR'][cond_intl])))
+                fmll['DGAMMAS'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAS'][cond_intl])))
 
         print("Pro: {0} --> Setting Previous Pars for {1} lines".format(self.ID,numpreset))
 
