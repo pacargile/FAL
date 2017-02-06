@@ -424,6 +424,7 @@ class FALmcmc(object):
         # parse the ilines to only the lines with WL in fmll to save memory
         print('PARSE ILINES')
         selilines = np.in1d(ilines['WL'],fmll['WL'])
+        print('Turn into astropy Table')
         ilines = Table(ilines[selilines])
 
         # make unique ID for lines in preset linelist
