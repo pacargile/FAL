@@ -402,14 +402,16 @@ class FALmcmc(object):
         fmllcode = np.empty(len(fmll),dtype=object)
         for nnn,ill in enumerate(fmll):
             fmllcode[nnn] = "".join(
-                [str(ill['WL']),
+                [
+                str(ill['WL']),
                 ill['CODE'],
                 str(ill['E']),str(ill['EP']),
                 str(ill['XJ']),str(ill['XJP']),
-                ill['REF'],
-                str(ill['ISO1']),str(ill['X1']),
-                str(ill['ISO2']),str(ill['X2']),
-                ill['OTHER']]
+                # ill['REF'],
+                # str(ill['ISO1']),str(ill['X1']),
+                # str(ill['ISO2']),str(ill['X2']),
+                # ill['OTHER']
+                ]
                 ).replace(" ","")
 
         # Read previous table: LINE INFO, DWL, DGFLOG, DGAMMA (will figure out which GAMMA after the fact)
@@ -443,14 +445,16 @@ class FALmcmc(object):
         ilines['UNIQ_ID'] = np.empty(len(ilines),dtype=object)
         for nnn,ill in enumerate(ilines):
             ilines['UNIQ_ID'][nnn] = "".join(
-                [str(ill['WL']),
+                [
+                str(ill['WL']),
                 ill['CODE'],
                 str(ill['E']),str(ill['EP']),
                 str(ill['XJ']),str(ill['XJP']),
-                ill['REF'],
-                str(ill['ISO1']),str(ill['X1']),
-                str(ill['ISO2']),str(ill['X2']),
-                ill['OTHER']]
+                # ill['REF'],
+                # str(ill['ISO1']),str(ill['X1']),
+                # str(ill['ISO2']),str(ill['X2']),
+                # ill['OTHER']
+                ]
             ).replace(" ","")
 
         # cycle through line list and find matches
