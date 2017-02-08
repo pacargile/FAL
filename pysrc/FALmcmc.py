@@ -467,6 +467,12 @@ class FALmcmc(object):
 
         print("Pro: {0} --> Setting Previous Pars for {1} lines".format(self.ID,numpreset))
 
+        # clean up some memory
+        del ilines
+        del ilines_i
+        del ilines_ii
+        del ilines_iii
+
         return fmll
 
     def getspecdata(self):
