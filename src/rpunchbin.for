@@ -137,7 +137,7 @@ C      PRINT *,' XXXX double van der Waals in atoms XXXX'
 C      PRINT *, 'XXXX increase strength of C2, DGFLOG=+0.250 XXXX'
 C      PRINT *, 'XXXX increase strength of MgH, DGFLOG=+0.140 XXXX'
 CXXXXX
-      DO 900 ILINE=1,10000000
+      DO 900 ILINE=1,100000000
 C
 C     201 character record,  last 2 still available
       READ(11,END=145)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,
