@@ -476,7 +476,7 @@ class FALmcmc(object):
         return fmll
 
     def getspecdata(self):
-        if ((self.minWL > 470.0) & (self.maxWL < 800.0)):
+        if ((self.minWL > 470.0) & (self.maxWL < 755.0)):
             print("Pro: {0} --> Working with Optical Spectrum".format(self.ID))
             # read in observed data for the Sun and Acturus
             sol_i = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/SOL_4750_8270.fits',format='fits')            
@@ -495,6 +495,27 @@ class FALmcmc(object):
             trans.sort('WAVE')
             # correct for slight doppler shift
             trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
+
+        elif ((self.minWL > 745.0) & (self.maxWL < 1010.0)):
+            print("Pro: {0} --> Working with Red Spectrum".format(self.ID))
+            # read in observed data for the Sun and Acturus
+            sol_i = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/SOL_710_1098.fits',format='fits')            
+            arc_ii = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/ARC_3800_9300_HINKLE.fits',format='fits')
+            arc_i = Table()
+            arc_i['WAVE'] = arc_ii['WAVELENGTH']/10.0
+            arc_i['FLUX'] = arc_ii['ARCTURUS'].copy()
+            fluxcond = arc_i['FLUX'] >= 0.0
+            fluxcond = np.array(fluxcond,dtype=bool)
+            print("Pro: {0} --> Number of pixels clipped out of Arcturus spectrum: {1}".format(self.ID,len(arc_i)-len(fluxcond.nonzero()[0])))
+            arc_i = arc_i[fluxcond]
+
+            # read in transmission spectrum
+            transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_RED_2_21_17.h5','r')
+            trans = Table(np.array(transh5['spec']))
+            trans.sort('WAVE')
+            # correct for slight doppler shift
+            trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
+
 
         elif ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
             print("Pro: {0} --> Working with H-Band Spectrum".format(self.ID))
