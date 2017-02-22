@@ -137,6 +137,7 @@ def makeinlist(infilename):
 			'arcscale':float(rf_i['ARCSCALE']),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
 			'outputdir':'/n/regal/conroy_lab/pac/FAL/REDSEG/RUN1/MCMCoutput/',
+			'initlines':None,
 			# 'initlines':'/n/regal/conroy_lab/pac/FAL/HBAND/CarRun1_LL_1400_1900.h5',
 			'RUNID':ii})
 
