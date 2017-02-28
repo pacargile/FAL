@@ -405,6 +405,7 @@ class FALmcmc(object):
             fmllcode[nnn] = "".join(
                 [
                 str(ill['WL']),
+                str(ill['GFLOG']),
                 ill['CODE'],
                 str(ill['E']),str(ill['EP']),
                 str(ill['XJ']),str(ill['XJP']),
@@ -444,6 +445,7 @@ class FALmcmc(object):
             ilines['UNIQ_ID'][nnn] = "".join(
                 [
                 str(ill['WL']),
+                str(ill['GFLOG']),
                 ill['CODE'],
                 str(ill['E']),str(ill['EP']),
                 str(ill['XJ']),str(ill['XJP']),
