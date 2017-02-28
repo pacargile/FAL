@@ -460,7 +460,10 @@ class FALmcmc(object):
             if any(cond_intl):
                 numpreset = numpreset + 1
                 print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(fmll['WL'][ii])))
-                print(ilines['WL'][cond_intl])
+                if len(cond_intl) > 1:
+                    print(ilines[cond_intl[0]])
+                    print(ilines[cond_intl[1]])
+                    print(fmll[ii])
                 fmll['DWL'][ii]     = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
                 fmll['DGFLOG'][ii]  = float('{0:6.4f}'.format(float(ilines['DGFLOG'][cond_intl])))
                 fmll['DGAMMAW'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAW'][cond_intl])))
