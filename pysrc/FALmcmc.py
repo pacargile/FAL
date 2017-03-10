@@ -407,12 +407,14 @@ class FALmcmc(object):
                 str(ill['WL']),
                 str(ill['GFLOG']),
                 ill['CODE'],
-                str(ill['E']),str(ill['EP']),
+                # str(ill['E']),str(ill['EP']),
                 str(ill['XJ']),str(ill['XJP']),
                 str(ill['LABEL']),str(ill['LABELP']),
                 # ill['REF'],
                 # str(ill['ISO1']),str(ill['X1']),
                 # str(ill['ISO2']),str(ill['X2']),
+                str(ill['ISO1']),
+                str(ill['ISO2']),
                 ill['OTHER']
                 ]
                 ).replace(" ","")
@@ -447,12 +449,14 @@ class FALmcmc(object):
                 str(ill['WL']),
                 str(ill['GFLOG']),
                 ill['CODE'],
-                str(ill['E']),str(ill['EP']),
+                # str(ill['E']),str(ill['EP']),
                 str(ill['XJ']),str(ill['XJP']),
                 str(ill['LABEL']),str(ill['LABELP']),
                 # ill['REF'],
                 # str(ill['ISO1']),str(ill['X1']),
                 # str(ill['ISO2']),str(ill['X2']),
+                str(ill['ISO1']),
+                str(ill['ISO2']),
                 ill['OTHER'][1:]
                 ]
             ).replace(" ","")
