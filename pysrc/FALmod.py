@@ -248,10 +248,10 @@ class FALmod(object):
                     # '/n/regal/conroy_lab/pac/FAL/HBAND/FINALLL/CR2_H2O.bin'])
                     # MASTERLL = (['/n/conroyfs1/pac/FAL/data/LL/KuruczLL_1400_1900.bin',
                     # '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
-                    MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_NOPRED.bin',
-                    '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
-                    # MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_CLEAN.bin',
+                    # MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_NOPRED.bin',
                     # '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
+                    MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_CLEAN.bin',
+                    '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
                 else:
                     print(self.starpars['WSTART'],self.starpars['WEND'])
                     raise ValueError('DID NOT UNDERSTAND MASTERLL')
