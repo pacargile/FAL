@@ -246,14 +246,14 @@ class FALmod(object):
                 # if (self.starpars['WSTART'] > 749.0) & (self.starpars['WEND'] < 1001.0):
                 #     MASTERLL = ['/n/conroyfs1/pac/FAL_FITS/REDSEG/linelist/CR2_LL_750_1000.bin']
                 elif (self.starpars['WSTART'] > 1399.0) & (self.starpars['WEND'] < 1901.0):
-                    MASTERLL = (['/n/conroyfs1/pac/FAL_FITS/HBAND/RUN2/linelist/CR2_LL.bin',
-                    '/n/conroyfs1/pac/FAL_FITS/HBAND/RUN2/linelist/CR2_H2O.bin'])
+                    # MASTERLL = (['/n/conroyfs1/pac/FAL_FITS/HBAND/RUN2/linelist/CR2_LL.bin',
+                    # '/n/conroyfs1/pac/FAL_FITS/HBAND/RUN2/linelist/CR2_H2O.bin'])
                     # MASTERLL = (['/n/conroyfs1/pac/FAL/data/LL/KuruczLL_1400_1900.bin',
                     # '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
                     # MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_NOPRED.bin',
                     # '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
-                    # MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_CLEAN.bin',
-                    # '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
+                    MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_CLEAN.bin',
+                    '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
                 else:
                     print(self.starpars['WSTART'],self.starpars['WEND'])
                     raise ValueError('DID NOT UNDERSTAND MASTERLL')

@@ -138,7 +138,8 @@ def makeinlist(infilename):
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
 			'outputdir':'/n/regal/conroy_lab/pac/FAL/HBAND/RUN2/MCMCoutput/',
 			# 'initlines':None,
-			'initlines':'/n/regal/conroy_lab/pac/FAL/HBAND/CarRun1_LL_1400_1900_new.h5',
+			# 'initlines':'/n/regal/conroy_lab/pac/FAL/HBAND/CarRun1_LL_1400_1900_new.h5',
+			'initlines':'/n/regal/conroy_lab/pac/FAL/HBAND/EQWGT/RUN1/CR2_uneq_1400_1900.h5',
 			'RUNID':ii})
 
 		indictlist.append(tempdict)
