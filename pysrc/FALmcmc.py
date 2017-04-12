@@ -157,7 +157,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
 
     # Prior on gamma using beta function
     mingamma = -1.5
-    maxgamma = 0.5
+    maxgamma = 0.65
     rangegamma = maxgamma-mingamma
     gammawprior = beta.logpdf(p['DGAMMAW'][Tarr[...,2] != -1],1.0,1.0,loc=mingamma,scale=rangegamma)
     gammarprior = beta.logpdf(p['DGAMMAR'][Tarr[...,3] != -1],1.0,1.0,loc=mingamma,scale=rangegamma)
