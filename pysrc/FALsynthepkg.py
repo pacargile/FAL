@@ -327,7 +327,7 @@ class synthe(object):
         if 'PRED' in self.starpars.keys():
             self.PRED = self.starpars['PRED']
         else:
-            self.PRED = 1
+            self.PRED = 0
         if 'LINOUT' in self.starpars.keys():
             self.LINOUT = self.starpars['LINOUT']
         else:
