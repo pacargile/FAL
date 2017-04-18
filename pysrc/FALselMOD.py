@@ -10,7 +10,7 @@ def selmod(starpars):
 			"AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD")
 		gausspar_opt = 130000.0
 		# gausspar_hband = 100000.0
-		gausspar_hband = 200000.0
+		gausspar_hband = 100000.0
 		instparstr = {"OPT":{"GAUSSIAN":gausspar_opt},"HBAND":{"GAUSSIAN":gausspar_hband}}
 
 		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/Arcturus_NEWpars_V4.dat"
