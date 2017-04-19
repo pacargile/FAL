@@ -116,8 +116,8 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     # sig['Sun'] = obsflux['Sun']/500.0
     # sig['Arcturus'] = obsflux['Arcturus']/300.0
 
-    sig['Sun'] = np.ones_like(obsflux['Sun'])/100.0
-    sig['Arcturus'] = np.ones_like(obsflux['Arcturus'])/100.0
+    sig['Sun'] = np.ones_like(obsflux['Sun'])/1000.0
+    sig['Arcturus'] = np.ones_like(obsflux['Arcturus'])/1000.0
 
     modintrp = {}
 
