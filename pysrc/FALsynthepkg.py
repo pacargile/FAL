@@ -576,6 +576,10 @@ class synthe(object):
         """
         helper function to do molecule TiO file read in
         """
+
+        if verbose:
+            print("Running RSCHWENK {0}")
+
         # write TiO line list files into fort.11 and fort.48
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
@@ -593,11 +597,17 @@ class synthe(object):
             os.unlink('fort.48')
         if os.path.isfile('/dev/shm/FAL/{0}/fort.48'.format(self.ID)):
             os.remove('/dev/shm/FAL/{0}/fort.48'.format(self.ID))
+        if verbose:
+            print("Finished RSCHWENK {0}")
     
     def readmol_H2O(self,verbose=None):
         """
         helper function to do molecule H2O file read in
         """
+
+        if verbose:
+            print("Running RH2OSLOW {0}")
+
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
         os.symlink(self.bigdatadir+'MOLECULES/h2oslowfix.bin','fort.11')
@@ -614,6 +624,9 @@ class synthe(object):
             os.unlink('fort.48')
         if os.path.isfile('/dev/shm/FAL/{0}/fort.48'.format(self.ID)):
             os.remove('/dev/shm/FAL/{0}/fort.48'.format(self.ID))
+
+        if verbose:
+            print("Finished RH2OSLOW {0}")
 
     def readmol(self,molfile,verbose=None):
         """
