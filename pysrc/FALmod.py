@@ -16,7 +16,7 @@ class FALmod(object):
     Class to take delta line parameters and return a synthesized
     spectrum from SYNTHE to use in python
     """    
-    def __init__(self,ID=None,starpars='Sun',waverange=None,verbose=False):
+    def __init__(self,ID=None,starpars='Sun',waverange=None,verbose=False,extra={}):
         '''
         FALmod -> Python wrapper around SYNTHE
 
@@ -60,6 +60,9 @@ class FALmod(object):
         else:
             self.starpars['WSTART'] = waverange[0]
             self.starpars['WEND'] = waverange[1]
+
+        for kk in extra.keys():
+            self.starpars[kk] = extra[kk]
 
         # make dir in memory if not already there
         if not os.path.exists('/dev/shm/FAL/{0}'.format(self.ID)):
