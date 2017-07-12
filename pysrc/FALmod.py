@@ -238,11 +238,11 @@ class FALmod(object):
         elif linelist == 'readmaster':
             # determine which readmaster line list to use base on wavelength range
             if self.masterll == None:
-                if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 850.0):
-                    MASTERLL = ['/n/conroyfs1/pac/MASTERLL/OPTSEG/LL/KurLL_450_850.bin']
-                    # MASTERLL = ['/n/conroyfs1/pac/MASTERLL/OPTSEG/CarR2_450_750.bin']
-                elif (self.starpars['WSTART'] > 845.0) & (self.starpars['WEND'] < 1350.0):
-                    MASTERLL = ['/n/conroyfs1/pac/FAL/data/LL/KurLL_850_1350.bin']
+                if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1350.0):
+                    MASTERLL = ['/n/conroyfs1/pac/MASTERLL/FULLOPT/LL/Kur_LL_475_1000.bin']
+                    # MASTERLL = ['/n/conroyfs1/pac/MASTERLL/FULLOPT/CR2_LL_475_1000.bin']
+                # elif (self.starpars['WSTART'] > 845.0) & (self.starpars['WEND'] < 1350.0):
+                #     MASTERLL = ['/n/conroyfs1/pac/FAL/data/LL/KurLL_850_1350.bin']
                 # if (self.starpars['WSTART'] > 749.0) & (self.starpars['WEND'] < 1001.0):
                 #     MASTERLL = ['/n/conroyfs1/pac/FAL_FITS/REDSEG/linelist/CR2_LL_750_1000.bin']
                 elif (self.starpars['WSTART'] > 1399.0) & (self.starpars['WEND'] < 1901.0):
