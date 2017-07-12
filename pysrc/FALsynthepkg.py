@@ -65,7 +65,7 @@ class synthe(object):
         self.WORKDIR = '/n/conroyfs1/pac/FAL'
         self.exedir = self.HOMEDIR+"/bin/"
         self.datadir = self.HOMEDIR+"/data/"
-        self.bigdatadir = self.WORKDIR+"/DATA/"
+        self.bigdatadir = self.WORKDIR+"/data/"
 
         # create the glue  
         self.glue = FALGlue.glue()
@@ -647,7 +647,8 @@ class synthe(object):
         # Predicted lines file is gigantic, so don't copy into memory just sym link it
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
-        os.symlink(self.bigdatadir+'/gfpred27sep15.bin','fort.11')
+        # os.symlink(self.bigdatadir+'/gfpred27sep15.bin','fort.11')
+        os.symlink(self.bigdatadir+'/gfpred29dec2014.bin','fort.11')
         self.rmoleout = self._callpro("rpredict",verbose=verbose)
 
     def ratomic(self,verbose=None):
@@ -659,8 +660,11 @@ class synthe(object):
             self._rmsym('fort.11',verbose=verbose)
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
-        os.symlink(self.bigdatadir+'/gfall05jun16.dat','fort.11')
-        os.symlink(self.bigdatadir+'/gfall05jun16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        # os.symlink(self.bigdatadir+'/gfall05jun16.dat','fort.11')
+        # os.symlink(self.bigdatadir+'/gfall05jun16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
+        os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+
 
         # check to make sure all input/output files are right
         filesdict = {}
