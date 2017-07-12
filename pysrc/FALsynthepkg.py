@@ -506,6 +506,7 @@ class synthe(object):
                     'h2bx.dat','h2cx.dat','h2xx.dat', # H2
                     'hdxx.dat', #HD
                     'mgh.dat', #MgH
+                    # 'mghax.dat','mghbx.dat', #MgH
                     'mgodaily.dat', #MgO
                     'nhax.dat','nhca.dat', # NH
                     'chjorg.dat', #CH
