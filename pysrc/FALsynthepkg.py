@@ -522,7 +522,12 @@ class synthe(object):
                     ])
                 # read molecular files
                 self.rmolecascout = {}
-                [self.readmol(mf,verbose=verbose) for mf in self.molefiles]
+                for mf in self.molefiles:
+                    try:
+                        self.readmol(mf,verbose=verbose)
+                    except IOError:
+                        print('!!!!! Missing {0} !!!!!'.format(mf))
+                        raise
         except KeyError:
             pass
         try:
