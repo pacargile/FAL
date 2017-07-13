@@ -823,7 +823,7 @@ class synthe(object):
         # write in information into input string
         # print("Running Synthe")
         if speed == 'slow':
-            self.synout = self._callpro("synthe",verbose=verbose)
+            self.synout = self._callpro("synthe_slow",verbose=verbose)
         elif speed == 'fast':
             self.synout = self._callpro("synthe_fast",verbose=verbose)
         elif speed == 'ultrafast':
