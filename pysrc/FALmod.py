@@ -161,17 +161,21 @@ class FALmod(object):
         self._readline(linelist,verbose_i)
         
         # do synthesis calc
-        if type(verbose) == type(True):
-            if (verbose == True):
-                verbose_i = True
-            else:
-                verbose_i = False
+        if (verbose == True or verbose == 'synthe'):
+            verbose_i = True
         else:
-            if (verbose == 'synthesis'):
-                verbose_i = verbose
-            else:
-                verbose_i = False
-        self._synthesis(verbose_i)
+            verbose_i = False
+        # if type(verbose) == type(True):
+        #     if (verbose == True):
+        #         verbose_i = True
+        #     else:
+        #         verbose_i = False
+        # else:
+        #     if (verbose == 'synthe'):
+        #         verbose_i = verbose
+        #     else:
+        #         verbose_i = False
+        self._synthesis(verbose=verbose_i)
 
         # do broadening
         if type(verbose) == type(True):
