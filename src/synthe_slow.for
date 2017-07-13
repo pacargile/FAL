@@ -289,10 +289,9 @@ C     ADD LINES TO BUFFER
       IF(N12.EQ.0)GO TO 400
       N191=N19+1
       alpha=0.
-      WRITE(6,*)'N191,NLINES'
-      WRITE(6,*)N191,NLINES
       DO 350 ILINE=N191,NLINES
       READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF
+      WRITE(6,*)NBUFF
 c
 c     include Barklem, Anstee, and O'Mara van der Waals
 c     READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF,alpha
