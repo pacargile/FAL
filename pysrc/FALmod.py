@@ -168,16 +168,6 @@ class FALmod(object):
                 verbose_i = verbose
         else:
             verbose_i = False
-        # if type(verbose) == type(True):
-        #     if (verbose == True):
-        #         verbose_i = True
-        #     else:
-        #         verbose_i = False
-        # else:
-        #     if (verbose == 'synthe'):
-        #         verbose_i = verbose
-        #     else:
-        #         verbose_i = False
         self._synthesis(verbose=verbose_i)
 
         # do broadening
