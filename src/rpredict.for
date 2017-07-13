@@ -15,7 +15,7 @@ C     si usa con le files gf100
       REAL*8 CENTER,CONCEN,LABEL,LABELP,OTHER1,OTHER2
       REAL*4 DECKJ(7,kw)
       REAL*4 TABLOG(32768)
-	    real*8 vacair
+      real*8 vacair
       INTEGER*2 IELION,IELO,IGFLOG,IGR,IGS,IGW
       COMMON /IIIIIII/IWL,IELION,IELO,IGFLOG,IGR,IGS,IGW
       INTEGER*4 IIIIIII(4)
@@ -440,7 +440,7 @@ C     CONGF=.026538/1.77245*GF/FREQ
       GAMWF=TABLOG(IGW)/FRQ4PI
       alpha=0.
       IXWL=DLOG(WLVAC)/RATIOLG+.5D0
-	if(ifvac.eq.0)ixwl=dlog(wl)/ratiolg+.5D0
+      if(ifvac.eq.0)ixwl=dlog(wl)/ratiolg+.5D0
       NBUFF=IXWL-IXWLBEG+1
       WRITE(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF,alpha
       WRITE(14)LINDAT8,LINDAT4
@@ -462,7 +462,7 @@ C     CONGF=.026538/1.77245*GF/FREQ
       FUNCTION VACAIR(W)
 c      IMPLICIT REAL*8 (A-H,O-Z)
 C     W IS VACUUM WAVELENGTH IN NM
-	real*8 vacair,w,waven
+      real*8 vacair,w,waven
       WAVEN=1.D7/W
       VACAIR=W/(1.0000834213D0+
      1 2406030.D0/(1.30D10-WAVEN**2)+15997.D0/(3.89D9-WAVEN**2))

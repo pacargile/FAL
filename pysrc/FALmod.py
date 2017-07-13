@@ -167,7 +167,7 @@ class FALmod(object):
             else:
                 verbose_i = False
         else:
-            if ('synthesis' in verbose):
+            if (verbose == 'synthesis'):
                 verbose_i = verbose
             else:
                 verbose_i = False
