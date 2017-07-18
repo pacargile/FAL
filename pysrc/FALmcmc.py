@@ -110,14 +110,14 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
 
     sig = {}
 
-    # sig['Sun'] = np.ones_like(obsflux['Sun'])/800.0
-    # sig['Arcturus'] = np.ones_like(obsflux['Arcturus'])/250.0
+    sig['Sun'] = np.ones_like(obsflux['Sun'])/200.0
+    sig['Arcturus'] = np.ones_like(obsflux['Arcturus'])/200.0
 
     # sig['Sun'] = obsflux['Sun']/500.0
     # sig['Arcturus'] = obsflux['Arcturus']/300.0
 
-    sig['Sun'] = np.ones_like(obsflux['Sun'])/1000.0
-    sig['Arcturus'] = np.ones_like(obsflux['Arcturus'])/1.0
+    # sig['Sun'] = np.ones_like(obsflux['Sun'])/1000.0
+    # sig['Arcturus'] = np.ones_like(obsflux['Arcturus'])/1.0
 
     modintrp = {}
 
@@ -313,9 +313,9 @@ class FALmcmc(object):
         # set it into self
         self.fmll = fmll
 
-        # remove all predicted lines
-        plinesind = np.array((self.fmll['LABEL'] == '          ') & (self.fmll['LABELP'] == '          ') & (self.fmll['RESID'] < 0.99),dtype=bool)
-        self.fmll = self.fmll[~plinesind]
+        # # remove all predicted lines
+        # plinesind = np.array((self.fmll['LABEL'] == '          ') & (self.fmll['LABELP'] == '          ') & (self.fmll['RESID'] < 0.99),dtype=bool)
+        # self.fmll = self.fmll[~plinesind]
 
         # change all DWL back to zero, hack for pervious solar-only fit
         self.fmll['DWL'] = np.zeros_like(self.fmll['DWL'])
