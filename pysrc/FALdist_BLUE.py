@@ -136,7 +136,7 @@ def makeinlist(infilename):
 			'minlinWL':float(rf_i['LINWLstart']),'maxlinWL':float(rf_i['LINWLend']),
 			'arcscale':float(rf_i['ARCSCALE']),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
-			'outputdir':'/n/regal/conroy_lab/pac/FAL/OPTSEG/MCMCoutput/',
+			'outputdir':'/n/regal/conroy_lab/pac/FAL/OPTSEG/RUN1/MCMCoutput/',
 			'initlines':None,
 			# 'initlines':'/n/regal/conroy_lab/pac/FAL/OPTSEG/CarRun1_LL_475_750_new.h5',
 			'RUNID':ii})
