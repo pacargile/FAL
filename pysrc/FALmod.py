@@ -244,7 +244,7 @@ class FALmod(object):
             if self.masterll == None:
                 if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1300.0):
                     MASTERLL = (['/n/conroyfs1/pac/MASTERLL/FULLOPT/LL/Kur_LL_450_1300_CLEAN.bin',
-                        '/n/conroyfs1/pac/MASTERLL/TiO/TiO_LL_450_1300.bin'])
+                        '/n/conroyfs1/pac/MASTERLL/TiO/LL/TiO_LL_450_1300.bin'])
                 elif (self.starpars['WSTART'] > 1399.0) & (self.starpars['WEND'] < 1901.0):
                     MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_CLEAN.bin',
                     '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
