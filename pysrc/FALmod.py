@@ -245,22 +245,7 @@ class FALmod(object):
                 if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1300.0):
                     MASTERLL = (['/n/conroyfs1/pac/MASTERLL/FULLOPT/LL/Kur_LL_450_1300_CLEAN.bin',
                         '/n/conroyfs1/pac/MASTERLL/TiO/TiO_LL_450_1300.bin'])
-                    # MASTERLL = ['/n/conroyfs1/pac/MASTERLL/FULLOPT/CR2_LL_475_1000.bin']
-                # elif (self.starpars['WSTART'] > 845.0) & (self.starpars['WEND'] < 1350.0):
-                #     MASTERLL = ['/n/conroyfs1/pac/FAL/data/LL/KurLL_850_1350.bin']
-                # if (self.starpars['WSTART'] > 749.0) & (self.starpars['WEND'] < 1001.0):
-                #     MASTERLL = ['/n/conroyfs1/pac/FAL_FITS/REDSEG/linelist/CR2_LL_750_1000.bin']
                 elif (self.starpars['WSTART'] > 1399.0) & (self.starpars['WEND'] < 1901.0):
-                    # MASTERLL = (['/n/conroyfs1/pac/FAL_FITS/HBAND/RUN2/linelist/CR2_LL.bin',
-                    # '/n/conroyfs1/pac/FAL_FITS/HBAND/RUN2/linelist/CR2_H2O.bin'])
-                    # MASTERLL = (['/n/conroyfs1/pac/FAL/data/LL/KuruczLL_1400_1900.bin',
-                    # '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
-                    # MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_NOPRED.bin',
-                    # '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
-
-                    # MASTERLL = (['/n/regal/conroy_lab/pac/FAL/HBAND/EQWGT/RUN1/SPEC/CR2_LL.bin',
-                    # '/n/regal/conroy_lab/pac/FAL/HBAND/EQWGT/RUN1/SPEC/CR2_H2O.bin'])
-
                     MASTERLL = (['/n/conroyfs1/pac/MASTERLL/HBAND/KUR_CLEAN.bin',
                     '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
 
