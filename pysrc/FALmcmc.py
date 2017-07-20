@@ -249,7 +249,8 @@ class FALmcmc(object):
         self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
         # Define synthesis wavelength range
-        self.waverange = [self.minWL-0.2,self.maxWL+0.2]
+        self.wavebuffer = 0.15
+        self.waverange = [self.minWL-self.wavebuffer,self.maxWL+self.wavebuffer]
 
         # setting cut for line selection
         self.condst = [{'LP':'RESID','OP':np.less,'LV':0.99}]
@@ -275,7 +276,8 @@ class FALmcmc(object):
         else:
             self.walltime = walltime # walltime in seconds
         print('Pro: {0} --> Total possible run time = {1} seconds'.format(self.ID,self.walltime-self.starttime))
-        print('Pro: {0} --> Full Wavelength Range = {1:9.5f}-{2:9.5f} ({3:9.5f}) nm'.format(self.ID,self.minWL-0.1,self.maxWL+0.1,self.maxWL-self.minWL+0.2))
+        print('Pro: {0} --> Full Wavelength Range = {1:9.5f}-{2:9.5f} ({3:9.5f}) nm'.format(
+            self.ID,self.minWL-self.wavebuffer,self.maxWL+self.wavebuffer,self.maxWL-self.minWL+(2.0*self.wavebuffer)))
 
 
         # set up some dictionaries for passing objects
