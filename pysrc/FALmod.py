@@ -221,7 +221,7 @@ class FALmod(object):
         if type(linelist).__name__ == 'Table':
             # linelist equal to a path to user defined line list 
             self.SYNTHE.readlines(rtype=linelist,verbose=verbose_i)
-            self.speed = 'fast'
+            self.speed = 'slow'
             if self.timeit:
                 print("Pro: {1} --> Read in user defined numpy table line list -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
