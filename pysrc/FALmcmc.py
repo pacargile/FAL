@@ -310,11 +310,11 @@ class FALmcmc(object):
 
         # check to see if working in H-band where we don't incldue a background model
         if ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
-            print("Pro{0} --> Not using a background model for weak lines".format(self.ID))
+            print("Pro: {0} --> Not using a background model for weak lines".format(self.ID))
         else:
             # remove lines with RESID > 0.9999 as these are included in the static background model
             fmll = fmll[fmll['RESID'] > 0.9999]
-            print("Pro{0} --> Using a background model for weak lines".format(self.ID))
+            print("Pro: {0} --> Using a background model for weak lines".format(self.ID))
 
         # # inject fake lines
         # fmll = self.injectfake(fmll.copy())
