@@ -308,9 +308,14 @@ class FALmcmc(object):
         fmll.sort(tabpars+['RESID'])
         fmll = unique(fmll,tabpars)
 
-        # remove lines with RESID > 0.9999 as these are included in the static background model
-        fmll = fmll[fmll['RESID'] > 0.9999]
-
+        # check to see if working in H-band where we don't incldue a background model
+        if ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
+            print("Pro{0} --> Not using a background model for weak lines".format(self.ID))
+        else:
+            # remove lines with RESID > 0.9999 as these are included in the static background model
+            fmll = fmll[fmll['RESID'] > 0.9999]
+            print("Pro{0} --> Using a background model for weak lines".format(self.ID))
+        
         # # inject fake lines
         # fmll = self.injectfake(fmll.copy())
 
@@ -591,7 +596,6 @@ class FALmcmc(object):
         # check to see if we are working in the H-band with no background model spectrum
         if bg_sol_i != np.ones_like(sol_i['FLUX']):
             # parse and interpolate background model spectrum
-            print("Pro{0} --> Using a background model for weak lines".format(self.ID))
             bg_sol = bg_sol_i[ (bg_sol_i['WAVE'] > solobswave.min()-0.1) & (bg_sol_i['WAVE'] > solobswave.max()+0.1) ]
             bg_arc = bg_arc_i[ (bg_arc_i['WAVE'] > arcobswave.min()-0.1) & (bg_arc_i['WAVE'] > arcobswave.max()+0.1) ]
             bg_sol['FLUX'] = bg_sol['QMU1']/bg_sol['QMU2']
@@ -600,7 +604,6 @@ class FALmcmc(object):
             bg_sol_flux = UnivariateSpline(bg_sol['WAVE'].data,bg_sol['FLUX'].data,s=0,k=1)(solobswave)
             bg_arc_flux = UnivariateSpline(bg_arc['WAVE'].data,bg_arc['FLUX'].data,s=0,k=1)(arcobswave)
         else:
-            print("Pro{0} --> Not using a background model for weak lines".format(self.ID))
             bg_sol_flux = bg_sol_i
             bg_arc_flux = bg_arc_i
 
