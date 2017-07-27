@@ -313,7 +313,7 @@ class FALmcmc(object):
             print("Pro: {0} --> Not using a background model for weak lines".format(self.ID))
         else:
             # remove lines with RESID > 0.9999 as these are included in the static background model
-            fmll = fmll[fmll['RESID'] > 0.9999]
+            fmll = fmll[fmll['RESID'] < 0.9999]
             print("Pro: {0} --> Using a background model for weak lines".format(self.ID))
 
         # # inject fake lines
