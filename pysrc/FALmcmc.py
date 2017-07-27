@@ -315,7 +315,7 @@ class FALmcmc(object):
             # remove lines with RESID > 0.9999 as these are included in the static background model
             fmll = fmll[fmll['RESID'] > 0.9999]
             print("Pro{0} --> Using a background model for weak lines".format(self.ID))
-        
+
         # # inject fake lines
         # fmll = self.injectfake(fmll.copy())
 
@@ -692,10 +692,12 @@ class FALmcmc(object):
         transpec.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
 
         # write background model into file
-        backgmod = Table()
-        backgmod['SOL_FLUX'] = self.bg_sol_flux
-        backgmod['ARC_FLUX'] = self.bg_arc_flux
-        backgmod.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='background',overwrite=True,append=True)
+        backgmod_s = Table()
+        backgmod_s['SOL_FLUX'] = self.bg_sol_flux
+        backgmod_a = Table()
+        backgmod_a['ARC_FLUX'] = self.bg_arc_flux
+        backgmod_s.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='SOL_background',overwrite=True,append=True)
+        backgmod_a.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='ARC_background',overwrite=True,append=True)
 
         return 
 
