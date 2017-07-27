@@ -23,7 +23,7 @@ warnings.simplefilter(action='ignore',category=FutureWarning)
 def lnprob(pin,args,verbose=False,justprior=False):
 
     # read in arguments
-    (solobswave,solobsflux,arcobswave,arcobsflux,transflux,fmdict,fmll,Tarr,minWL,maxWL,minLWL,maxLWL) = args
+    (solobswave,solobsflux,arcobswave,arcobsflux,transflux,bg_sol_flux,bg_arc_flux,fmdict,fmll,Tarr,minWL,maxWL,minLWL,maxLWL) = args
     # for printing to command line, generate an ID
     ID = fmdict.keys()[0] - 10000000
 
@@ -91,6 +91,10 @@ def lnprob(pin,args,verbose=False,justprior=False):
     # scale arcturus spectrum
     obsflux['Arcturus'] = obsflux['Arcturus']*arcscale
     obswave['Arcturus'] = obswave['Arcturus']*(1.0+(arcvel/speedoflight))
+
+    # divide observed spectrum by background models
+    obsflux['Sun'] = obsflux['Sun'] / bg_sol_flux
+    obsflux['Arc'] = obsflux['Arc'] / bg_arc_flux
 
     # calculate lnl
     lnl, mod = lnlike(p,obswave,obsflux,fmdict,minWL,maxWL)
@@ -304,6 +308,9 @@ class FALmcmc(object):
         fmll.sort(tabpars+['RESID'])
         fmll = unique(fmll,tabpars)
 
+        # remove lines with RESID > 0.9999 as these are included in the static background model
+        fmll = fmll[fmll['RESID'] > 0.9999]
+
         # # inject fake lines
         # fmll = self.injectfake(fmll.copy())
 
@@ -368,8 +375,8 @@ class FALmcmc(object):
         print("Pro: {0} --> Fitting Arcturus Spectrum scaling and velocity".format(self.ID))
         self.ndim = self.ndim + 2
 
-        # get observed data and transmission spectrum
-        (self.solobswave,self.solobsflux,self.arcobswave,self.arcobsflux,self.transflux) = self.getspecdata()
+        # get observed data, transmission spectrum, and background model
+        (self.solobswave,self.solobsflux,self.arcobswave,self.arcobsflux,self.transflux,self.bg_sol_flux,self.bg_arc_flux) = self.getspecdata()
 
         # initialize output files
         self.initoutput()
@@ -488,7 +495,7 @@ class FALmcmc(object):
 
     def getspecdata(self):
         if ((self.minWL > 470.0) & (self.maxWL < 755.0)):
-            print("Pro: {0} --> Working with Optical Spectrum".format(self.ID))
+            print("Pro: {0} --> Working with Blue Optical Spectrum".format(self.ID))
             # read in observed data for the Sun and Acturus
             sol_i = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/SOL_4750_8270.fits',format='fits')            
             arc_ii = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/ARC_3800_9300_HINKLE.fits',format='fits')
@@ -507,8 +514,13 @@ class FALmcmc(object):
             # correct for slight doppler shift
             trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
 
+            # read in background spectrum for each model
+            bg_sol_i = Table.read('/n/conroyfs1/pac/MASTERLL/WEAKLL/SPEC_SOL_weak_475_1000.fits.gz',format='fits')
+            bg_arc_i = Table.read('/n/conroyfs1/pac/MASTERLL/WEAKLL/SPEC_ARC_weak_475_1000.fits.gz',format='fits')
+
+
         elif ((self.minWL > 745.0) & (self.maxWL < 1010.0)):
-            print("Pro: {0} --> Working with Red Spectrum".format(self.ID))
+            print("Pro: {0} --> Working with Red Optical Spectrum".format(self.ID))
             # read in observed data for the Sun and Acturus
             sol_i = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/SOL_710_1098.fits',format='fits')            
             arc_ii = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/ARC_3800_9300_HINKLE.fits',format='fits')
@@ -527,6 +539,9 @@ class FALmcmc(object):
             # correct for slight doppler shift
             trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
 
+            # read in background spectrum for each model
+            bg_sol_i = Table.read('/n/conroyfs1/pac/MASTERLL/WEAKLL/SPEC_SOL_weak_475_1000.fits.gz',format='fits')
+            bg_arc_i = Table.read('/n/conroyfs1/pac/MASTERLL/WEAKLL/SPEC_ARC_weak_475_1000.fits.gz',format='fits')
 
         elif ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
             print("Pro: {0} --> Working with H-Band Spectrum".format(self.ID))
@@ -544,6 +559,10 @@ class FALmcmc(object):
             transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_HBAND_10_22_15.h5','r')
             trans = Table(np.array(transh5['spec']))
             trans.sort('WAVE')
+
+            # no background model for H-band spectrum
+            bg_sol_i = np.ones_like(sol_i['FLUX'])
+            bg_arc_i = np.ones_like(arc_i['FLUX'])
 
         else:
             raise IOError("COULD NOT FIND OBSERVED SOLAR SPECTRUM IN THIS WAVELENGTH RANGE!")
@@ -569,7 +588,23 @@ class FALmcmc(object):
         transintrp = UnivariateSpline(trans_i['WAVE'].data,trans_i['FLUX'].data,s=0,k=1)(solobswave)
         transflux = transintrp
 
-        return (solobswave,solobsflux,arcobswave,arcobsflux,transflux)
+        # check to see if we are working in the H-band with no background model spectrum
+        if bg_sol_i != np.ones_like(sol_i['FLUX']):
+            # parse and interpolate background model spectrum
+            print("Pro{0} --> Using a background model for weak lines".format(self.ID))
+            bg_sol = bg_sol_i[ (bg_sol_i['WAVE'] > solobswave.min()-0.1) & (bg_sol_i['WAVE'] > solobswave.max()+0.1) ]
+            bg_arc = bg_arc_i[ (bg_arc_i['WAVE'] > arcobswave.min()-0.1) & (bg_arc_i['WAVE'] > arcobswave.max()+0.1) ]
+            bg_sol['FLUX'] = bg_sol['QMU1']/bg_sol['QMU2']
+            bg_arc['FLUX'] = bg_arc['QMU1']/bg_arc['QMU2']
+
+            bg_sol_flux = UnivariateSpline(bg_sol['WAVE'].data,bg_sol['FLUX'].data,s=0,k=1)(solobswave)
+            bg_arc_flux = UnivariateSpline(bg_arc['WAVE'].data,bg_arc['FLUX'].data,s=0,k=1)(arcobswave)
+        else:
+            print("Pro{0} --> Not using a background model for weak lines".format(self.ID))
+            bg_sol_flux = bg_sol_i
+            bg_arc_flux = bg_arc_i
+
+        return (solobswave,solobsflux,arcobswave,arcobsflux,transflux,bg_sol_flux,bg_arc_flux)
 
     def initoutput(self):
         print("Pro: {0} --> Initializing Output Files".format(self.ID))
@@ -653,6 +688,12 @@ class FALmcmc(object):
         transpec['FLUX'] = self.transflux
         transpec.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='trans',overwrite=True,append=True)
 
+        # write background model into file
+        backgmod = Table()
+        backgmod['SOL_FLUX'] = self.bg_sol_flux
+        backgmod['ARC_FLUX'] = self.bg_arc_flux
+        backgmod.write(self.outputdir+'SAMP'+self.outputfile[4:-3]+'h5',format='hdf5',path='background',overwrite=True,append=True)
+
         return 
 
     def buildsampler(self,nwalkers=0,threads=0):
@@ -669,6 +710,7 @@ class FALmcmc(object):
         args = ([(self.solobswave,self.solobsflux,
             self.arcobswave,self.arcobsflux,
             self.transflux,
+            self.bg_sol_flux,self.bg_arc_flux,
             self.fmdict,self.fmll,self.Tarr,
             self.minWL,self.maxWL,
             self.minLINWL,self.maxLINWL
@@ -802,7 +844,6 @@ class FALmcmc(object):
         temparr.append(0.001*np.random.randn())
 
         return temparr
-
 
     def run_MCMC(self,nsteps,burnin=True,nburn=100):
         if burnin:
