@@ -94,7 +94,7 @@ def lnprob(pin,args,verbose=False,justprior=False):
 
     # divide observed spectrum by background models
     obsflux['Sun'] = obsflux['Sun'] / bg_sol_flux
-    obsflux['Arc'] = obsflux['Arc'] / bg_arc_flux
+    obsflux['Arcturus'] = obsflux['Arcturus'] / bg_arc_flux
 
     # calculate lnl
     lnl, mod = lnlike(p,obswave,obsflux,fmdict,minWL,maxWL)
