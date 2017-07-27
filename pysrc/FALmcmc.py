@@ -596,8 +596,8 @@ class FALmcmc(object):
         # check to see if we are working in the H-band with no background model spectrum
         if bg_sol_i != np.ones_like(sol_i['FLUX']):
             # parse and interpolate background model spectrum
-            bg_sol = bg_sol_i[ (bg_sol_i['WAVE'] > solobswave.min()-0.1) & (bg_sol_i['WAVE'] > solobswave.max()+0.1) ]
-            bg_arc = bg_arc_i[ (bg_arc_i['WAVE'] > arcobswave.min()-0.1) & (bg_arc_i['WAVE'] > arcobswave.max()+0.1) ]
+            bg_sol = bg_sol_i[ (bg_sol_i['WAVE'] > solobswave.min()-0.1) & (bg_sol_i['WAVE'] < solobswave.max()+0.1) ]
+            bg_arc = bg_arc_i[ (bg_arc_i['WAVE'] > arcobswave.min()-0.1) & (bg_arc_i['WAVE'] < arcobswave.max()+0.1) ]
             bg_sol['FLUX'] = bg_sol['QMU1']/bg_sol['QMU2']
             bg_arc['FLUX'] = bg_arc['QMU1']/bg_arc['QMU2']
 
