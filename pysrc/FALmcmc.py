@@ -322,7 +322,14 @@ class FALmcmc(object):
         if initlines != None:
             # inject previous parameters
             print('Pro: {0} --> Injecting Previous Line Parameters'.format(self.ID))
-            fmll = self.injectprev(fmll.copy(),presetll=initlines)
+            if type(initlines) == type(''):
+                fmll = self.injectprev(fmll.copy(),presetll=initlines)
+            elif type(initlines) == type([]):
+                for initlines_i in initlines:
+                    fmll = self.injectprev(fmll.copy(),presetll=initlines_i)
+            else:
+                print("Pro: {0} --> WARNING!!! Did not understand previous line parameter file".format(self.ID))
+
 
         # set it into self
         self.fmll = fmll
