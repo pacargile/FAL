@@ -137,8 +137,9 @@ def makeinlist(infilename):
 			'arcscale':float(rf_i['ARCSCALE']),
 			'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
 			'outputdir':'/n/regal/conroy_lab/pac/FAL/OPTSEG/RUN1/MCMCoutput/',
-			'initlines':None,
+			# 'initlines':None,
 			# 'initlines':'/n/regal/conroy_lab/pac/FAL/OPTSEG/CarRun1_LL_475_750_new.h5',
+			'initlines':['/n/conroyfs1/pac/MASTERLL/OPTSEG/LL/CR1_LL_475_750.h5','/n/conroyfs1/pac/MASTERLL/OPTSEG/LL/CR1_TiO_475_750.h5'],
 			'RUNID':ii})
 
 		indictlist.append(tempdict)
