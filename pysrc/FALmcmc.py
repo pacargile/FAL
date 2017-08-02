@@ -495,7 +495,7 @@ class FALmcmc(object):
                 fmll['DGAMMAR'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAR'][cond_intl])))
                 fmll['DGAMMAS'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAS'][cond_intl])))
 
-        print("Pro: {0} --> Setting Previous Pars for {1} lines".format(self.ID,numpreset))
+        print("Pro: {0} --> Setting Previous Pars for {1} lines from {2}".format(self.ID,numpreset,initlines))
 
         # clean up some memory
         del ilines
