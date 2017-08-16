@@ -604,12 +604,17 @@ class FALmcmc(object):
         if bg_sol_i != np.ones_like(sol_i['FLUX']):
             # parse and interpolate background model spectrum
             bg_sol = bg_sol_i[ (bg_sol_i['WAVE'] > solobswave.min()-0.1) & (bg_sol_i['WAVE'] < solobswave.max()+0.1) ]
-            bg_arc = bg_arc_i[ (bg_arc_i['WAVE'] > arcobswave.min()-0.1) & (bg_arc_i['WAVE'] < arcobswave.max()+0.1) ]
             bg_sol['FLUX'] = bg_sol['QMU1']/bg_sol['QMU2']
-            bg_arc['FLUX'] = bg_arc['QMU1']/bg_arc['QMU2']
-
             bg_sol_flux = UnivariateSpline(bg_sol['WAVE'].data,bg_sol['FLUX'].data,s=0,k=1)(solobswave)
-            bg_arc_flux = UnivariateSpline(bg_arc['WAVE'].data,bg_arc['FLUX'].data,s=0,k=1)(arcobswave)
+
+            # check to see if there is observed ARC spectra in wavelength range
+            if len(arcobswave) > 0:
+                bg_arc = bg_arc_i[ (bg_arc_i['WAVE'] > arcobswave.min()-0.1) & (bg_arc_i['WAVE'] < arcobswave.max()+0.1) ]
+                bg_arc['FLUX'] = bg_arc['QMU1']/bg_arc['QMU2']
+                bg_arc_flux = UnivariateSpline(bg_arc['WAVE'].data,bg_arc['FLUX'].data,s=0,k=1)(arcobswave)
+            else:
+                bg_arc_flux = np.array([])
+
         else:
             bg_sol_flux = bg_sol_i
             bg_arc_flux = bg_arc_i
