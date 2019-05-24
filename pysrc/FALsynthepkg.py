@@ -248,28 +248,33 @@ class synthe(object):
                 lfs = localfilenamestr.format(NAME=fname)
                 mfs = memfilenamestr.format(NAME=fname,ID=self.ID)
 
-                # check file in memory
                 try:
-                    os.remove(mfs)
-                except OSError:
-                    pass
-                if filesdict['newfiles'][fname] == 'bin':
-                    #ff = spIO.FortranFile(mfs,'w')
-                    ff = open(mfs,'wb')
-                    f = np.fromfile(ff,count=0)
-                    
-                elif filesdict['newfiles'][fname] == 'ascii':
-                    ff = open(mfs,'w')
-                else:
-                    return "Error: Did not understand file type on -> {NAME}".format(NAME=mfs)
-                ff.close()
+                    # check file in memory
+                    try:
+                        os.remove(mfs)
+                    except OSError:
+                        pass
+                    if filesdict['newfiles'][fname] == 'bin':
+                        #ff = spIO.FortranFile(mfs,'w')
+                        ff = open(mfs,'wb')
+                        f = np.fromfile(ff,count=0)
+                        
+                    elif filesdict['newfiles'][fname] == 'ascii':
+                        ff = open(mfs,'w')
+                    else:
+                        return "Error: Did not understand file type on -> {NAME}".format(NAME=mfs)
+                    ff.close()
 
-                # check local file
-                try:
-                    os.unlink(lfs)
-                except OSError:
-                    pass
-                os.symlink(mfs,lfs)
+                    # check local file
+                    try:
+                        os.unlink(lfs)
+                    except OSError:
+                        pass
+                    os.symlink(mfs,lfs)
+                except:
+                    print('Problem with {} {}'.format(lfs,mfs))
+                    raise
+
         
     def cleandir(self):
         """
