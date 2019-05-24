@@ -9,8 +9,12 @@ import copy
 class glue(object):
 	def __init__(self):
 
-		# read in fortran libraray
-		self.fortran = cdll.LoadLibrary('/n/conroyfs1/pac/FAL/lib/FALglue.so')
+		try:
+			# read in fortran libraray
+			self.fortran = cdll.LoadLibrary('/n/conroyfs1/pac/FAL/lib/FALglue.so')
+		except OSError:
+			self.fortran = cdll.LoadLibrary('/Users/pcargile/Astro/FAL/PYSCRIPT/lib/FALglue.so')
+
 
 		# define some useful things for later
 		self.c_double_p = POINTER(c_double)
@@ -23,61 +27,75 @@ class glue(object):
 		# THE FOLLOWING ARE FOR THE PUNCH500 DEL FILES
 
 		# for line parameters
-		self.lpars = (['WL','DWL',
-			       'GFLOG','DGFLOG','CODE',
-			       'E','XJ','LABEL',
-			       'EP','XJP','LABELP',
-			       'GR','DGAMMAR',
-			       'GS','DGAMMAS',
-			       'GW','DGAMMAW',
-			       'WAVENO','REF','NBLO','NBUP',
-			       'ISO1','X1','ISO2','X2',
-			       'OTHER',
-			       ])
+		self.lpars = ([
+			'WL','DWL',
+			'GFLOG','DGFLOG',
+			'CODE',
+			'E','XJ','LABEL',
+			'EP','XJP','LABELP',
+			'GR','DGAMMAR',
+			'GS','DGAMMAS',
+			'GW','DGAMMAW',
+			'WAVENO',
+			'REF','NBLO','NBUP',
+			'ISO1','X1','ISO2','X2',
+			'OTHER1','OTHER2','ISOSHIFT',
+			'NELION','EXTRA'])
 
 		# array to convert arrays into actual dtypes
 		# keep some arrays as strings because we won't
 		# change those.
+				
+		self.fmtstr = ([
+			'11.4f','7.4f',
+			'7.3f','7.3f',
+			'8s',
+			'12.3f','5.1f',
+			'11s',
+			'12.3f','5.1f',
+			'11s',
+			'6.2f','+6.2f',
+			'6.2f','+6.2f',
+			'6.2f','+6.2f',
+			'11.3f',
+			'5s','2d','2d',
+			'3d','6.3f','3d','6.3f',
+			'10s','10s','6d','4d','2s'
+			])
 
-		# when generating new MASTER BINARY FILES FROM ASCII, BE SURE TO CHANGE 11,5,2,2 -> 11,4,2,2
-		
-		self.fmtstr = (['11.4f','7.4f',
-				'7.3f','7.3f','8s',
-				'12s','5s','11s',
-				'12s','5s','11s',
-				'6.2f','+6.2f',
-				'6.2f','+6.2f',
-				'6.2f','+6.2f',
-				# '11s','4s','2s','2s',
-				'11s','5s','2s','2s',
-				'3s','6s','3s','6s',
-				'30s',
-				])
+		self.fmtnp = ([
+			np.float64,np.float64,
+			np.float64,np.float64,
+			np.str_,
+			np.float64,np.float64,
+			np.str_,
+			np.float64,np.float64,
+			np.str_,
+			np.float64,np.float64,
+			np.float64,np.float64,
+			np.float64,np.float64,
+			np.float64,
+			np.str_,np.int_,np.int_,
+			np.int_,np.float64,np.int_,np.float64,
+			np.str_,np.str_,np.int_,np.int_,np.str_
+			])
 
-		self.fmtnp = ([np.float64,np.float64,
-			       np.float64,np.float64,np.str_,
-			       np.str_,np.str_,np.str_,
-			       np.str_,np.str_,np.str_,
-			       np.float64,np.float64,
-			       np.float64,np.float64,
-			       np.float64,np.float64,
-			       np.str_,np.str_,np.str_,np.str_,
-			       np.str_,np.str_,np.str_,np.str_,
-			       np.str_
-			       ])
-
-		self.ldelim_i = ([11,7,
-				  7,7,8,
-				  12,5,11,
-				  12,5,11,
-				  6,6,
-				  6,6,
-				  6,6,
-				  # 11,4,2,2,
-				  11,5,2,2,
-				  3,6,3,6,
-				  32,
-				  ])
+		self.ldelim_i = ([
+			11,7,
+			7,7,
+			8,
+			12,5,
+			11,
+			12,5,
+			11,
+			6,6,
+			6,6,
+			6,6,
+			11,
+			5,2,2,
+			3,6,3,6,
+			10,10,6,4,2,
+			])
 		
 		self.ldelim = np.cumsum(self.ldelim_i)
 		self.ldelim_stop = self.ldelim
@@ -237,7 +255,7 @@ class glue(object):
 
 	def readlp(self,filename):
 		"""
-		READ(11,140,END=145)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,
+		READ(11,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,
 		1        EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO,
 		2        REF,NBLO,NBUP,ISO1,X1,ISO2,X2,OTHER1,OTHER2,ISOSHIFT,
 		$        NELION
@@ -286,14 +304,14 @@ class glue(object):
 	def con_nptolp(self,nptab):
 		outtab_arr = []
 		for ii,fmt in enumerate(self.lpars):
-			if 's' in self.fmtstr[ii]:
-				temparr = ([('{0:>'+self.fmtstr[ii]+'}').format(
-							'{0}'.format(xx)) for xx in nptab[fmt]])
-				outtab_arr.append(temparr)
-			else:
-				temparr = ([('{0:'+self.fmtstr[ii]+'}').format(
-							float(xx)) for xx in nptab[fmt]])
-				outtab_arr.append(temparr)
+			# if 's' in self.fmtstr[ii]:
+			# 	temparr = ([('{0:>'+self.fmtstr[ii]+'}').format(
+			# 				'{0}'.format(xx)) for xx in nptab[fmt]])
+			# 	outtab_arr.append(temparr)
+			# else:
+			temparr = ([('{0:'+self.fmtstr[ii]+'}').format(
+						xx) for xx in nptab[fmt]])
+			outtab_arr.append(temparr)
 
 		outtab = Table(outtab_arr,names=self.lpars)
 		return outtab
