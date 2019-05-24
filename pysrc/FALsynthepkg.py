@@ -4,7 +4,7 @@ from __future__ import (division, print_function, absolute_import,
 
 import os,sys,glob,time,filecmp
 import subprocess
-import cStringIO
+# import cStringIO
 import shutil
 from scipy import io as spIO
 import numpy as np
@@ -144,14 +144,14 @@ class synthe(object):
         output = pro.communicate(_inputstr)
         return output
 
-    def _stringIOafy(self,strin):
-        """
-        general function to input in string into StringIO object
-        """
-        output = cStringIO.StringIO()
-        output.write(strin)
-        output.close()
-        return output
+    # def _stringIOafy(self,strin):
+    #     """
+    #     general function to input in string into StringIO object
+    #     """
+    #     output = cStringIO.StringIO()
+    #     output.write(strin)
+    #     output.close()
+    #     return output
 
     def _fastcopy(self,src,dst,buffer_size=-1):#10485760):
         """
