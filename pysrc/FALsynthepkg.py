@@ -255,9 +255,9 @@ class synthe(object):
                     except OSError:
                         pass
                     if filesdict['newfiles'][fname] == 'bin':
-                        #ff = spIO.FortranFile(mfs,'w')
-                        ff = open(mfs,'wb')
-                        f = np.fromfile(ff,count=0)
+                        ff = spIO.FortranFile(mfs,'w')
+                        # ff = open(mfs,'wb')
+                        # f = np.fromfile(ff,count=0)
                         
                     elif filesdict['newfiles'][fname] == 'ascii':
                         ff = open(mfs,'w')
