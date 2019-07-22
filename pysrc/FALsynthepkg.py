@@ -141,7 +141,8 @@ class synthe(object):
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
                                    stdin=subprocess.PIPE,stdout=_FNULL)
 
-        output = pro.communicate(_inputstr)
+        if type(_inputstr) != type(None):
+            output = pro.communicate(_inputstr)
         return output
 
     # def _stringIOafy(self,strin):
