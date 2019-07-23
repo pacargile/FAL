@@ -134,7 +134,8 @@ class synthe(object):
         else:
             _FNULL = self.FNULL
 
-        _FNULL = sys.stdout
+        if (function == 'rgfall') | (function == 'rmolecasc'):
+            _FNULL = sys.stdout
 
         if inpipe != None:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
