@@ -134,6 +134,8 @@ class synthe(object):
         else:
             _FNULL = self.FNULL
 
+        _FNULL = sys.stdout
+
         if inpipe != None:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
                                    stdin=open(inpipe,'r'),stdout=_FNULL,encoding='utf8')
@@ -650,6 +652,7 @@ class synthe(object):
         """
         # write molfile line list into fort.11
         if os.path.isfile("fort.11"):
+            print('FOUND fort.11')
             self._rmsym('fort.11',verbose=True)
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'fort.11')
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
@@ -692,6 +695,7 @@ class synthe(object):
         """
         # write atomic line list into fort.11
         if os.path.isfile("fort.11"):
+            print('found fort.11')
             self._rmsym('fort.11',verbose=True)
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
@@ -713,9 +717,9 @@ class synthe(object):
         except AssertionError:
             raise IOError("Something wrong with Input/Output files")
 
-        # print("Running RGFALL")
+        print("Running RGFALL")
         self.ratomicout = self._callpro("rgfall",verbose=True)
-        # print("Finished RGFALL")
+        print("Finished RGFALL")
 
     def rinjectlines(self,verbose=None,injectll=None):
         """
