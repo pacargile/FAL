@@ -714,9 +714,9 @@ class synthe(object):
         except AssertionError:
             raise IOError("Something wrong with Input/Output files")
 
-        print("Running RGFALL")
+        # print("Running RGFALL")
         self.ratomicout = self._callpro("rgfall",verbose=verbose)
-        print("Finished RGFALL")
+        # print("Finished RGFALL")
 
     def rinjectlines(self,verbose=None,injectll=None):
         """
