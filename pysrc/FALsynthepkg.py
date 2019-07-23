@@ -540,6 +540,7 @@ class synthe(object):
                 # read molecular files
                 self.rmolecascout = {}
                 for mf in self.molefiles:
+                    print(mf)
                     try:
                         self.readmol(mf,verbose=True)
                     except IOError:
@@ -657,6 +658,9 @@ class synthe(object):
             self._rmsym('fort.11',verbose=True)
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'fort.11')
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
+
+        if os.path.isfile("fort.11"):
+            print('CREATED fort.11')
         
         # check to make sure all input/output files are right
         filesdict = {}
