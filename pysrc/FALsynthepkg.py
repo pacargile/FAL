@@ -195,6 +195,7 @@ class synthe(object):
         """
         Function that removes sym and file in memory
         """
+        print(glob.glob('/dev/shm/FAL/{0}/{1}'.format(self.ID,src)))
         try:
             os.remove('/dev/shm/FAL/{0}/{1}'.format(self.ID,src))
         except OSError:
