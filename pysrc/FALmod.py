@@ -167,20 +167,20 @@ class FALmod(object):
             else:
                 verbose_i = False
         else:
-            if ('synthesis' in verbose):
+            if ('synthesis' == verbose):
                 verbose_i = verbose
             else:
                 verbose_i = False
         self._synthesis(verbose=verbose_i)
 
         # do broadening
-        if type(verbose) == type(True):
+        if isinstance(verbose,bool):
             if (verbose == True):
                 verbose_i = True
             else:
                 verbose_i = False
         else:
-            if ('broaden' in verbose):
+            if ('broaden' == verbose):
                 verbose_i = verbose
             else:
                 verbose_i = False
@@ -232,7 +232,7 @@ class FALmod(object):
             # rlinedict = {"TiO":True} # atoms, molecules + H2O & TiO
             # rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":False,"predict":True} # atoms, molecules + H2O & TiO
             rlinedict = {"atoms":True} 
-            self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=True)
+            self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
             self.speed = 'slow'
 
             if self.timeit:
