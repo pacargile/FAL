@@ -136,7 +136,8 @@ class glue(object):
 			
 	def readspecbin(self,filename,NWL=int(12000),NLINES=int(1000000)):
 
-		s    = b'{0}'.format(filename)
+		s_i  = '{0}'.format(filename)
+		s    = bytes(s_i, 'utf-8')
 		SWL   = np.zeros(NWL, dtype="double")
 		QMU1 = np.zeros(NWL, dtype="double")
 		QMU2 = np.zeros(NWL, dtype="double")
