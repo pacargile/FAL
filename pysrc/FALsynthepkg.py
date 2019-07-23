@@ -538,7 +538,7 @@ class synthe(object):
                 self.rmolecascout = {}
                 for mf in self.molefiles:
                     try:
-                        self.readmol(mf,verbose=verbose)
+                        self.readmol(mf,verbose=True)
                     except IOError:
                         print('!!!!! Missing {0} !!!!!'.format(mf))
                         raise
@@ -644,7 +644,7 @@ class synthe(object):
         if verbose:
             print("Finished RH2OSLOW")
 
-    def readmol(self,molfile,verbose=None):
+    def readmol(self,molfile,verbose=True):
         """
         helper function to do molecule file read in
         """
