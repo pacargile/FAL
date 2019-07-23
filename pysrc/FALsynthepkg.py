@@ -145,7 +145,7 @@ class synthe(object):
                                    stdin=subprocess.PIPE,stdout=_FNULL,encoding='utf8')
 
         if type(_inputstr) != type(None):
-            output = pro.communicate(_inputstr)
+            output = pro.communicate(input=_inputstr)
         else:
             output = None
         return output
@@ -724,6 +724,7 @@ class synthe(object):
 
         print("Running RGFALL")
         self.ratomicout = self._callpro("rgfall",verbose=True)
+        print(self.ratomicout)
         print("Finished RGFALL")
 
     def rinjectlines(self,verbose=None,injectll=None):
