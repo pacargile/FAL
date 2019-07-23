@@ -142,7 +142,7 @@ class synthe(object):
                                    stdin=subprocess.PIPE,stdout=_FNULL,encoding='utf8')
 
         if type(_inputstr) != type(None):
-            output = pro.communicate(_inputstr.encoding('utf8'))
+            output = pro.communicate(_inputstr)
         return output
 
     # def _stringIOafy(self,strin):
