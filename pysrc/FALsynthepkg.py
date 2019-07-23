@@ -19,7 +19,7 @@ __all__ = ["synthepkg"]
 
 
 class synthe(object):
-    def __init__(self,ID=None,verbose=False,clobber=False,starpars=None):
+    def __init__(self,ID=None,verbose=True,clobber=False,starpars=None):
         # define a unique job ID if not already defined
         # must be equal to or less than 8-digit int/string.
         if ID != None:
@@ -196,14 +196,14 @@ class synthe(object):
         Function that removes sym and file in memory
         """
         print(glob.glob('/dev/shm/FAL/{0}/{1}'.format(self.ID,src)))
-        try:
+        if os.path.isfile('/dev/shm/FAL/{0}/{1}'.format(self.ID,src)):
             os.remove('/dev/shm/FAL/{0}/{1}'.format(self.ID,src))
-        except OSError:
+        else:
             if verbose:
                 print('WARNING: Could not find /dev/shm/FAL/{0}/{1}'.format(self.ID,src))
-        try:
-            os.unlink(src)
-        except OSError:
+        if os.path.isfile(src):
+            os.remove(src)
+        else:
             if verbose:
                 print('WARNING: Could not find {0}'.format(src))
         
@@ -700,8 +700,7 @@ class synthe(object):
         helper function to read in atomic lines
         """
         # write atomic line list into fort.11
-        if os.path.isfile("fort.11"):
-            print('found fort.11')
+        if (os.path.isfile("fort.11") | os.path.isfile("/dev/shm/FAL/{0}/fort.11")):
             self._rmsym('fort.11',verbose=True)
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
