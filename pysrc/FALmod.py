@@ -232,7 +232,7 @@ class FALmod(object):
             # rlinedict = {"TiO":True} # atoms, molecules + H2O & TiO
             # rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":False,"predict":True} # atoms, molecules + H2O & TiO
             rlinedict = {"atoms":True,"moles":True} 
-            self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
+            self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=True)
             self.speed = 'slow'
 
             if self.timeit:
