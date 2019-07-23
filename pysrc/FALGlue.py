@@ -227,10 +227,10 @@ class glue(object):
 		ll['CODE']     = np.array(['{0:8.2f}'.format(x) for x in CODEin],dtype='float')
 		ll['E']        = np.array(['{0:12.3f}'.format(x) for x in Ein],dtype='float')    
 		ll['XJ']       = np.array(['{0:5.1f}'.format(x) for x in XJin],dtype='float')
-		ll['LABEL']    = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		ll['LABEL']    = np.array([''.join(LABELin[i,:].tostring('F').decode('utf-32')) for i in range(NLINES)])
 		ll['EP']       = np.array(['{0:12.3f}'.format(x) for x in EPin],dtype='float')
 		ll['XJP']      = np.array(['{0:5.1f}'.format(x) for x in XJPin],dtype='float')
-		ll['LABELP']   = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		ll['LABELP']   = np.array([''.join(LABELPin[i,:].tostring('F').decode('utf-32')) for i in range(NLINES)])
 		ll['GR']       = np.array(['{0:6.2f}'.format(x) for x in GRin],dtype='float')
 		ll['DGAMMAR']  = DGAMMARin
 		ll['GS']       = np.array(['{0:6.2f}'.format(x) for x in GSin],dtype='float')
@@ -238,15 +238,15 @@ class glue(object):
 		ll['GW']       = np.array(['{0:6.2f}'.format(x) for x in GWin],dtype='float')
 		ll['DGAMMAW']  = DGAMMAWin
 		ll['WAVENO']   = np.array(['{0:11.3f}'.format(x) for x in WAVENOin],dtype='str')
-		ll['REF']      = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		ll['REF']      = np.array([''.join(REFin[i,:].tostring('F').decode('utf-32')) for i in range(NLINES)])
 		ll['NBLO']     = NBLOin
 		ll['NBUP']     = NBUPin
 		ll['ISO1']     = ISO1in
 		ll['X1']       = np.array(['{0:6.3f}'.format(x) for x in X1in],dtype='float')
 		ll['ISO2']     = ISO2in
 		ll['X2']       = np.array(['{0:6.3f}'.format(x) for x in X2in],dtype='float')  
-		ll['OTHER1']   = np.array([''.join(OTHER1in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		ll['OTHER2']   = np.array([''.join(OTHER2in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		ll['OTHER1']   = np.array([''.join(OTHER1in[i,:].tostring('F').decode('utf-32')) for i in range(NLINES)])
+		ll['OTHER2']   = np.array([''.join(OTHER2in[i,:].tostring('F').decode('utf-32')) for i in range(NLINES)])
 		ll['ISOSHIFT'] = ISOSHIFTin
 		ll['NELION']   = NELIONin
 		ll['OTHER'] = np.array(
