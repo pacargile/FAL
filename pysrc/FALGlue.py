@@ -224,7 +224,7 @@ class glue(object):
 		ll['DWL']      = np.array(['{0:7.4f}'.format(x) for x in DWLin],dtype='float')
 		ll['GFLOG']    = np.array(['{0:7.3f}'.format(x) for x in GFLOGin],dtype='float')
 		ll['DGFLOG']   = np.array(['{0:7.3f}'.format(x) for x in DGFLOGin],dtype='float')
-		ll['CODE']     = np.array(['{0:8.2f}'.format(x.decode('ascii')) for x in CODEin],dtype='str')
+		ll['CODE']     = np.array(['{0:8.2f}'.format(x) for x in CODEin],dtype='float')
 		ll['E']        = np.array(['{0:12.3f}'.format(x) for x in Ein],dtype='float')    
 		ll['XJ']       = np.array(['{0:5.1f}'.format(x) for x in XJin],dtype='float')
 		ll['LABEL']    = np.array([''.join(LABELin[i,:].decode('ascii')) for i in range(NLINES)])
