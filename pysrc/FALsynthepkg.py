@@ -148,6 +148,8 @@ class synthe(object):
             output = pro.communicate(input=_inputstr)
         else:
             output = None
+
+        pro.wait()
         return output
 
     # def _stringIOafy(self,strin):
