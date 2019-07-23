@@ -143,6 +143,8 @@ class synthe(object):
 
         if type(_inputstr) != type(None):
             output = pro.communicate(_inputstr)
+        else:
+            output = None
         return output
 
     # def _stringIOafy(self,strin):
