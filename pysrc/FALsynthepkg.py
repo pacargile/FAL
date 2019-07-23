@@ -686,7 +686,7 @@ class synthe(object):
         os.symlink(self.bigdatadir+'/gfpred29dec2014.bin','fort.11')
         self.rmoleout = self._callpro("rpredict",verbose=verbose)
 
-    def ratomic(self,verbose=None):
+    def ratomic(self,verbose=True):
         """
         helper function to read in atomic lines
         """
