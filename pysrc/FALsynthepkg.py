@@ -724,7 +724,6 @@ class synthe(object):
 
         print("Running RGFALL")
         self.ratomicout = self._callpro("rgfall",verbose=True)
-        print(self.ratomicout)
         print("Finished RGFALL")
 
     def rinjectlines(self,verbose=None,injectll=None):
