@@ -650,7 +650,7 @@ class synthe(object):
         """
         # write molfile line list into fort.11
         if os.path.isfile("fort.11"):
-            self._rmsym('fort.11',verbose=verbose)
+            self._rmsym('fort.11',verbose=True)
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'fort.11')
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
         
@@ -668,7 +668,7 @@ class synthe(object):
 
         if verbose:
             print("Running RMolecASC on {0}".format(molfile))
-        self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=verbose)
+        self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=True)
         if verbose:
             print("Finished RMolecASC on {0}".format(molfile))
 
@@ -692,7 +692,7 @@ class synthe(object):
         """
         # write atomic line list into fort.11
         if os.path.isfile("fort.11"):
-            self._rmsym('fort.11',verbose=verbose)
+            self._rmsym('fort.11',verbose=True)
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
         # os.symlink(self.bigdatadir+'/gfall05jun16.dat','fort.11')
@@ -714,7 +714,7 @@ class synthe(object):
             raise IOError("Something wrong with Input/Output files")
 
         # print("Running RGFALL")
-        self.ratomicout = self._callpro("rgfall",verbose=verbose)
+        self.ratomicout = self._callpro("rgfall",verbose=True)
         # print("Finished RGFALL")
 
     def rinjectlines(self,verbose=None,injectll=None):
