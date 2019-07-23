@@ -496,16 +496,18 @@ class synthe(object):
             if rlinedict['atoms']==True:
                 print('... Reading ATOMS')
                 # do atomic lines
-                self.ratomic(verbose=verbose)
+                self.ratomic(verbose=True)
         except KeyError:
             pass
         try:
             if rlinedict['predict']==True:
                 print('... Reading PRED')
                 # do predicted lines
-                self.readpredlines(verbose=verbose)
+                self.readpredlines(verbose=True)
         except KeyError:
             pass
+
+        print('... FINISHED ATOMS')
         try:
             if rlinedict['moles']==True:
                 print('... Reading MOLECULES')
