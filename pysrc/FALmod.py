@@ -457,7 +457,6 @@ class FALmod(object):
 
         outspec,newll = self.glue.readspecbin(infile,NWL=runinfo['LENGTH'],NLINES=lineinfo['NLINES'])
         # turn these dictionaries into Table for ease of use
-        print('READING OUT SPECTRUM')
         outspec = Table(outspec)
         newll = Table(newll)
 
