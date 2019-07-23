@@ -227,8 +227,6 @@ class glue(object):
 		ll['CODE']     = np.array(['{0:8.2f}'.format(x) for x in CODEin],dtype='str')
 		ll['E']        = np.array(['{0:12.3f}'.format(x) for x in Ein],dtype='float')    
 		ll['XJ']       = np.array(['{0:5.1f}'.format(x) for x in XJin],dtype='float')
-		print(LABELin.dtype)
-		print(LABELin[0,0].decode('utf-32'))
 		ll['LABEL']    = np.array([''.join(LABELin[i,:]) for i in range(NLINES)])
 		ll['EP']       = np.array(['{0:12.3f}'.format(x) for x in EPin],dtype='float')
 		ll['XJP']      = np.array(['{0:5.1f}'.format(x) for x in XJPin],dtype='float')
