@@ -507,7 +507,6 @@ class synthe(object):
         except KeyError:
             pass
 
-        print('... FINISHED ATOMS')
         try:
             if rlinedict['moles']==True:
                 print('... Reading MOLECULES')
