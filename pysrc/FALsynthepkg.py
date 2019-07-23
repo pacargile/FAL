@@ -193,7 +193,7 @@ class synthe(object):
         os.unlink(src)
         os.symlink('/dev/shm/FAL/{0}/{1}'.format(self.ID,outname),'./'+outname)
 
-    def _rmsym(self,src,verbose=True):
+    def _rmsym(self,src,verbose=False):
         """
         Function that removes sym and file in memory
         """
@@ -501,14 +501,14 @@ class synthe(object):
             if rlinedict['atoms']==True:
                 print('... Reading ATOMS')
                 # do atomic lines
-                self.ratomic(verbose=True)
+                self.ratomic(verbose=verbose)
         except KeyError:
             pass
         try:
             if rlinedict['predict']==True:
                 print('... Reading PRED')
                 # do predicted lines
-                self.readpredlines(verbose=True)
+                self.readpredlines(verbose=verbose)
         except KeyError:
             pass
 
@@ -544,7 +544,7 @@ class synthe(object):
                 for mf in self.molefiles:
                     print(mf)
                     try:
-                        self.readmol(mf,verbose=True)
+                        self.readmol(mf,verbose=verbose)
                     except IOError:
                         print('!!!!! Missing {0} !!!!!'.format(mf))
                         raise
@@ -657,7 +657,7 @@ class synthe(object):
         # write molfile line list into fort.11
         if os.path.isfile("fort.11"):
             print('FOUND fort.11')
-            self._rmsym('fort.11',verbose=True)
+            self._rmsym('fort.11',verbose=verbose)
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'fort.11')
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
 
@@ -678,7 +678,7 @@ class synthe(object):
 
         if verbose:
             print("Running RMolecASC on {0}".format(molfile))
-        self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=True)
+        self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=verbose)
         if verbose:
             print("Finished RMolecASC on {0}".format(molfile))
 
@@ -702,7 +702,7 @@ class synthe(object):
         """
         # write atomic line list into fort.11
         if (os.path.isfile("fort.11") | os.path.isfile("/dev/shm/FAL/{0}/fort.11")):
-            self._rmsym('fort.11',verbose=True)
+            self._rmsym('fort.11',verbose=verbose)
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
         # os.symlink(self.bigdatadir+'/gfall05jun16.dat','fort.11')
@@ -724,7 +724,7 @@ class synthe(object):
             raise IOError("Something wrong with Input/Output files")
 
         print("Running RGFALL")
-        self.ratomicout = self._callpro("rgfall",verbose=True)
+        self.ratomicout = self._callpro("rgfall",verbose=verbose)
         print("Finished RGFALL")
 
     def rinjectlines(self,verbose=None,injectll=None):
