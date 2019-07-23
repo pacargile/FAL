@@ -496,14 +496,12 @@ class synthe(object):
         """
         try:
             if rlinedict['atoms']==True:
-                print('... Reading ATOMS')
                 # do atomic lines
                 self.ratomic(verbose=verbose)
         except KeyError:
             pass
         try:
             if rlinedict['predict']==True:
-                print('... Reading PRED')
                 # do predicted lines
                 self.readpredlines(verbose=verbose)
         except KeyError:
@@ -539,7 +537,6 @@ class synthe(object):
                 # read molecular files
                 self.rmolecascout = {}
                 for mf in self.molefiles:
-                    print(mf)
                     try:
                         self.readmol(mf,verbose=verbose)
                     except IOError:
@@ -549,7 +546,6 @@ class synthe(object):
             pass
         try:
             if rlinedict['TiO']==True:
-                print('... Reading TiO')
                 # do TiO lines
                 self.readmol_TiO(verbose=verbose)
             if os.path.isfile("fort.48"):
@@ -564,7 +560,6 @@ class synthe(object):
             pass
         try:
             if rlinedict['H2O']==True:
-                print('... Reading H2O')
                 # do H20 lines
                 self.readmol_H2O(verbose=verbose)
             if os.path.isfile("fort.48"):
@@ -580,7 +575,6 @@ class synthe(object):
         
         try:
             if rlinedict['injectlines'] != None:
-                print('... Reading INJECTED LINES')
                 # inject lines into line list
                 self.rinjectlines(verbose=verbose,injectll=rlinedict['injectlines'])
         except KeyError:
