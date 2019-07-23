@@ -134,15 +134,12 @@ class synthe(object):
         else:
             _FNULL = self.FNULL
 
-        if (function == 'rgfall') | (function == 'rmolecasc'):
-            _FNULL = sys.stdout
-
         if inpipe != None:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
-                                   stdin=open(inpipe,'r'),stdout=_FNULL,encoding='utf8')
+                                   stdin=open(inpipe,'r'),stdout=_FNULL,encoding='utf-8')
         else:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
-                                   stdin=subprocess.PIPE,stdout=_FNULL,encoding='utf8')
+                                   stdin=subprocess.PIPE,stdout=_FNULL,encoding='utf-8')
 
         if type(_inputstr) != type(None):
             output = pro.communicate(input=_inputstr)
