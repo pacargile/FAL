@@ -231,7 +231,7 @@ class FALmod(object):
             # read all individual line lists
             # rlinedict = {"TiO":True} # atoms, molecules + H2O & TiO
             # rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":False,"predict":True} # atoms, molecules + H2O & TiO
-            rlinedict = {"moles":True} 
+            rlinedict = {"atoms":True} 
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=True)
             self.speed = 'slow'
 
