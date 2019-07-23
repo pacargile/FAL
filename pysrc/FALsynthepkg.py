@@ -196,7 +196,8 @@ class synthe(object):
         Function that removes sym and file in memory
         """
         print(glob.glob('/dev/shm/FAL/{0}/{1}'.format(self.ID,src)))
-        if os.path.isfile('/dev/shm/FAL/{0}/{1}'.format(self.ID,src)):
+        print(glob.glob(src))
+       if os.path.isfile('/dev/shm/FAL/{0}/{1}'.format(self.ID,src)):
             os.remove('/dev/shm/FAL/{0}/{1}'.format(self.ID,src))
         else:
             if verbose:
