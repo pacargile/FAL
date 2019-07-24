@@ -159,7 +159,12 @@ subroutine readoutspecbin(&
      DWLin(I) = DWL
      GFLOGin(I) = GFLOG
      DGFLOGin(I) = DGFLOG
-     CODEin(I) = CODE
+     ! CODEin(I) = CODE
+     WRITE(SLABEL,'(A8)') CODE
+     SLABEL = SLABEL//c_null_char
+     DO J=1,8
+       CODEin(J,I) = SLABEL(J:J)
+     END DO
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8,A2)') LABEL
