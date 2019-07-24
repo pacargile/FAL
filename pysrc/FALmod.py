@@ -378,7 +378,7 @@ class FALmod(object):
             self.lasttime = time.time()
 
         # pull outspec and newll from rotate.for code
-        outspec,newll = self._specout('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'))
+        outspec,newll = self._specout('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),verbose=True)
 
         # -- check if the user wants broadening --
         if self.starpars['MACVEL'] == -1:
