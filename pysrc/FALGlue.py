@@ -31,8 +31,10 @@ class glue(object):
 			'WL','DWL',
 			'GFLOG','DGFLOG',
 			'CODE',
-			'E','XJ','LABEL',
-			'EP','XJP','LABELP',
+			'E','XJ',
+			'LABEL',
+			'EP','XJP',
+			'LABELP',
 			'GR','DGAMMAR',
 			'GS','DGAMMAS',
 			'GW','DGAMMAW',
@@ -149,7 +151,7 @@ class glue(object):
 		CODEin     = np.zeros(NLINES,dtype='double')
 		Ein        = np.zeros(NLINES,dtype='double')
 		XJin       = np.zeros(NLINES,dtype='double')
-		LABELin    = np.zeros((NLINES,8),dtype='str')
+		LABELin    = np.zeros((8,NLINES),dtype='str')
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
 		LABELPin   = np.zeros((NLINES,11),dtype='str')
