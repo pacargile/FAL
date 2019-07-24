@@ -220,10 +220,27 @@ class glue(object):
 		# QMU1 = np.trim_zeros(QMU1,trim='b')
 		# QMU2 = np.trim_zeros(QMU2,trim='b')
 
-		for pp,inarr in zip([11,11,5,10,10],[LABELin,LABELPin,REFin,OTHER1in,OTHER2in]):
-			x = np.array([''.join(inarr[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-			x = ''.join(x)
-			inpar = list(map(''.join, zip(*[iter(x)]*pp)))
+		# for pp,inarr in zip([11,11,5,10,10],[LABELin,LABELPin,REFin,OTHER1in,OTHER2in]):
+
+		x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		x = ''.join(x)
+		LABELin = list(map(''.join, zip(*[iter(x)]*11)))
+
+		x = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		x = ''.join(x)
+		LABELPin = list(map(''.join, zip(*[iter(x)]*11)))
+
+		x = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		x = ''.join(x)
+		REFin = list(map(''.join, zip(*[iter(x)]*5)))
+
+		x = np.array([''.join(OTHER1in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		x = ''.join(x)
+		OTHER1in = list(map(''.join, zip(*[iter(x)]*10)))
+
+		x = np.array([''.join(OTHER2in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		x = ''.join(x)
+		OTHER2in = list(map(''.join, zip(*[iter(x)]*10)))
 
 		# x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		# x = ''.join(x)
