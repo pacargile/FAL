@@ -52,7 +52,7 @@ class FALmod(object):
             self.starpars['OBJECT'] = 'Arcturus'
             self.starpars['RESOL'] = 500000.0
         else:
-            if isinstance(starpars,None):
+            if starpars is None:
                 self.starpars = {'OBJECT':None}
             else:
                 self.starpars = starpars
