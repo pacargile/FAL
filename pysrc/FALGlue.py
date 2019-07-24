@@ -224,15 +224,15 @@ class glue(object):
 
 		x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		LABELin = list(map(''.join, zip(*[iter(x)]*11)))
+		LABELin = list(map(''.join, zip(*[iter(x)]*10)))
 
 		x = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		LABELPin = list(map(''.join, zip(*[iter(x)]*11)))
+		LABELPin = list(map(''.join, zip(*[iter(x)]*10)))
 
 		x = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		REFin = list(map(''.join, zip(*[iter(x)]*5)))
+		REFin = list(map(''.join, zip(*[iter(x)]*4)))
 
 		x = np.array([''.join(OTHER1in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
