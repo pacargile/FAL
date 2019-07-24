@@ -220,9 +220,10 @@ class glue(object):
 		# QMU1 = np.trim_zeros(QMU1,trim='b')
 		# QMU2 = np.trim_zeros(QMU2,trim='b')
 
-		# for pp,inarr in zip([8,11,11,5,10,10],[CODEin,LABELin,LABELPin,REFin,OTHER1in,OTHER2in]):
-		# 	x = np.array([''.join(inarr[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		# 	x = ''.join(x)
+		for pp,inarr in zip([11,11,5,10,10],[LABELin,LABELPin,REFin,OTHER1in,OTHER2in]):
+			x = np.array([''.join(inarr[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+			x = ''.join(x)
+			inpar = list(map(''.join, zip(*[iter(x)]*pp)))
 
 		# x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		# x = ''.join(x)
