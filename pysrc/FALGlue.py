@@ -242,9 +242,6 @@ class glue(object):
 		x = ''.join(x)
 		OTHER2in = list(map(''.join, zip(*[iter(x)]*10)))
 
-		print(LABELin)
-
-
 		outspec = {'WAVE':SWL,'QMU1':QMU1,'QMU2':QMU2}
 		ll = {}
 		ll['WL']       = np.array(['{0:11.4f}'.format(x) for x in WLin],dtype='float')
@@ -280,7 +277,6 @@ class glue(object):
 		# ll['OTHER2']   = np.array([''.join(OTHER2in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		ll['OTHER1']   = np.array(OTHER1in,dtype='str')
 		ll['OTHER2']   = np.array(OTHER2in,dtype='str')
-		print(ll)
 		ll['ISOSHIFT'] = ISOSHIFTin
 		ll['NELION']   = NELIONin
 		ll['OTHER'] = np.array(
