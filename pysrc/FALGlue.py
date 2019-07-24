@@ -148,10 +148,10 @@ class glue(object):
 		DWLin      = np.zeros(NLINES,dtype='double')
 		GFLOGin    = np.zeros(NLINES,dtype='double')
 		DGFLOGin   = np.zeros(NLINES,dtype='double')
-		CODEin     = np.zeros(NLINES,dtype='double')
+		CODEin     = np.zeros((NLINES,8),dtype='str')
 		Ein        = np.zeros(NLINES,dtype='double')
 		XJin       = np.zeros(NLINES,dtype='double')
-		LABELin    = np.zeros((NLINES,8),dtype='str')
+		LABELin    = np.zeros((NLINES,11),dtype='str')
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
 		LABELPin   = np.zeros((NLINES,11),dtype='str')
@@ -188,7 +188,7 @@ class glue(object):
 			DWLin.ctypes.data_as(self.c_double_p),     
 			GFLOGin.ctypes.data_as(self.c_double_p),   
 			DGFLOGin.ctypes.data_as(self.c_double_p),  
-			CODEin.ctypes.data_as(self.c_double_p),    
+			CODEin.ctypes.data_as(self.c_char_p),    
 			Ein.ctypes.data_as(self.c_double_p),       
 			XJin.ctypes.data_as(self.c_double_p),      
 			LABELin.ctypes.data_as(c_char_p),   
@@ -220,11 +220,15 @@ class glue(object):
 		# QMU1 = np.trim_zeros(QMU1,trim='b')
 		# QMU2 = np.trim_zeros(QMU2,trim='b')
 
-		x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		x = ''.join(x)
+		# for pp,inarr in zip([8,11,11,5,10,10],[CODEin,LABELin,LABELPin,REFin,OTHER1in,OTHER2in]):
+		# 	x = np.array([''.join(inarr[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		# 	x = ''.join(x)
 
-		print(x)
-		print(list(map(''.join, zip(*[iter(x)]*8))))
+		# x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		# x = ''.join(x)
+
+		# print(x)
+		# print(list(map(''.join, zip(*[iter(x)]*8))))
 
 		outspec = {'WAVE':SWL,'QMU1':QMU1,'QMU2':QMU2}
 		ll = {}
