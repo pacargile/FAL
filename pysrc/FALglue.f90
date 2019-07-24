@@ -63,10 +63,10 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(out) :: LABELin(11,NLINESi)
+  character(kind=c_char,len=1),  intent(out) :: LABELin(10,NLINESi)
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: LABELPin(11,NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: LABELPin(10,NLINESi)
   real(c_double), intent(out) :: GRin(NLINESi)
   real(c_double), intent(out) :: DGAMMARin(NLINESi)
   real(c_double), intent(out) :: GSin(NLINESi)
@@ -187,7 +187,7 @@ subroutine readoutspecbin(&
      WAVENOin(I) = WAVENO
      WRITE(SLABEL,'(A4)') REF
      SLABEL = SLABEL//c_null_char
-     DO J=1,4
+     DO J=1,5
        REFin(J,I) = SLABEL(J:J)
      END DO
      NBLOin(I) = INT(NBLO)
