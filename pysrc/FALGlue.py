@@ -301,6 +301,8 @@ class glue(object):
 		# 		ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
 		ll['RESID']    = np.array(['{0:7.5f}'.format(x) for x in RESIDin],dtype='float')
 
+		ll.sort('WL')
+
 		return (outspec,ll)
 
 	def readlp(self,filename):
