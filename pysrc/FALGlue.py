@@ -220,7 +220,7 @@ class glue(object):
 		# QMU1 = np.trim_zeros(QMU1,trim='b')
 		# QMU2 = np.trim_zeros(QMU2,trim='b')
 
-		print(LABELin[0,:].tostring('F').shape)
+		print(LABELin[0,:].tostring('F').decode('ascii').shape)
 		print(''.join(LABELin[0,:].tostring('F').decode('ascii')))
 
 		outspec = {'WAVE':SWL,'QMU1':QMU1,'QMU2':QMU2}
