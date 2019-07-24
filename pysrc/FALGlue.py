@@ -301,7 +301,10 @@ class glue(object):
 		# 		ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
 		ll['RESID']    = np.array(['{0:7.5f}'.format(x) for x in RESIDin],dtype='float')
 
-		ll.sort('WL')
+		sortind = np.argsort(ll['WL'])
+
+		for kk in ll.keys():
+			ll[kk] = ll[kk][sortind]
 
 		return (outspec,ll)
 
