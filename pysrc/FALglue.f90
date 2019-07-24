@@ -60,8 +60,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: DWLin(NLINESi)
   real(c_double), intent(out) :: GFLOGin(NLINESi)
   real(c_double), intent(out) :: DGFLOGin(NLINESi)
-  ! real(c_double), intent(out) :: CODEin(NLINESi)
-  character(kind=c_char,len=1),  intent(out) :: CODEin(8,NLINESi)
+  real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
   character(kind=c_char,len=1),  intent(out) :: LABELin(11,NLINESi)
@@ -147,24 +146,24 @@ subroutine readoutspecbin(&
   DO I=1,NLINESO
      READ(1)LINDAT8,LINDAT
 
-     IF(I.EQ.6)WRITE(6,141)WL,CODE,LABEL,LABELP
+     ! IF(I.EQ.6)WRITE(6,141)WL,CODE,LABEL,LABELP
 
-     IF(I.EQ.6)WRITE(6,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,&
-     EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO,&
-     REF,NBLO,NBUP,ISO1,X1,ISO2,X2,OTHER1,OTHER2,ISOSHIFT,&
-     NELION,resid
+     ! IF(I.EQ.6)WRITE(6,140)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,&
+     ! EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO,&
+     ! REF,NBLO,NBUP,ISO1,X1,ISO2,X2,OTHER1,OTHER2,ISOSHIFT,&
+     ! NELION,resid
 
      resid=center/concen
      WLin(I) = WL
      DWLin(I) = DWL
      GFLOGin(I) = GFLOG
      DGFLOGin(I) = DGFLOG
-     ! CODEin(I) = CODE
-     WRITE(SLABEL,'(A8)') CODE
-     SLABEL = SLABEL//c_null_char
-     DO J=1,8
-       CODEin(J,I) = SLABEL(J:J)
-     END DO
+     CODEin(I) = CODE
+     ! WRITE(SLABEL,'(A8)') CODE
+     ! SLABEL = SLABEL//c_null_char
+     ! DO J=1,8
+     !   CODEin(J,I) = SLABEL(J:J)
+     ! END DO
      Ein(I) = E
      XJin(I) = XJ
      WRITE(SLABEL,'(A8,A2)') LABEL

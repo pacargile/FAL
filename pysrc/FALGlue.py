@@ -51,7 +51,7 @@ class glue(object):
 		self.fmtstr = ([
 			'11.4f','7.4f',
 			'7.3f','7.3f',
-			'8s',
+			'8.2f',
 			'12.3f','5.1f',
 			'11s',
 			'12.3f','5.1f',
@@ -68,7 +68,7 @@ class glue(object):
 		self.fmtnp = ([
 			np.float64,np.float64,
 			np.float64,np.float64,
-			np.str_,
+			np.float64,
 			np.float64,np.float64,
 			np.str_,
 			np.float64,np.float64,
@@ -148,7 +148,7 @@ class glue(object):
 		DWLin      = np.zeros(NLINES,dtype='double')
 		GFLOGin    = np.zeros(NLINES,dtype='double')
 		DGFLOGin   = np.zeros(NLINES,dtype='double')
-		CODEin     = np.zeros((NLINES,8),dtype='str')
+		CODEin     = np.zeros(NLINES,dtype='double')
 		Ein        = np.zeros(NLINES,dtype='double')
 		XJin       = np.zeros(NLINES,dtype='double')
 		LABELin    = np.zeros((NLINES,11),dtype='str')
@@ -188,7 +188,7 @@ class glue(object):
 			DWLin.ctypes.data_as(self.c_double_p),     
 			GFLOGin.ctypes.data_as(self.c_double_p),   
 			DGFLOGin.ctypes.data_as(self.c_double_p),  
-			CODEin.ctypes.data_as(c_char_p),    
+			CODEin.ctypes.data_as(self.c_double_p),    
 			Ein.ctypes.data_as(self.c_double_p),       
 			XJin.ctypes.data_as(self.c_double_p),      
 			LABELin.ctypes.data_as(c_char_p),   
@@ -236,8 +236,8 @@ class glue(object):
 		ll['DWL']      = np.array(['{0:7.4f}'.format(x) for x in DWLin],dtype='float')
 		ll['GFLOG']    = np.array(['{0:7.3f}'.format(x) for x in GFLOGin],dtype='float')
 		ll['DGFLOG']   = np.array(['{0:7.3f}'.format(x) for x in DGFLOGin],dtype='float')
-		# ll['CODE']     = np.array(['{0:8.2f}'.format(x) for x in CODEin],dtype='float')
-		ll['CODE']     = np.array([''.join(CODEin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
+		ll['CODE']     = np.array(['{0:8.2f}'.format(x) for x in CODEin],dtype='float')
+		# ll['CODE']     = np.array([''.join(CODEin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		ll['E']        = np.array(['{0:12.3f}'.format(x) for x in Ein],dtype='float')    
 		ll['XJ']       = np.array(['{0:5.1f}'.format(x) for x in XJin],dtype='float')
 		ll['LABEL']    = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
