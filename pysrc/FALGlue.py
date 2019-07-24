@@ -188,7 +188,7 @@ class glue(object):
 			DWLin.ctypes.data_as(self.c_double_p),     
 			GFLOGin.ctypes.data_as(self.c_double_p),   
 			DGFLOGin.ctypes.data_as(self.c_double_p),  
-			CODEin.ctypes.data_as(self.c_char_p),    
+			CODEin.ctypes.data_as(c_char_p),    
 			Ein.ctypes.data_as(self.c_double_p),       
 			XJin.ctypes.data_as(self.c_double_p),      
 			LABELin.ctypes.data_as(c_char_p),   
