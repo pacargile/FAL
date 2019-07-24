@@ -509,7 +509,7 @@ class synthe(object):
 
         try:
             if rlinedict['moles']==True:
-                print('... Reading MOLECULES')
+                # print('... Reading MOLECULES')
                 self.molefiles = ([
                     'alopatrascu.asc', # AlO
                     'nah.dat', # NaH
@@ -646,14 +646,10 @@ class synthe(object):
         """
         # write molfile line list into fort.11
         if os.path.isfile("fort.11"):
-            print('FOUND fort.11')
             self._rmsym('fort.11',verbose=verbose)
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'fort.11')
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
-
-        if os.path.isfile("fort.11"):
-            print('CREATED fort.11')
-        
+                
         # check to make sure all input/output files are right
         filesdict = {}
         filesdict['infiles'] = {'fort.11':'ascii'}
