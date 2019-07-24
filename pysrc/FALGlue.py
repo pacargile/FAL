@@ -151,7 +151,7 @@ class glue(object):
 		CODEin     = np.zeros(NLINES,dtype='double')
 		Ein        = np.zeros(NLINES,dtype='double')
 		XJin       = np.zeros(NLINES,dtype='double')
-		LABELin    = np.zeros((NLINES,...),dtype='str')
+		LABELin    = np.zeros((NLINES,8),dtype='str')
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
 		LABELPin   = np.zeros((NLINES,11),dtype='str')
@@ -219,6 +219,8 @@ class glue(object):
 		# WL = np.trim_zeros(WL,trim='b')
 		# QMU1 = np.trim_zeros(QMU1,trim='b')
 		# QMU2 = np.trim_zeros(QMU2,trim='b')
+
+		print([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 
 		outspec = {'WAVE':SWL,'QMU1':QMU1,'QMU2':QMU2}
 		ll = {}
