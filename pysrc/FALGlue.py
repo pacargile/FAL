@@ -283,6 +283,7 @@ class glue(object):
 		# ll['OTHER2']   = np.array([''.join(OTHER2in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		ll['OTHER1']   = np.array(OTHER1in,dtype='str')
 		ll['OTHER2']   = np.array(OTHER2in,dtype='str')
+		print(ll)
 		ll['ISOSHIFT'] = ISOSHIFTin
 		ll['NELION']   = NELIONin
 		ll['OTHER'] = np.array(
