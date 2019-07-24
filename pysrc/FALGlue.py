@@ -224,7 +224,7 @@ class glue(object):
 		x = ''.join(x)
 
 		print(x)
-		print(map(''.join, zip(*[iter(x)]*8)))
+		print(list(map(''.join, zip(*[iter(x)]*8))))
 
 		outspec = {'WAVE':SWL,'QMU1':QMU1,'QMU2':QMU2}
 		ll = {}
