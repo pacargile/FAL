@@ -94,7 +94,7 @@ class glue(object):
 			'OTHER2':'10s',
 			'ISOSHIFT':'6d',
 			'NELION':'4d',
-			'RESID':'8.4f',
+			'RESID':'10.4f',
 			})
 				
 
@@ -299,7 +299,7 @@ class glue(object):
 		# ll['OTHER'] = np.array(
 		# 	['{0}{1}{2:6.0f}{3:4.0f}'.format(x1,x2,x3,x4) for x1,x2,x3,x4 in zip(
 		# 		ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
-		ll['RESID']    = np.array(['{0:>10.4f}'.format(x) for x in RESIDin],dtype='float')
+		ll['RESID']    = np.array(['{0:.4f}'.format(x) for x in RESIDin],dtype='float')
 
 		sortind = np.argsort(ll['WL'])
 
