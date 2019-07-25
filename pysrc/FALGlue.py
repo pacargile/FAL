@@ -270,7 +270,7 @@ class glue(object):
 		ll['XJ']       = np.array(['{0:5.1f}'.format(x) for x in XJin],dtype='float')
 		# ll['LABEL']    = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		ll['LABEL']    = np.array([' {0:10s}'.format(x) for x in LABELin],dtype=str)
-		ll['EP']       = np.array(['{0:12.3f}'.format(x) for x in EPin],dtype='float')
+		ll['EP']       = np.array(['{0:11.3f}'.format(x) for x in EPin],dtype='float')
 		ll['XJP']      = np.array(['{0:5.1f}'.format(x) for x in XJPin],dtype='float')
 		# ll['LABELP']   = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		ll['LABELP']   = np.array([' {0:10s}'.format(x) for x in LABELPin],dtype=str)
@@ -299,7 +299,7 @@ class glue(object):
 		# ll['OTHER'] = np.array(
 		# 	['{0}{1}{2:6.0f}{3:4.0f}'.format(x1,x2,x3,x4) for x1,x2,x3,x4 in zip(
 		# 		ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
-		ll['RESID']    = np.array(['{0:7.5f}'.format(x) for x in RESIDin],dtype='float')
+		ll['RESID']    = np.array(['{0:10.4f}'.format(x) for x in RESIDin],dtype='float')
 
 		sortind = np.argsort(ll['WL'])
 
