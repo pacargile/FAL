@@ -166,16 +166,16 @@ subroutine readoutspecbin(&
      ! END DO
      Ein(I) = E
      XJin(I) = XJ
-     WRITE(SLABEL,'(X1,A8,A2)') LABEL
+     WRITE(SLABEL,'(A9,A2)') LABEL
      SLABEL = SLABEL//c_null_char
-     DO J=1,10
+     DO J=1,11
        LABELin(J,I) = SLABEL(J:J)
      END DO
      EPin(I) = EP
      XJPin(I) = XJP
-     WRITE(SLABEL,'(X1,A8,A2)') LABELP
+     WRITE(SLABEL,'(A9,A2)') LABELP
      SLABEL = SLABEL//c_null_char
-     DO J=1,10
+     DO J=1,11
        LABELPin(J,I) = SLABEL(J:J)
      END DO
      GRin(I) = GR
@@ -185,9 +185,9 @@ subroutine readoutspecbin(&
      GWin(I) = GW
      DGAMMAWin(I) = DGAMMAW
      WAVENOin(I) = WAVENO
-     WRITE(SLABEL,'(X1,A4)') REF
+     WRITE(SLABEL,'(A5)') REF
      SLABEL = SLABEL//c_null_char
-     DO J=1,5
+     DO J=1,6
        REFin(J,I) = SLABEL(J:J)
      END DO
      NBLOin(I) = INT(NBLO)
