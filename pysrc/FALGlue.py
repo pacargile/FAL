@@ -83,7 +83,7 @@ class glue(object):
 			'GW':'6.2f',
 			'DGAMMAW':'+6.2f',
 			'WAVENO':'11.3f',
-			'REF':'4s',
+			'REF':'5s',
 			'NBLO':'2d',
 			'NBUP':'2d',
 			'ISO1':'3d',
@@ -283,7 +283,7 @@ class glue(object):
 		ll['WAVENO']   = np.array(['{0:11.3f}'.format(x) for x in WAVENOin],dtype='float')
 		# ll['REF']      = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		# ll['REF']      = np.array(REFin,dtype='str')
-		ll['REF']      = np.array([' {0:4s}  '.format(x) for x in REFin],dtype=str)
+		ll['REF']      = np.array([' {0:5s} '.format(x) for x in REFin],dtype=str)
 		ll['NBLO']     = NBLOin
 		ll['NBUP']     = NBUPin
 		ll['ISO1']     = ISO1in
