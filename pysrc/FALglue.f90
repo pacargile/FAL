@@ -187,7 +187,7 @@ subroutine readoutspecbin(&
      WAVENOin(I) = WAVENO
      WRITE(SLABEL,'(A4)') REF
      SLABEL = SLABEL//c_null_char
-     DO J=1,5
+     DO J=1,4
        REFin(J,I) = SLABEL(J:J)
      END DO
      NBLOin(I) = INT(NBLO)
