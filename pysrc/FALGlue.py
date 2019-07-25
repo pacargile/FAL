@@ -172,10 +172,10 @@ class glue(object):
 		CODEin     = np.zeros(NLINES,dtype='double')
 		Ein        = np.zeros(NLINES,dtype='double')
 		XJin       = np.zeros(NLINES,dtype='double')
-		LABELin    = np.zeros((NLINES,11),dtype='str')
+		LABELin    = np.zeros((NLINES,10),dtype='str')
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
-		LABELPin   = np.zeros((NLINES,11),dtype='str')
+		LABELPin   = np.zeros((NLINES,10),dtype='str')
 		GRin       = np.zeros(NLINES,dtype='double')
 		DGAMMARin  = np.zeros(NLINES,dtype='double')
 		GSin       = np.zeros(NLINES,dtype='double')
@@ -183,7 +183,7 @@ class glue(object):
 		GWin       = np.zeros(NLINES,dtype='double')
 		DGAMMAWin  = np.zeros(NLINES,dtype='double')
 		WAVENOin   = np.zeros(NLINES,dtype='double')
-		REFin      = np.zeros((NLINES,5),dtype='str')
+		REFin      = np.zeros((NLINES,4),dtype='str')
 		NBLOin     = np.zeros(NLINES,dtype=np.int64)
 		NBUPin     = np.zeros(NLINES,dtype=np.int64)
 		ISO1in     = np.zeros(NLINES,dtype=np.int64)
@@ -240,15 +240,15 @@ class glue(object):
 
 		x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		LABELin = list(map(''.join, zip(*[iter(x)]*11)))
+		LABELin = list(map(''.join, zip(*[iter(x)]*10)))
 
 		x = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		LABELPin = list(map(''.join, zip(*[iter(x)]*11)))
+		LABELPin = list(map(''.join, zip(*[iter(x)]*10)))
 
 		x = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		REFin = list(map(''.join, zip(*[iter(x)]*5)))
+		REFin = list(map(''.join, zip(*[iter(x)]*4)))
 
 		x = np.array([''.join(OTHER1in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
@@ -300,6 +300,8 @@ class glue(object):
 		# 	['{0}{1}{2:6.0f}{3:4.0f}'.format(x1,x2,x3,x4) for x1,x2,x3,x4 in zip(
 		# 		ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
 		ll['RESID']    = np.array(['{0:10.4f}'.format(x) for x in RESIDin],dtype='float')
+
+		print(ll[:5])
 
 		sortind = np.argsort(ll['WL'])
 
