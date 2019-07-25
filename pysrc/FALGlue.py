@@ -72,10 +72,10 @@ class glue(object):
 			'CODE':'8.2f',
 			'E':'12.3f',
 			'XJ':'5.1f',
-			'LABEL':'11s',
+			'LABEL':'10s',
 			'EP':'12.3f',
 			'XJP':'5.1f',
-			'LABELP':'11s',
+			'LABELP':'10s',
 			'GR':'6.2f',
 			'DGAMMAR':'+6.2f',
 			'GS':'6.2f',
@@ -83,7 +83,7 @@ class glue(object):
 			'GW':'6.2f',
 			'DGAMMAW':'+6.2f',
 			'WAVENO':'11.3f',
-			'REF':'5s',
+			'REF':'4s',
 			'NBLO':'2d',
 			'NBUP':'2d',
 			'ISO1':'3d',
@@ -172,10 +172,10 @@ class glue(object):
 		CODEin     = np.zeros(NLINES,dtype='double')
 		Ein        = np.zeros(NLINES,dtype='double')
 		XJin       = np.zeros(NLINES,dtype='double')
-		LABELin    = np.zeros((NLINES,11),dtype='str')
+		LABELin    = np.zeros((NLINES,10),dtype='str')
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
-		LABELPin   = np.zeros((NLINES,11),dtype='str')
+		LABELPin   = np.zeros((NLINES,10),dtype='str')
 		GRin       = np.zeros(NLINES,dtype='double')
 		DGAMMARin  = np.zeros(NLINES,dtype='double')
 		GSin       = np.zeros(NLINES,dtype='double')
@@ -183,7 +183,7 @@ class glue(object):
 		GWin       = np.zeros(NLINES,dtype='double')
 		DGAMMAWin  = np.zeros(NLINES,dtype='double')
 		WAVENOin   = np.zeros(NLINES,dtype='double')
-		REFin      = np.zeros((NLINES,5),dtype='str')
+		REFin      = np.zeros((NLINES,4),dtype='str')
 		NBLOin     = np.zeros(NLINES,dtype=np.int64)
 		NBUPin     = np.zeros(NLINES,dtype=np.int64)
 		ISO1in     = np.zeros(NLINES,dtype=np.int64)
