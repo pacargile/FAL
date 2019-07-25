@@ -72,10 +72,10 @@ class glue(object):
 			'CODE':'8.2f',
 			'E':'12.3f',
 			'XJ':'5.1f',
-			'LABEL':'12s',
+			'LABEL':'10s',
 			'EP':'12.3f',
 			'XJP':'5.1f',
-			'LABELP':'11s',
+			'LABELP':'10s',
 			'GR':'6.2f',
 			'DGAMMAR':'+6.2f',
 			'GS':'6.2f',
@@ -83,7 +83,7 @@ class glue(object):
 			'GW':'6.2f',
 			'DGAMMAW':'+6.2f',
 			'WAVENO':'11.3f',
-			'REF':'5s',
+			'REF':'4s',
 			'NBLO':'2d',
 			'NBUP':'2d',
 			'ISO1':'3d',
@@ -172,10 +172,10 @@ class glue(object):
 		CODEin     = np.zeros(NLINES,dtype='double')
 		Ein        = np.zeros(NLINES,dtype='double')
 		XJin       = np.zeros(NLINES,dtype='double')
-		LABELin    = np.zeros((NLINES,11),dtype='str')
+		LABELin    = np.zeros((NLINES,10),dtype='str')
 		EPin       = np.zeros(NLINES,dtype='double')
 		XJPin      = np.zeros(NLINES,dtype='double')
-		LABELPin   = np.zeros((NLINES,11),dtype='str')
+		LABELPin   = np.zeros((NLINES,10),dtype='str')
 		GRin       = np.zeros(NLINES,dtype='double')
 		DGAMMARin  = np.zeros(NLINES,dtype='double')
 		GSin       = np.zeros(NLINES,dtype='double')
@@ -183,7 +183,7 @@ class glue(object):
 		GWin       = np.zeros(NLINES,dtype='double')
 		DGAMMAWin  = np.zeros(NLINES,dtype='double')
 		WAVENOin   = np.zeros(NLINES,dtype='double')
-		REFin      = np.zeros((NLINES,5),dtype='str')
+		REFin      = np.zeros((NLINES,4),dtype='str')
 		NBLOin     = np.zeros(NLINES,dtype=np.int64)
 		NBUPin     = np.zeros(NLINES,dtype=np.int64)
 		ISO1in     = np.zeros(NLINES,dtype=np.int64)
@@ -248,7 +248,7 @@ class glue(object):
 
 		x = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		REFin = list(map(''.join, zip(*[iter(x)]*5)))
+		REFin = list(map(''.join, zip(*[iter(x)]*4)))
 
 		x = np.array([''.join(OTHER1in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
@@ -269,11 +269,11 @@ class glue(object):
 		ll['E']        = np.array(['{0:12.3f}'.format(x) for x in Ein],dtype='float')    
 		ll['XJ']       = np.array(['{0:5.1f}'.format(x) for x in XJin],dtype='float')
 		# ll['LABEL']    = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		ll['LABEL']    = np.array(['{0:10s}'.format(x) for x in LABELin],dtype=str)
+		ll['LABEL']    = np.array([' {0:10s}'.format(x) for x in LABELin],dtype=str)
 		ll['EP']       = np.array(['{0:12.3f}'.format(x) for x in EPin],dtype='float')
 		ll['XJP']      = np.array(['{0:5.1f}'.format(x) for x in XJPin],dtype='float')
 		# ll['LABELP']   = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		ll['LABELP']   = np.array(['{0:10s}'.format(x) for x in LABELPin],dtype=str)
+		ll['LABELP']   = np.array([' {0:10s}'.format(x) for x in LABELPin],dtype=str)
 		ll['GR']       = np.array(['{0:6.2f}'.format(x) for x in GRin],dtype='float')
 		ll['DGAMMAR']  = DGAMMARin
 		ll['GS']       = np.array(['{0:6.2f}'.format(x) for x in GSin],dtype='float')
@@ -283,7 +283,7 @@ class glue(object):
 		ll['WAVENO']   = np.array(['{0:11.3f}'.format(x) for x in WAVENOin],dtype='float')
 		# ll['REF']      = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		# ll['REF']      = np.array(REFin,dtype='str')
-		ll['REF']      = np.array(['{0:5s}'.format(x) for x in REFin],dtype=str)
+		ll['REF']      = np.array([' {0:4s}'.format(x) for x in REFin],dtype=str)
 		ll['NBLO']     = NBLOin
 		ll['NBUP']     = NBUPin
 		ll['ISO1']     = ISO1in
@@ -307,7 +307,7 @@ class glue(object):
 			ll[kk] = ll[kk][sortind]
 
 		for kk in ll.keys():
-			for ii in [88471]:#np.random.choice(range(len(ll)),5):
+			for ii in np.random.choice(range(len(ll)),5):
 				print(kk,'---','{}'.format(ll[kk][ii]),'---',len('{}'.format(ll[kk][ii])))
 
 
