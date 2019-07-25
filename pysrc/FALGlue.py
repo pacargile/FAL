@@ -307,7 +307,7 @@ class glue(object):
 			ll[kk] = ll[kk][sortind]
 
 		for kk in ll.keys():
-			for ii in [88471,88472]:#np.random.choice(range(len(ll)),5):
+			for ii in [88471]:#np.random.choice(range(len(ll)),5):
 				print(kk,'---','{}'.format(ll[kk][ii]),'---',len('{}'.format(ll[kk][ii])))
 
 
