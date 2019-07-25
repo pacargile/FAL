@@ -63,10 +63,10 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(out) :: LABELin(10,NLINESi)
+  character(kind=c_char,len=1),  intent(out) :: LABELin(11,NLINESi)
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: LABELPin(10,NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: LABELPin(11,NLINESi)
   real(c_double), intent(out) :: GRin(NLINESi)
   real(c_double), intent(out) :: DGAMMARin(NLINESi)
   real(c_double), intent(out) :: GSin(NLINESi)
@@ -166,16 +166,16 @@ subroutine readoutspecbin(&
      ! END DO
      Ein(I) = E
      XJin(I) = XJ
-     WRITE(SLABEL,'(A9,A1)') LABEL
+     WRITE(SLABEL,'(A8,A3)') LABEL
      SLABEL = SLABEL//c_null_char
-     DO J=1,12
+     DO J=0,10
        LABELin(J,I) = SLABEL(J:J)
      END DO
      EPin(I) = EP
      XJPin(I) = XJP
-     WRITE(SLABEL,'(A9,A3)') LABELP
+     WRITE(SLABEL,'(A8,A3)') LABELP
      SLABEL = SLABEL//c_null_char
-     DO J=1,12
+     DO J=0,10
        LABELPin(J,I) = SLABEL(J:J)
      END DO
      GRin(I) = GR
@@ -187,7 +187,7 @@ subroutine readoutspecbin(&
      WAVENOin(I) = WAVENO
      WRITE(SLABEL,'(A5)') REF
      SLABEL = SLABEL//c_null_char
-     DO J=1,6
+     DO J=0,5
        REFin(J,I) = SLABEL(J:J)
      END DO
      NBLOin(I) = INT(NBLO)
