@@ -302,7 +302,7 @@ class glue(object):
 		ll['RESID']    = np.array(['{0:10.4f}'.format(x) for x in RESIDin],dtype='float')
 
 		for kk in ll.keys():
-			print(kk,'---','{}'.format(ll[kk][0]),'---',len('{}'.format(ll[kk][0])))
+			print(kk,'---','{}'.format(ll[kk][4]),'---',len('{}'.format(ll[kk][4])))
 
 		sortind = np.argsort(ll['WL'])
 
