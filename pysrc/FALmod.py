@@ -354,7 +354,7 @@ class FALmod(object):
             verbose_i = True
         else:
             verbose_i = False
-        self.SYNTHE.syn(verbose=verbose_i,speed=self.speed)
+        self.SYNTHE.syn(verbose=True,speed=self.speed)
         if self.timeit:
             print("Pro: {1} --> SYNTHE -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
@@ -375,7 +375,7 @@ class FALmod(object):
             verbose_i = True
         else:
             verbose_i = False
-        self.SYNTHE.rotate(self.starpars['VROT'],verbose=verbose_i)
+        self.SYNTHE.rotate(self.starpars['VROT'],verbose=True)
         if self.timeit:
             print("Pro: {1} --> ROTATE -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
