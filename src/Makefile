@@ -39,8 +39,9 @@ synthe:
 	$(FC) $(LDFLAGS) -o globaladj.exe globaladj.o
 
 testing:
-	$(FC) $(FFLAGS) -o globaladj.o globaladj.for
-	$(FC) $(LDFLAGS) -o globaladj.exe globaladj.o
+	$(FC) $(FFLAGS) -o rotate.o rotate.for
+	$(FC) $(LDFLAGS) -o rotate.exe rotate.o
+
 install:
 	/bin/mv *.exe ../bin
 
