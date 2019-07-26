@@ -111,7 +111,7 @@ def selmod(starpars):
 	else:
 		# set up some object specific strings
 		synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
-			"0.          0   {LINOUT:3.0f}{TOL:7.5f}     {PRED}    00\n"
+			"0.          0    {LINOUT:3.0f}{TOL:7.5f}     {PRED}    00\n"
 			"AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD")
 		instparstr = {'OPT':None,'HBAND':None}
 
