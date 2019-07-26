@@ -364,7 +364,7 @@ class FALmod(object):
             verbose_i = True
         else:
             verbose_i = False
-        self.SYNTHE.spectrv(verbose=verbose_i,tau=self.tau_i)
+        self.SYNTHE.spectrv(verbose=True,tau=self.tau_i)
         if self.timeit:
             print("Pro: {1} --> SPECTRV -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
