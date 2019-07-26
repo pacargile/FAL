@@ -1,8 +1,8 @@
 FC=ifort
 
-FFLAGS = -c -save -w -V -WB -opt-prefetch -double-size 64 -assume buffered_io -ip -O3 -xhost -mkl 
+# FFLAGS = -c -save -w -V -WB -opt-prefetch -double-size 64 -assume buffered_io -ip -O3 -xhost -mkl 
 LDFLAGS = -zero
-
+FFLAGS = -c -save -w -V -WB -double-size 64
 synthe:
 	$(FC) $(FFLAGS)  -o atlas7lib.o  atlas7v.for
 	$(FC) $(FFLAGS) -o xnfpelsyn.o xnfpelsyn.for
