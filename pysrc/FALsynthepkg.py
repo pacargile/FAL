@@ -342,7 +342,7 @@ class synthe(object):
         if 'LINOUT' in self.starpars.keys():
             self.LINOUT = self.starpars['LINOUT']
         else:
-            self.LINOUT = 30
+            self.LINOUT = 1
         if 'TOL' in self.starpars.keys():
             self.TOL = self.starpars['TOL']
         else:
