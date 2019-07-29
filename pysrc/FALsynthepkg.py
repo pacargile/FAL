@@ -141,9 +141,9 @@ class synthe(object):
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
                                    stdin=subprocess.PIPE,stdout=_FNULL,encoding='ascii')
         if function == 'rotate':
-            print(_inputstr.decode('ascii'))
+            print(_inputstr.encode('ascii'))
         if type(_inputstr) != type(None):
-            output = pro.communicate(input=_inputstr.decode('ascii'))[0]
+            output = pro.communicate(input=_inputstr.encode('ascii'))[0]
         else:
             output = None
 
