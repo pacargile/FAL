@@ -590,7 +590,7 @@ class synthe(object):
         """
 
         # if verbose:
-        print("Running RSCHWENK")
+        # print("Running RSCHWENK")
 
         # write TiO line list files into fort.11 and fort.48
         if os.path.isfile("fort.11"):
@@ -603,14 +603,14 @@ class synthe(object):
         os.symlink(self.bigdatadir+'MOLECULES/eschwenke.bin','fort.48')
         os.symlink(self.bigdatadir+'MOLECULES/eschwenke.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
 
-        self.rmoleout_tio = self._callpro("rschwenk",verbose=True)
+        self.rmoleout_tio = self._callpro("rschwenk",verbose=verbose)
 
         if os.path.isfile("fort.48"):
             os.unlink('fort.48')
         if os.path.isfile('/dev/shm/FAL/{0}/fort.48'.format(self.ID)):
             os.remove('/dev/shm/FAL/{0}/fort.48'.format(self.ID))
         # if verbose:
-        print("Finished RSCHWENK")
+        # print("Finished RSCHWENK")
     
     def readmol_H2O(self,verbose=None):
         """
