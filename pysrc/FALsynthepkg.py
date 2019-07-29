@@ -950,6 +950,7 @@ class synthe(object):
         # write in information into input string
         print("Running Rotate")
         rotatestr = self.rotatevar.format(VROT=VROT)
+        print(rotateout)
         self.rotateout = self._callpro("rotate",rotatestr,verbose=True)
         print("Finished Rotate")
 
