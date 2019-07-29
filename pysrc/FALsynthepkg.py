@@ -143,7 +143,7 @@ class synthe(object):
 
         print(_inputstr)
         if type(_inputstr) != type(None):
-            output = pro.communicate(input=_inputstr.encode())
+            output = pro.communicate(input=_inputstr)[0]
         else:
             output = None
 
