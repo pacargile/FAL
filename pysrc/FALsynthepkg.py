@@ -78,7 +78,7 @@ class synthe(object):
         self.atmomod = '/dev/shm/FAL/{0}/mod.dat'.format(self.ID)
 
         # set up some useful strings
-        self.rotatevar = ("    1\n{VROT:5.3f}")
+        self.rotatevar = ("    1\n {VROT:5.3f}")
         self.macpar = "MACRO     {MACVEL:3.1f}       KM                  COMMENT FIELD"
 
         # move some static files into memory
