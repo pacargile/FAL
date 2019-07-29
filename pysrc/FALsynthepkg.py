@@ -840,7 +840,7 @@ class synthe(object):
         # print("Running Synthe")
         if speed == 'slow':
             # print("Running Synthe SLOW")
-            self.synout = self._callpro("synthe_slow",verbose=verbose)
+            self.synout = self._callpro("synthe_slow",verbose=True)
         elif speed == 'fast':
             # print("Running Synthe FAST")
             self.synout = self._callpro("synthe_fast",verbose=verbose)
@@ -954,7 +954,7 @@ class synthe(object):
         # write in information into input string
         print("Running Rotate")
         rotatestr = self.rotatevar.format(NROT=1,NRADIUS=0,VROT=VROT)
-        self.rotateout = self._callpro("rotate",rotatestr,verbose=True)
+        self.rotateout = self._callpro("rotate",rotatestr,verbose=verbose)
         print("Finished Rotate")
 
         return (self.rotateout,self.ID)
