@@ -22,7 +22,7 @@ C     TAPE15 temporary file of opacity vectors for each line
 C     TAPE19 input line data from RNLTE
 C     TAPE93 parameters for this run from SYNBEG
       PARAMETER (kw=99,mw=139,mw6=mw*6)
-      PARAMETER (LENREC=1000000,MAXLEN=100000001,MAXPROF=1000000,
+      PARAMETER (LENREC=10000000,MAXLEN=100000001,MAXPROF=1000000,
      1           MAXBUFF=MAXLEN+MAXPROF,MAXLIN=MAXBUFF+MAXPROF*2)
 C     LENREC  transposition is done in blocks of LENRECxkw
 C     MAXLEN  number of points in the spectrum
@@ -87,7 +87,6 @@ C
      1     WLBEG,WLEND,RESOLU,RATIO,RATIOLG,CUTOFF,LINOUT
 C      WRITE(6,*) "NLINES, LINOUT:"
 C      WRITE(6,108) NLINES, LINOUT
-       WRITE(6,*)NLINES
  108  FORMAT(I10,I10)
       CLOSE(UNIT=93)
 C
@@ -296,7 +295,6 @@ C     ADD LINES TO BUFFER
       IF(N12.EQ.0)GO TO 400
       N191=N19+1
       alpha=0.
-      WRITE(6,*)N191,NLINES
       DO 350 ILINE=N191,NLINES
       READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF
 c
