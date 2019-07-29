@@ -606,7 +606,7 @@ class synthe(object):
         os.symlink(self.bigdatadir+'MOLECULES/eschwenke.bin','fort.48')
         os.symlink(self.bigdatadir+'MOLECULES/eschwenke.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
 
-        self.rmoleout_tio = self._callpro("rschwenk",verbose=verbose)
+        self.rmoleout_tio = self._callpro("rschwenk",verbose=True)
 
         if os.path.isfile("fort.48"):
             os.unlink('fort.48')

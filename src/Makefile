@@ -43,6 +43,8 @@ testing:
 	$(FC) $(LDFLAGS) -o synthe_slow.exe synthe_slow.o
 	$(FC) $(FFLAGS) -o rotate.o rotate.for
 	$(FC) $(LDFLAGS) -o rotate.exe rotate.o
+	$(FC) $(FFLAGS) -o  rschwenk.o rschwenk.for
+	$(FC) $(LDFLAGS) -o  rschwenk.exe rschwenk.o
 
 install:
 	/bin/mv *.exe ../bin
