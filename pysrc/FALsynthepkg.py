@@ -143,12 +143,11 @@ class synthe(object):
 
         print(_inputstr)
         if type(_inputstr) != type(None):
-            output = pro.communicate(input=_inputstr)
+            output = pro.communicate(input=_inputstr.encode())
         else:
             output = None
 
-        if function != 'rotate':
-            pro.wait()
+        pro.wait()
         return output
 
     # def _stringIOafy(self,strin):
