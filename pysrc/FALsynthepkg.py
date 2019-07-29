@@ -147,7 +147,8 @@ class synthe(object):
         else:
             output = None
 
-        pro.wait()
+        if function != 'rotate':
+            pro.wait()
         return output
 
     # def _stringIOafy(self,strin):
