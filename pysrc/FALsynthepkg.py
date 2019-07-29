@@ -670,7 +670,7 @@ class synthe(object):
             print("Running RMolecASC on {0}".format(molfile))
         self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=verbose)
         if verbose:
-            # print("Finished RMolecASC on {0}".format(molfile))
+            print("Finished RMolecASC on {0}".format(molfile))
 
     def readpredlines(self,verbose=None):
         """
