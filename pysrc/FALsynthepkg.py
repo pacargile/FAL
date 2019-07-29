@@ -145,7 +145,6 @@ class synthe(object):
                                    universal_newlines=True)
 
         if type(_inputstr) != type(None):
-            print(_inputstr)
             output = pro.communicate(input=_inputstr)
         else:
             output = None
