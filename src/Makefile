@@ -2,7 +2,7 @@ FC=ifort
 
 # FFLAGS = -c -save -w -V -WB -opt-prefetch -double-size 64 -assume buffered_io -ip -O3 -xhost -mkl 
 LDFLAGS = -zero
-FFLAGS = -c -save -w -V -WB -double-size 64
+FFLAGS = -c -save -w -V -WB -double-size 64 -O3
 synthe:
 	$(FC) $(FFLAGS)  -o atlas7lib.o  atlas7v.for
 	$(FC) $(FFLAGS) -o xnfpelsyn.o xnfpelsyn.for
@@ -39,8 +39,8 @@ synthe:
 	$(FC) $(LDFLAGS) -o globaladj.exe globaladj.o
 
 testing:
-	$(FC) $(FFLAGS) -o rotate.o rotate.for
-	$(FC) $(LDFLAGS) -o rotate.exe rotate.o
+	$(FC) $(FFLAGS)  -o synthe_slow.o synthe_slow.for
+	$(FC) $(LDFLAGS) -o synthe_slow.exe synthe_slow.o
 
 install:
 	/bin/mv *.exe ../bin
