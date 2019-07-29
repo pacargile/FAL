@@ -948,10 +948,10 @@ class synthe(object):
             
 
         # write in information into input string
-        # print("Running Rotate")
+        print("Running Rotate")
         rotatestr = self.rotatevar.format(VROT=VROT)
-        self.rotateout = self._callpro("rotate",rotatestr,verbose=verbose)
-        # print("Finished Rotate")
+        self.rotateout = self._callpro("rotate",rotatestr,verbose=True)
+        print("Finished Rotate")
 
         return (self.rotateout,self.ID)
     
