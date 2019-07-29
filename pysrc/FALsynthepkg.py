@@ -136,13 +136,16 @@ class synthe(object):
 
         if inpipe != None:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
-                                   stdin=open(inpipe,'r'),stdout=_FNULL,encoding='ascii')
+                                   stdin=open(inpipe,'r'),stdout=_FNULL,encoding='ascii',
+                                   universal_newlines=True)
         else:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
-                                   stdin=subprocess.PIPE,stdout=_FNULL,encoding='ascii')
+                                   stdin=subprocess.PIPE,stdout=_FNULL,encoding='ascii',
+                                   universal_newlines=True)
+                                   
         if type(_inputstr) != type(None):
             print(_inputstr)
-            output = pro.communicate(input=_inputstr)[0]
+            output = pro.communicate(input=_inputstr)
         else:
             output = None
 
