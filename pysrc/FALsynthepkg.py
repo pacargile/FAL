@@ -494,7 +494,7 @@ class synthe(object):
         return (self.rgfalldelout,self.ID)
 
 
-    def rlinefunc(self,rlinedict={"atoms":True,"moles":True},verbose=None):
+    def rlinefunc(self,rlinedict={"atoms":True,"moles":True},verbose=True):
         """
         Run read line code to manually read in all data
         """
@@ -594,7 +594,7 @@ class synthe(object):
         """
 
         # if verbose:
-        # print("Running RSCHWENK")
+        print("Running RSCHWENK")
 
         # write TiO line list files into fort.11 and fort.48
         if os.path.isfile("fort.11"):
@@ -621,8 +621,8 @@ class synthe(object):
         helper function to do molecule H2O file read in
         """
 
-        if verbose:
-            print("Running RH2OSLOW")
+        # if verbose:
+        print("Running RH2OSLOW")
 
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
@@ -670,7 +670,7 @@ class synthe(object):
             print("Running RMolecASC on {0}".format(molfile))
         self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=verbose)
         if verbose:
-            print("Finished RMolecASC on {0}".format(molfile))
+            # print("Finished RMolecASC on {0}".format(molfile))
 
     def readpredlines(self,verbose=None):
         """
@@ -684,6 +684,7 @@ class synthe(object):
             self._rmsym('fort.11',verbose=verbose)
         # os.symlink(self.bigdatadir+'/gfpred27sep15.bin','fort.11')
         os.symlink(self.bigdatadir+'/gfpred29dec2014.bin','fort.11')
+        print('RUNNING RPRED')
         self.rmoleout = self._callpro("rpredict",verbose=verbose)
 
     def ratomic(self,verbose=True):
@@ -713,7 +714,7 @@ class synthe(object):
         except AssertionError:
             raise IOError("Something wrong with Input/Output files")
 
-        # print("Running RGFALL")
+        print("Running RGFALL")
         self.ratomicout = self._callpro("rgfall",verbose=verbose)
         # print("Finished RGFALL")
 
