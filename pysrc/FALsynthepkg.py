@@ -79,7 +79,7 @@ class synthe(object):
 
         # set up some useful strings
         # self.rotatevar = ("{NROT:5d}\n{VROT:10.1f}")
-        self.rotatevar = ("{VROT:10.1f}")
+        self.rotatevar = ("{VROT:10.1f}\n")
         self.macpar = "MACRO     {MACVEL:3.1f}       KM                  COMMENT FIELD"
 
         # move some static files into memory
