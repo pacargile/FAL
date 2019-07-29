@@ -81,6 +81,7 @@ C       LINOUT=300
       NROT=1
       NRADIUS=0
       READ(5,*)VROT_i
+      WRITE(6,*)VROT_i
       VROT(1) = VROT_i
 C       READ(5,1001)NROT,NRADIUS,(VROT(IROT),IROT=1,NROT)
 C  1001 FORMAT(I5,I5/(8F10.1))
