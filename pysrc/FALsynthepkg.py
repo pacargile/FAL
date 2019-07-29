@@ -136,10 +136,10 @@ class synthe(object):
 
         if inpipe != None:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
-                                   stdin=open(inpipe,'r'),stdout=_FNULL,encoding='utf-8',shell=True)
+                                   stdin=open(inpipe,'r'),stdout=_FNULL,encoding='ascii')
         else:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
-                                   stdin=subprocess.PIPE,stdout=_FNULL,encoding='utf-8',shell=True)
+                                   stdin=subprocess.PIPE,stdout=_FNULL,encoding='ascii')
         if function == 'rotate':
             print(_inputstr)
         if type(_inputstr) != type(None):
