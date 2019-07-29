@@ -41,6 +41,8 @@ synthe:
 testing:
 	$(FC) $(FFLAGS)  -o synthe_slow.o synthe_slow.for
 	$(FC) $(LDFLAGS) -o synthe_slow.exe synthe_slow.o
+	$(FC) $(FFLAGS) -o rotate.o rotate.for
+	$(FC) $(LDFLAGS) -o rotate.exe rotate.o
 
 install:
 	/bin/mv *.exe ../bin
