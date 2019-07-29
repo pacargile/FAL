@@ -305,7 +305,7 @@ C       WRITE(6,*)N191
 C       WRITE(6,*)NLINES
       DO 350 ILINE=N191,NLINES
       READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF
-      c
+      
 c     include Barklem, Anstee, and O'Mara van der Waals
 c     READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF,alpha
 c
