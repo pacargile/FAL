@@ -22,8 +22,10 @@ C     TAPE15 temporary file of opacity vectors for each line
 C     TAPE19 input line data from RNLTE
 C     TAPE93 parameters for this run from SYNBEG
       PARAMETER (kw=99,mw=139,mw6=mw*6)
-      PARAMETER (LENREC=1000000,MAXLEN=100000001,MAXPROF=1000000,
-     1           MAXBUFF=MAXLEN+MAXPROF*2,MAXLIN=MAXBUFF+MAXPROF*4)
+C       PARAMETER (LENREC=1000000,MAXLEN=100000001,MAXPROF=1000000,
+C      1           MAXBUFF=MAXLEN+MAXPROF*2,MAXLIN=MAXBUFF+MAXPROF*4)
+      PARAMETER (LENREC=8000,MAXLEN=2000001,MAXPROF=10000,
+     1           MAXBUFF=MAXLEN+MAXPROF,MAXLIN=MAXBUFF+MAXPROF*2)
 C     LENREC  transposition is done in blocks of LENRECxkw
 C     MAXLEN  number of points in the spectrum
 C     MAXPROF number of points in either wing of a line with a Voigt profile
