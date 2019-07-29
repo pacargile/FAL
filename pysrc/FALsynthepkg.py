@@ -79,7 +79,7 @@ class synthe(object):
 
         # set up some useful strings
         # self.rotatevar = ("{NROT:5d}\n{VROT:10.1f}")
-        self.rotatevar = ("{VROT:10.1f}\n")
+        self.rotatevar = ("{NROT:5d}{NRADIUS:5d}\n{VROT:10.1f}\n")
         self.macpar = "MACRO     {MACVEL:3.1f}       KM                  COMMENT FIELD"
 
         # move some static files into memory
@@ -953,7 +953,7 @@ class synthe(object):
 
         # write in information into input string
         print("Running Rotate")
-        rotatestr = self.rotatevar.format(VROT=VROT)
+        rotatestr = self.rotatevar.format(NROT=1,NRADIUS=0,VROT=VROT)
         self.rotateout = self._callpro("rotate",rotatestr,verbose=True)
         print("Finished Rotate")
 
