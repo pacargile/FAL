@@ -78,7 +78,7 @@ class synthe(object):
         self.atmomod = '/dev/shm/FAL/{0}/mod.dat'.format(self.ID)
 
         # set up some useful strings
-        self.rotatevar = ("    1\n {VROT:5.3f}")
+        self.rotatevar = ("{NROT:5d}{NRADIUS:5d}\n{VROT:10.1f}")
         self.macpar = "MACRO     {MACVEL:3.1f}       KM                  COMMENT FIELD"
 
         # move some static files into memory
@@ -141,6 +141,7 @@ class synthe(object):
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
                                    stdin=subprocess.PIPE,stdout=_FNULL,encoding='utf-8')
 
+        print(_inputstr)
         if type(_inputstr) != type(None):
             output = pro.communicate(input=_inputstr)
         else:
@@ -949,8 +950,7 @@ class synthe(object):
 
         # write in information into input string
         print("Running Rotate")
-        rotatestr = self.rotatevar.format(VROT=VROT)
-        print(rotatestr)
+        rotatestr = self.rotatevar.format(VROT=VROT,NROT=1,NRADIUS=0)
         self.rotateout = self._callpro("rotate",rotatestr,verbose=True)
         print("Finished Rotate")
 
