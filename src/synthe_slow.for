@@ -298,6 +298,7 @@ C     ADD LINES TO BUFFER
       DO 350 ILINE=N191,NLINES
       READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF
 c
+      WRITE(6,*)NBUFF
 c     include Barklem, Anstee, and O'Mara van der Waals
 c     READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF,alpha
 c
