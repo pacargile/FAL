@@ -493,7 +493,7 @@ class synthe(object):
         return (self.rgfalldelout,self.ID)
 
 
-    def rlinefunc(self,rlinedict={"atoms":True,"moles":True},verbose=True):
+    def rlinefunc(self,rlinedict={"atoms":True,"moles":True},verbose=None):
         """
         Run read line code to manually read in all data
         """
@@ -606,7 +606,7 @@ class synthe(object):
         os.symlink(self.bigdatadir+'MOLECULES/eschwenke.bin','fort.48')
         os.symlink(self.bigdatadir+'MOLECULES/eschwenke.bin','/dev/shm/FAL/{0}/fort.48'.format(self.ID))        
 
-        self.rmoleout_tio = self._callpro("rschwenk",verbose=True)
+        self.rmoleout_tio = self._callpro("rschwenk",verbose=verbose)
 
         if os.path.isfile("fort.48"):
             os.unlink('fort.48')
