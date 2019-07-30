@@ -168,7 +168,7 @@ C     CORONAL APPROXIMATION LINE
       IF(AUTO.EQ.'COR')GO TO 900
 C
 C     14NOV13   Stark width GS is sometimes too large for high series members       
-      IF(GS.NE.0.)GS=MIN(GS,-3.)
+C       IF(GS.NE.0.)GS=MIN(GS,-3.)
 C
 C
 C       WRITE(6,140)WL,GFLOG,CODE,E,XJ,LABEL,EP,XJP,LABELP,
