@@ -375,13 +375,13 @@ class FALmod(object):
             verbose_i = True
         else:
             verbose_i = False
-        self.SYNTHE.rotate(self.starpars['VROT'],verbose=True)
+        self.SYNTHE.rotate(self.starpars['VROT'],verbose=verbose)
         if self.timeit:
             print("Pro: {1} --> ROTATE -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
 
         # pull outspec and newll from rotate.for code
-        outspec,newll = self._specout('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),verbose=True)
+        outspec,newll = self._specout('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),verbose=verbose)
 
         # -- check if the user wants broadening --
         if self.starpars['MACVEL'] == -1:
