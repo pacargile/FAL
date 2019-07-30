@@ -209,7 +209,7 @@ c
       GS=LOG10(GAMMAS)
 C
 C     14NOV13   Stark width GS is sometimes too large for high series members       
-      GS=MIN(GS,-3.)
+C       GS=MIN(GS,-3.)
 C
 C
       GO TO 138

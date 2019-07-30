@@ -275,27 +275,27 @@ class glue(object):
 		# ll['LABELP']   = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		ll['LABELP']   = np.array([' {0:10s}'.format(x) for x in LABELPin],dtype=str)
 		ll['GR']       = np.array(['{0:6.2f}'.format(x) for x in GRin],dtype='float')
-		ll['DGAMMAR']  = DGAMMARin
+		ll['DGAMMAR']  = np.array(['{0:6.2f}'.format(x) for x in DGAMMARin], dtype='float')
 		ll['GS']       = np.array(['{0:6.2f}'.format(x) for x in GSin],dtype='float')
-		ll['DGAMMAS']  = DGAMMASin
+		ll['DGAMMAR']  = np.array(['{0:6.2f}'.format(x) for x in DGAMMASin], dtype='float')
 		ll['GW']       = np.array(['{0:6.2f}'.format(x) for x in GWin],dtype='float')
-		ll['DGAMMAW']  = DGAMMAWin
+		ll['DGAMMAR']  = np.array(['{0:6.2f}'.format(x) for x in DGAMMAWin], dtype='float')
 		ll['WAVENO']   = np.array(['{0:11.3f}'.format(x) for x in WAVENOin],dtype='float')
 		# ll['REF']      = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		# ll['REF']      = np.array(REFin,dtype='str')
 		ll['REF']      = np.array([' {0:5s} '.format(x) for x in REFin],dtype=str)
-		ll['NBLO']     = NBLOin
-		ll['NBUP']     = NBUPin
-		ll['ISO1']     = ISO1in
+		ll['NBLO']     = np.array(['{0:2d}'.format(x) for x in NBLOin],dtype='int')
+		ll['NBUP']     = np.array(['{0:2d}'.format(x) for x in NBUPin],dtype='int')
+		ll['ISO1']     = np.array(['{0:3d}'.format(x) for x in ISO1in],dtype='int')
 		ll['X1']       = np.array(['{0:6.3f}'.format(x) for x in X1in],dtype='float')
-		ll['ISO2']     = ISO2in
+		ll['ISO2']     = np.array(['{0:3d}'.format(x) for x in ISO2in],dtype='int')
 		ll['X2']       = np.array(['{0:6.3f}'.format(x) for x in X2in],dtype='float')  
 		# ll['OTHER1']   = np.array([''.join(OTHER1in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		# ll['OTHER2']   = np.array([''.join(OTHER2in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		ll['OTHER1']   = np.array(OTHER1in,dtype='str')
 		ll['OTHER2']   = np.array(OTHER2in,dtype='str')
-		ll['ISOSHIFT'] = ISOSHIFTin
-		ll['NELION']   = NELIONin
+		ll['ISOSHIFT'] = np.array(['{0:6d}'.format(x) for x in ISOSHIFTin], dtype='int')
+		ll['NELION']   = np.array(['{0:4d}'.format(x) for x in NELIONin], dtype='int')
 		# ll['OTHER'] = np.array(
 		# 	['{0}{1}{2:6.0f}{3:4.0f}'.format(x1,x2,x3,x4) for x1,x2,x3,x4 in zip(
 		# 		ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
