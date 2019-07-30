@@ -235,6 +235,9 @@ C
       WRITE(6,*)N19
       NLINES=N12+N19
       IREC=0
+C
+C
+C
       DO 500 J=1,NRHOX
       REWIND 12
 C     INITIALIZE BUFFER
@@ -304,8 +307,8 @@ C       WRITE(6,*)'N 191, N LINES:'
 C       WRITE(6,*)N191
 C       WRITE(6,*)NLINES
       DO 350 ILINE=N191,NLINES
-        IF(MOD(ILINE,10000).EQ.0)WRITE(6,*) ILINE
-        IF(ILINE.EQ.NLINES)WRITE(6,*) ILINE
+        IF(ILINE.EQ.N191)WRITE(6,*)N191
+        IF(ILINE.EQ.NLINES)WRITE(6,*)NLINES
         READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF
 
 c     include Barklem, Anstee, and O'Mara van der Waals
