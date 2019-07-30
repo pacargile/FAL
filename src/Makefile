@@ -39,12 +39,8 @@ synthe:
 	$(FC) $(LDFLAGS) -o globaladj.exe globaladj.o
 
 testing:
-	$(FC) $(FFLAGS)  -o synbeg.o synbeg.for
-	$(FC) $(LDFLAGS)  -o synbeg.exe synbeg.o
-	$(FC) $(FFLAGS)  -o synthe_slow.o synthe_slow.for
-	$(FC) $(LDFLAGS) -o synthe_slow.exe synthe_slow.o
-	$(FC) $(FFLAGS) -o  rschwenk.o rschwenk.for
-	$(FC) $(LDFLAGS) -o  rschwenk.exe rschwenk.o
+	$(FC) $(FFLAGS)  -o rgfall.o  rgfall.for
+	$(FC) $(LDFLAGS)  -o rgfall.exe  rgfall.o
 
 install:
 	/bin/mv *.exe ../bin
