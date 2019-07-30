@@ -539,7 +539,7 @@ class synthe(object):
                 self.rmolecascout = {}
                 for mf in self.molefiles:
                     try:
-                        self.readmol(mf,verbose=True)
+                        self.readmol(mf,verbose=verbose)
                     except IOError:
                         print('!!!!! Missing {0} !!!!!'.format(mf))
                         raise
@@ -666,7 +666,7 @@ class synthe(object):
 
         if verbose:
             print("Running RMolecASC on {0}".format(molfile))
-        self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=verbose)
+        self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=True)
         if verbose:
             print("Finished RMolecASC on {0}".format(molfile))
 
