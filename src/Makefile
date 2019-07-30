@@ -41,6 +41,8 @@ synthe:
 	$(FC) $(LDFLAGS) -o globaladj.exe globaladj.o
 
 testing:
+	$(FC) $(FFLAGS)  -o synthe_slow.o synthe_slow.for
+	$(FC) $(LDFLAGS) -o synthe_slow.exe synthe_slow.o
 	$(FC) $(FFLAGS)  -o rpredict.o  rpredict.for
 	$(FC) $(LDFLAGS)  -o rpredict.exe  rpredict.o
 	$(FC) $(FFLAGS) -o rpunchbin.o rpunchbin.for

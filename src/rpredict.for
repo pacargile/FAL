@@ -435,7 +435,6 @@ C     CONGF=.026538/1.77245*GF/FREQ
       GR = LOG10(real(GAMMAR))
       GS = LOG10(real(GAMMAS))
       GW = LOG10(real(GAMMAW))
-      IF(GR.EQ.0.0)WRITE(6,*)GAMMAR
       IF(GR.EQ.0.)THEN
       GAMMAR=2.223D13/WLVAC**2
       GR=LOG10(GAMMAR)
@@ -444,7 +443,6 @@ C     CONGF=.026538/1.77245*GF/FREQ
       GAMRF=TABLOG(IGR)/FRQ4PI
       GAMSF=TABLOG(IGS)/FRQ4PI
       GAMWF=TABLOG(IGW)/FRQ4PI
-      IF(GAMRF.EQ.0.0)WRITE(6,*)GAMMAR
       alpha=0.
       IXWL=DLOG(WLVAC)/RATIOLG+.5D0
       if(ifvac.eq.0)ixwl=dlog(wl)/ratiolg+.5D0

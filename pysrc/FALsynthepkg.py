@@ -685,7 +685,7 @@ class synthe(object):
 
         if verbose:
             print('RUNNING RPRED')
-        self.rmoleout = self._callpro("rpredict",verbose=True)
+        self.rpredout = self._callpro("rpredict",verbose=True)
 
     def ratomic(self,verbose=True):
         """
