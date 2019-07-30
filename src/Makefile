@@ -43,6 +43,8 @@ synthe:
 testing:
 	$(FC) $(FFLAGS)  -o rpredict.o  rpredict.for
 	$(FC) $(LDFLAGS)  -o rpredict.exe  rpredict.o
+	$(FC) $(FFLAGS) -o rpunchbin.o rpunchbin.for
+	$(FC) $(LDFLAGS) -o rpunchbin.exe rpunchbin.o
 
 install:
 	/bin/mv *.exe ../bin
