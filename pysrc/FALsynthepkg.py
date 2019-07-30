@@ -512,28 +512,32 @@ class synthe(object):
         try:
             if rlinedict['moles']==True:
                 # print('... Reading MOLECULES')
+                # self.molefiles = ([
+                #     'alopatrascu.asc', # AlO
+                #     'nah.dat', # NaH
+                #     'voax.asc','vobx.asc','vocx.asc', # VO
+                #     'fehfx.dat', # FeH
+                #     'h2bx.dat','h2cx.dat','h2xx.dat', # H2
+                #     'hdxx.dat', #HD
+                #     'mgh.dat', #MgH
+                #     # 'mghax.dat','mghbx.dat', #MgH
+                #     'mgodaily.dat', #MgO
+                #     'nhax.dat','nhca.dat', # NH
+                #     'chjorg.dat', #CH
+                #     # 'cnaxbrooke.dat','cnbxbrooke.dat','cnxx12brooke.dat', # CN
+                #     'cnax.dat','cnbx.dat', #CN
+                #     'c2ax.dat','c2ba.dat','c2da.dat','c2ea.dat', #C2
+                #     'coax.dat','coxx.dat', # CO
+                #     # 'ohax.dat','ohxx.dat', # OH
+                #     'ohaxupdate.asc','ohxxgoldman.asc',# OH
+                #     'sihax.dat', # SiH
+                #     'sioax.dat','sioex.dat','sioxx.dat', #SiO
+                #     'crhax.dat', # CrH
+                #     'cah.dat', # CaH
+                #     ])
+
                 self.molefiles = ([
-                    'alopatrascu.asc', # AlO
-                    'nah.dat', # NaH
-                    'voax.asc','vobx.asc','vocx.asc', # VO
-                    'fehfx.dat', # FeH
-                    'h2bx.dat','h2cx.dat','h2xx.dat', # H2
-                    'hdxx.dat', #HD
                     'mgh.dat', #MgH
-                    # 'mghax.dat','mghbx.dat', #MgH
-                    'mgodaily.dat', #MgO
-                    'nhax.dat','nhca.dat', # NH
-                    'chjorg.dat', #CH
-                    # 'cnaxbrooke.dat','cnbxbrooke.dat','cnxx12brooke.dat', # CN
-                    'cnax.dat','cnbx.dat', #CN
-                    'c2ax.dat','c2ba.dat','c2da.dat','c2ea.dat', #C2
-                    'coax.dat','coxx.dat', # CO
-                    # 'ohax.dat','ohxx.dat', # OH
-                    'ohaxupdate.asc','ohxxgoldman.asc',# OH
-                    'sihax.dat', # SiH
-                    'sioax.dat','sioex.dat','sioxx.dat', #SiO
-                    'crhax.dat', # CrH
-                    'cah.dat', # CaH
                     ])
                 # read molecular files
                 self.rmolecascout = {}
