@@ -324,6 +324,7 @@ C       WRITE(6,*)NLINES
         READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF
         IF(GAMRF.EQ.0.0)THEN
           WRITE(6,*)'FOUND GR:',NBUFF,CONGF,NELION,ELO,GAMRF
+        ENDIF
 c     include Barklem, Anstee, and O'Mara van der Waals
 c     READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF,alpha
 c
