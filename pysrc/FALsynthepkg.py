@@ -442,7 +442,6 @@ class synthe(object):
 
     def rgfalldel(self,verbose=None,reuse_ll=True,userll=None):
         """
-        Run RMOLECASC codes
         
         Reads In: 
             fort.11 (ascii)[Line List]
@@ -592,8 +591,8 @@ class synthe(object):
         helper function to do molecule TiO file read in
         """
 
-        # if verbose:
-        print("Running RSCHWENK")
+        if verbose:
+            print("Running RSCHWENK")
 
         # write TiO line list files into fort.11 and fort.48
         if os.path.isfile("fort.11"):
@@ -612,16 +611,16 @@ class synthe(object):
             os.unlink('fort.48')
         if os.path.isfile('/dev/shm/FAL/{0}/fort.48'.format(self.ID)):
             os.remove('/dev/shm/FAL/{0}/fort.48'.format(self.ID))
-        # if verbose:
-        # print("Finished RSCHWENK")
+        if verbose:
+            print("Finished RSCHWENK")
     
     def readmol_H2O(self,verbose=None):
         """
         helper function to do molecule H2O file read in
         """
 
-        # if verbose:
-        print("Running RH2OSLOW")
+        if verbose:
+            print("Running RH2OSLOW")
 
         if os.path.isfile("fort.11"):
             self._rmsym('fort.11',verbose=verbose)
@@ -665,8 +664,8 @@ class synthe(object):
         except AssertionError:
             raise IOError("Something wrong with Input/Output files")
 
-        # if verbose:
-        print("Running RMolecASC on {0}".format(molfile))
+        if verbose:
+            print("Running RMolecASC on {0}".format(molfile))
         self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=verbose)
         if verbose:
             print("Finished RMolecASC on {0}".format(molfile))
@@ -683,7 +682,9 @@ class synthe(object):
             self._rmsym('fort.11',verbose=verbose)
         # os.symlink(self.bigdatadir+'/gfpred27sep15.bin','fort.11')
         os.symlink(self.bigdatadir+'/gfpred29dec2014.bin','fort.11')
-        print('RUNNING RPRED')
+
+        if verbose:
+            print('RUNNING RPRED')
         self.rmoleout = self._callpro("rpredict",verbose=verbose)
 
     def ratomic(self,verbose=True):
@@ -715,9 +716,11 @@ class synthe(object):
         except AssertionError:
             raise IOError("Something wrong with Input/Output files")
 
-        print("Running RGFALL")
+        if verbose:
+            print("Running RGFALL")
         self.ratomicout = self._callpro("rgfall",verbose=verbose)
-        # print("Finished RGFALL")
+        if verbose:
+            print("Finished RGFALL")
 
     def rinjectlines(self,verbose=None,injectll=None):
         """
