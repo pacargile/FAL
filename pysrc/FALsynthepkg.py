@@ -957,10 +957,12 @@ class synthe(object):
             
 
         # write in information into input string
-        print("Running Rotate")
+        if verbose:
+            print("Running Rotate")
         rotatestr = self.rotatevar.format(NROT=1,NRADIUS=0,VROT=VROT)
         self.rotateout = self._callpro("rotate",rotatestr,verbose=verbose)
-        print("Finished Rotate")
+        if verbose:
+            print("Finished Rotate")
 
         return (self.rotateout,self.ID)
     
