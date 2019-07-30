@@ -697,8 +697,10 @@ class synthe(object):
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
         # os.symlink(self.bigdatadir+'/gfall05jun16.dat','fort.11')
         # os.symlink(self.bigdatadir+'/gfall05jun16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
-        os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
-        os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        # os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
+        # os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        os.symlink(self.bigdatadir+'/gfall08oct17.dat','fort.11')
+        os.symlink(self.bigdatadir+'/gfall08oct17.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
 
 
         # check to make sure all input/output files are right
