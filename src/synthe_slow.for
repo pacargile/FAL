@@ -305,6 +305,7 @@ C       WRITE(6,*)N191
 C       WRITE(6,*)NLINES
       DO 350 ILINE=N191,NLINES
         IF(MOD(ILINE,10000).EQ.0)WRITE(6,*) ILINE
+        IF(ILINE.EQ.NLINES)WRITE(6,*) ILINE
         READ(12)NBUFF,CONGF,NELION,ELO,GAMRF,GAMSF,GAMWF
 
 c     include Barklem, Anstee, and O'Mara van der Waals
