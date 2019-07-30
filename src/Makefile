@@ -21,6 +21,8 @@ synthe:
 	$(FC) $(LDFLAGS) -o  rschwenk.exe rschwenk.o
 	$(FC) $(FFLAGS) -o rh2oslow.o rh2oslow.for
 	$(FC) $(LDFLAGS) -o rh2oslow.exe rh2oslow.o
+	$(FC) $(FFLAGS)  -o rpredict.o  rpredict.for
+	$(FC) $(LDFLAGS)  -o rpredict.exe  rpredict.o
 	$(FC) $(FFLAGS)  -o synthe.o synthe.for
 	$(FC) $(LDFLAGS) -o synthe.exe synthe.o
 	$(FC) $(FFLAGS)  -o synthe_slow.o synthe_slow.for
@@ -39,8 +41,8 @@ synthe:
 	$(FC) $(LDFLAGS) -o globaladj.exe globaladj.o
 
 testing:
-	$(FC) $(FFLAGS)  -o rgfall.o  rgfall.for
-	$(FC) $(LDFLAGS)  -o rgfall.exe  rgfall.o
+	$(FC) $(FFLAGS)  -o rpredict.o  rpredict.for
+	$(FC) $(LDFLAGS)  -o rpredict.exe  rpredict.o
 
 install:
 	/bin/mv *.exe ../bin
