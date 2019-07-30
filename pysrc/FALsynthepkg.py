@@ -664,8 +664,8 @@ class synthe(object):
         except AssertionError:
             raise IOError("Something wrong with Input/Output files")
 
-        if verbose:
-            print("Running RMolecASC on {0}".format(molfile))
+        # if verbose:
+        print("Running RMolecASC on {0}".format(molfile))
         self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=True)
         if verbose:
             print("Finished RMolecASC on {0}".format(molfile))
