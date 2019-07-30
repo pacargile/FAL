@@ -539,7 +539,7 @@ class synthe(object):
                 self.rmolecascout = {}
                 for mf in self.molefiles:
                     try:
-                        self.readmol(mf,verbose=verbose)
+                        self.readmol(mf,verbose=True)
                     except IOError:
                         print('!!!!! Missing {0} !!!!!'.format(mf))
                         raise
@@ -685,7 +685,7 @@ class synthe(object):
 
         if verbose:
             print('RUNNING RPRED')
-        self.rpredout = self._callpro("rpredict",verbose=True)
+        self.rpredout = self._callpro("rpredict",verbose=verbose)
 
     def ratomic(self,verbose=True):
         """
