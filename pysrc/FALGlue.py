@@ -72,10 +72,10 @@ class glue(object):
 			'CODE':'8.2f',
 			'E':'12.3f',
 			'XJ':'5.1f',
-			'LABEL':'10s',
+			'LABEL':'11s',
 			'EP':'12.3f',
 			'XJP':'5.1f',
-			'LABELP':'10s',
+			'LABELP':'11s',
 			'GR':'6.2f',
 			'DGAMMAR':'+6.2f',
 			'GS':'6.2f',
@@ -240,11 +240,11 @@ class glue(object):
 
 		x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		LABELin = list(map(''.join, zip(*[iter(x)]*10)))
+		LABELin = list(map(''.join, zip(*[iter(x)]*11)))
 
 		x = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		LABELPin = list(map(''.join, zip(*[iter(x)]*10)))
+		LABELPin = list(map(''.join, zip(*[iter(x)]*11)))
 
 		x = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
@@ -269,11 +269,11 @@ class glue(object):
 		ll['E']        = np.array(['{0:12.3f}'.format(x) for x in Ein],dtype='float')    
 		ll['XJ']       = np.array(['{0:5.1f}'.format(x) for x in XJin],dtype='float')
 		# ll['LABEL']    = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		ll['LABEL']    = np.array([' {0:11s} '.format(x) for x in LABELin],dtype=str)
+		ll['LABEL']    = np.array([' {0:11s}'.format(x) for x in LABELin],dtype=str)
 		ll['EP']       = np.array(['{0:12.3f}'.format(x) for x in EPin],dtype='float')
 		ll['XJP']      = np.array(['{0:5.1f}'.format(x) for x in XJPin],dtype='float')
 		# ll['LABELP']   = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		ll['LABELP']   = np.array([' {0:11s} '.format(x) for x in LABELPin],dtype=str)
+		ll['LABELP']   = np.array([' {0:11s}'.format(x) for x in LABELPin],dtype=str)
 		ll['GR']       = np.array(['{0:6.2f}'.format(x) for x in GRin],dtype='float')
 		ll['DGAMMAR']  = np.array(['{0:6.2f}'.format(x) for x in DGAMMARin], dtype='float')
 		ll['GS']       = np.array(['{0:6.2f}'.format(x) for x in GSin],dtype='float')
