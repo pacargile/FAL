@@ -108,6 +108,15 @@ def selmod(starpars):
 		# modatm = '/work/02349/cargilpa/FAL/TESTING/YSmod/YSsol.atm'
 		modatm = '/n/conroyfs1/pac/FAL/data/ATM/solar_at12.atm'
 
+	elif starpars['OBJECT'] == 'Mdwarf':
+		# set up some object specific strings
+		synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
+			"0.          0    {LINOUT:3.0f} {TOL:7.5f}    {PRED}     0\n"
+			"AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD")
+		instparstr = {'OPT':None,'HBAND':None}
+
+		modatm = '/n/conroyfs1/pac/FAL/data/ATM/mdwarf_at12.atm'
+
 	else:
 		# set up some object specific strings
 		synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
