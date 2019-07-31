@@ -537,7 +537,8 @@ class synthe(object):
                 #     ])
 
                 self.molefiles = ([
-                    'mgh.dat', #MgH
+                    # 'mgh.dat', #MgH
+                    'mghax.dat','mghbx.dat',
                     ])
                 # read molecular files
                 self.rmolecascout = {}
