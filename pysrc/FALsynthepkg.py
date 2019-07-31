@@ -671,7 +671,7 @@ class synthe(object):
 
         # if verbose:
         print("Running RMolecASC on {0}".format(molfile))
-        self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=True)
+        self.rmolecascout[molfile] = self._callpro("rmolecasc",verbose=verbose)
         if verbose:
             print("Finished RMolecASC on {0}".format(molfile))
 
