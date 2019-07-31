@@ -51,6 +51,12 @@ class FALmod(object):
             self.starpars['MACVEL'] = 3.0
             self.starpars['OBJECT'] = 'Arcturus'
             self.starpars['RESOL'] = 500000.0
+        elif starpars == 'Mdwarf':
+            self.starpars = {}
+            self.starpars['VROT'] = 0.1
+            self.starpars['MACVEL'] = -1.0
+            self.starpars['OBJECT'] = 'Mdwarf'
+            self.starpars['RESOL'] = 3000000.0
         else:
             if starpars is None:
                 self.starpars = {'OBJECT':None}
