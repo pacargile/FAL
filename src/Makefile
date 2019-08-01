@@ -43,6 +43,8 @@ synthe:
 testing:
 	$(FC) $(FFLAGS) -o rpunchbin.o rpunchbin.for
 	$(FC) $(LDFLAGS) -o rpunchbin.exe rpunchbin.o
+	$(FC) $(FFLAGS)  -o rgfall.o  rgfall.for
+	$(FC) $(LDFLAGS)  -o rgfall.exe  rgfall.o
 
 install:
 	/bin/mv *.exe ../bin
