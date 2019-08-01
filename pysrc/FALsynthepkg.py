@@ -431,7 +431,7 @@ class synthe(object):
             os.symlink(MLL,'fort.11')
 
             # run read master list program
-            self.rmasterout = self._callpro("rpunchbin",verbose=verbose)
+            self.rmasterout = self._callpro("rpunchbin",verbose=True)
 
 
         # move fort.14 to fort.99 and clean up
