@@ -850,7 +850,7 @@ class synthe(object):
         # print("Running Synthe")
         if speed == 'slow':
             # print("Running Synthe SLOW")
-            self.synout = self._callpro("synthe_slow",verbose=verbose)
+            self.synout = self._callpro("synthe_slow",verbose=True)
         elif speed == 'fast':
             # print("Running Synthe FAST")
             self.synout = self._callpro("synthe_fast",verbose=verbose)
