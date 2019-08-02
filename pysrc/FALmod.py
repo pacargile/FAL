@@ -401,8 +401,6 @@ class FALmod(object):
                 # no macrovel applied, just return rotated spectrum to output
                 print("Pro: {1} --> No Stellar Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
-                return (outspec,newll,'ROT1')
-        
             else:
                 vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
                 QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],vmacdict)
@@ -421,9 +419,7 @@ class FALmod(object):
             if self.starpars['OUTRES'] == -1:
                 # no instrument broadening applied, just return rotated spectrum to output
                 print("Pro: {1} --> No Instrument Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
-                self.lasttime = time.time()
-                return (outspec,newll,'ROT1')
-        
+                self.lasttime = time.time()        
             else:
                 instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.starpars['OUTRES']}
                 QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
@@ -451,7 +447,6 @@ class FALmod(object):
                 # no instrument broadening applied, just return rotated spectrum to output
                 print("Pro: {1} --> No Instrument Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
-                return (outspec,newll,'ROT1')
 
         if self.timeit:
             print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
