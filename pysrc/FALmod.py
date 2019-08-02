@@ -389,46 +389,48 @@ class FALmod(object):
         # pull outspec and newll from rotate.for code
         outspec,newll = self._specout('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),verbose=verbose)
 
-        # -- check if the user wants broadening --
-        if self.starpars['MACVEL'] == -1:
-            # no macrovel applied, just return rotated spectrum to output
-            print("Pro: {1} --> No Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
-            self.lasttime = time.time()
-            return (outspec,newll,'ROT1')
-    
+        # -- do broaden for stellar broadening --
+        if (verbose == True or verbose == 'broaden:broad_star'):
+            verbose_i = True
         else:
-            # -- do broaden for macroturblence --
-            if (verbose == True or verbose == 'broaden:broad_mac'):
-                verbose_i = True
-            else:
-                verbose_i = False
-            vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
-            QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],vmacdict)
-            outspec['QMU1'] = QMU1['FLUX']
-            if self.timeit:
-                print("Pro: {1} --> BROADEN MACRO -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            verbose_i = False
+
+        # -- check if the user wants broadening --
+        if 'MACVEL' in self.starpars.keys():
+            if self.starpars['MACVEL'] == -1:
+                # no macrovel applied, just return rotated spectrum to output
+                print("Pro: {1} --> No Stellar Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
-
-            # -- do broaden for instrumental --
-            if (verbose == True or verbose == 'broaden:broad_inst'):
-                verbose_i = True
+                return (outspec,newll,'ROT1')
+        
             else:
-                verbose_i = False
+                vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
+                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],vmacdict)
+                outspec['QMU1'] = QMU1['FLUX']
+                if self.timeit:
+                    print("Pro: {1} --> BROADEN MACRO -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                    self.lasttime = time.time()
 
-            intpars = self.SYNTHE.instparstr['HBAND']
+        # -- do broaden for instrumental --
+        if (verbose == True or verbose == 'broaden:broad_inst'):
+            verbose_i = True
+        else:
+            verbose_i = False
 
-            parset = intpars.keys()
-            if len(intpars.keys()) == 1:
-                if intpars['GAUSSIAN'] != None:
-                    # the case with only one instrumental broadening (likely just a gaussian)
-                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':intpars['GAUSSIAN']}
-                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
-                    outspec['QMU1'] = QMU1['FLUX']
-                else:                    
-                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.starpars['OUTRES']}
-                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
-                    outspec['QMU1'] = QMU1['FLUX']
+        if 'OUTRES' in self.starpars.keys():
+            if self.starpars['OUTRES'] == -1:
+                # no instrument broadening applied, just return rotated spectrum to output
+                print("Pro: {1} --> No Instrument Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                self.lasttime = time.time()
+                return (outspec,newll,'ROT1')
+        
             else:
+                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.starpars['OUTRES']}
+                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                outspec['QMU1'] = QMU1['FLUX']
+
+        else:
+            if self.starpars['OBJECT'] == 'Sun':                
                 # the special case of the solar line profile with a SINC and a gaussian
                 instdict1 = {'type':'SINX/X','val':intpars['SINC'],'units':'CM-1'}
                 instdict2 = {'type':'GAUSSIAN','val':intpars['GAUSSIAN'],'units':'CM-1'}
@@ -437,9 +439,23 @@ class FALmod(object):
                     QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict_i)
                     outspec['QMU1'] = QMU1['FLUX']
 
-            if self.timeit:
-                print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            elif self.starpars['OBJECT'] == 'Arcturus':
+                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':intpars['GAUSSIAN']}
+                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                    outspec['QMU1'] = QMU1['FLUX']
+            elif self.starpars['OBJECT'] == 'Mdwarf':
+                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':intpars['GAUSSIAN']}
+                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                    outspec['QMU1'] = QMU1['FLUX']
+            else:
+                # no instrument broadening applied, just return rotated spectrum to output
+                print("Pro: {1} --> No Instrument Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
+                return (outspec,newll,'ROT1')
+
+        if self.timeit:
+            print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
         return (outspec,newll,'ROT1_mac_inst')
 
     def _specout(self,infile,verbose=False):

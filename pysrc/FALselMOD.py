@@ -115,6 +115,7 @@ def selmod(starpars):
 			"AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD")
 		instparstr = {'OPT':None,'HBAND':None}
 
+		instparstr = {'OPT':{"GAUSSIAN":150000.0},'HBAND':{'GAUSSIAN':150000.0}}
 		modatm = '/n/conroyfs1/pac/FAL/data/ATM/mdwarf_at12.atm'
 
 	else:
