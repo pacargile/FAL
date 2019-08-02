@@ -126,6 +126,6 @@ def selmod(starpars):
 
 		# set model atmosphere to use **USING SOLAR BECAUSE THIS WILL CHANGE TO AN INTERPOLATOR**
 		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
-		modatm = '/n/conroyfs1/pac/FAL/data/ATM/solar_at12.atm'
+		modatm = '/n/conroyfs1/pac/FAL/data/ATM/arcturus_at12.atm'
 
 	return (synbegvar,instparstr,modatm)
