@@ -972,6 +972,7 @@ class synthe(object):
         return (self.rotateout,self.ID)
     
     def broaden(self,inspec,VMAC=0.0,broadtype=None,WLreg=None,write=False,verbose=None):
+        verbose=True
         if broadtype==None:
             raise ValueError('Must define broadening type')
 
