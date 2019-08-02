@@ -193,7 +193,7 @@ class FALmod(object):
                 verbose_i = verbose
             else:
                 verbose_i = False
-        outspec,newll,binspecname = self._broaden(verbose_i)
+        outspec,newll,binspecname = self._broaden(verbose=True)
 
         if archive:
             # write newll into INT/ for archiving purposes
