@@ -1,4 +1,4 @@
-module f_wrapper
+module FALglue
 
 use iso_c_binding, only: c_double, c_int, c_char, c_null_char, C_PTR, C_LOC, c_float, c_long
 
