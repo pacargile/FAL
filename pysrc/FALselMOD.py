@@ -108,16 +108,25 @@ def selmod(starpars):
 		# modatm = '/work/02349/cargilpa/FAL/TESTING/YSmod/YSsol.atm'
 		modatm = '/n/conroyfs1/pac/FAL/data/ATM/solar_at12.atm'
 
+	elif starpars['OBJECT'] == 'Mdwarf':
+		# set up some object specific strings
+		synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
+			"0.          0    {LINOUT:3.0f} {TOL:7.5f}    {PRED}     0\n"
+			"AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD")
+		instparstr = {'OPT':None,'HBAND':None}
+
+		instparstr = {'OPT':{"GAUSSIAN":150000.0},'HBAND':{'GAUSSIAN':150000.0}}
+		modatm = '/n/conroyfs1/pac/FAL/data/ATM/mdwarf_at12.atm'
+
 	else:
 		# set up some object specific strings
 		synbegvar = ("AIR       {WSTART:7.3f}   {WEND:7.3f}  {RESOL:10.1f} "
-			"0.          0   {LINOUT:3.0f}{TOL:7.5f}     {PRED}    00\n"
+			"0.          0    {LINOUT:3.0f} {TOL:7.5f}    {PRED}     0\n"
 			"AIRorVAC  WLBEG     WLEND     RESOLU    TURBV  IFNLTE LINOUT CUTOFF        NREAD")
-		instparstr['OPT']   = None
-		instparstr['HBAND'] = None
+		instparstr = {'OPT':{"GAUSSIAN":100000.0},'HBAND':{'GAUSSIAN':100000.0}}
 
 		# set model atmosphere to use **USING SOLAR BECAUSE THIS WILL CHANGE TO AN INTERPOLATOR**
 		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
-		modatm = '/n/conroyfs1/pac/FAL/data/ATM/solar_at12.atm'
+		modatm = '/n/conroyfs1/pac/FAL/data/ATM/arcturus_at12.atm'
 
 	return (synbegvar,instparstr,modatm)

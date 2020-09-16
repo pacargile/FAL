@@ -28,82 +28,103 @@ class glue(object):
 
 		# for line parameters
 		self.lpars = ([
-			'WL','DWL',
-			'GFLOG','DGFLOG',
+			'WL',
+			'DWL',
+			'GFLOG',
+			'DGFLOG',
 			'CODE',
-			'E','XJ',
+			'E',
+			'XJ',
 			'LABEL',
-			'EP','XJP',
+			'EP',
+			'XJP',
 			'LABELP',
-			'GR','DGAMMAR',
-			'GS','DGAMMAS',
-			'GW','DGAMMAW',
+			'GR',
+			'DGAMMAR',
+			'GS',
+			'DGAMMAS',
+			'GW',
+			'DGAMMAW',
 			'WAVENO',
-			'REF','NBLO','NBUP',
-			'ISO1','X1','ISO2','X2',
-			'OTHER1','OTHER2','ISOSHIFT',
-			'NELION','EXTRA'])
+			'REF',
+			'NBLO',
+			'NBUP',
+			'ISO1',
+			'X1',
+			'ISO2',
+			'X2',
+			'OTHER1',
+			'OTHER2',
+			'ISOSHIFT',
+			'NELION',
+			'RESID',
+			])
 
 		# array to convert arrays into actual dtypes
 		# keep some arrays as strings because we won't
 		# change those.
+
+		self.fmtstr = ({
+			'WL':'11.4f',
+			'DWL':'7.4f',
+			'GFLOG':'7.3f',
+			'DGFLOG':'7.3f',
+			'CODE':'8.2f',
+			'E':'12.3f',
+			'XJ':'5.1f',
+			'LABEL':'11s',
+			'EP':'12.3f',
+			'XJP':'5.1f',
+			'LABELP':'11s',
+			'GR':'6.2f',
+			'DGAMMAR':'+6.2f',
+			'GS':'6.2f',
+			'DGAMMAS':'+6.2f',
+			'GW':'6.2f',
+			'DGAMMAW':'+6.2f',
+			'WAVENO':'11.3f',
+			'REF':'5s',
+			'NBLO':'2d',
+			'NBUP':'2d',
+			'ISO1':'3d',
+			'X1':'6.3f',
+			'ISO2':'3d',
+			'X2':'6.3f',
+			'OTHER1':'10s',
+			'OTHER2':'10s',
+			'ISOSHIFT':'6d',
+			'NELION':'4d',
+			'RESID':'10.4f',
+			})
 				
-		self.fmtstr = ([
-			'11.4f','7.4f',
-			'7.3f','7.3f',
-			'8.2f',
-			'12.3f','5.1f',
-			'11s',
-			'12.3f','5.1f',
-			'11s',
-			'6.2f','+6.2f',
-			'6.2f','+6.2f',
-			'6.2f','+6.2f',
-			'11.3f',
-			'5s','2d','2d',
-			'3d','6.3f','3d','6.3f',
-			'10s','10s','6d','4d','2s'
-			])
 
-		self.fmtnp = ([
-			np.float64,np.float64,
-			np.float64,np.float64,
-			np.float64,
-			np.float64,np.float64,
-			np.str_,
-			np.float64,np.float64,
-			np.str_,
-			np.float64,np.float64,
-			np.float64,np.float64,
-			np.float64,np.float64,
-			np.float64,
-			np.str_,np.int_,np.int_,
-			np.int_,np.float64,np.int_,np.float64,
-			np.str_,np.str_,np.int_,np.int_,np.str_
-			])
+		self.fmtnp = {}
+		for kk in self.fmtstr.keys():
+			if self.fmtstr[kk][-1] == 'f':
+				xx = np.float64
+			elif self.fmtstr[kk][-1] == 's':
+				xx = np.str_
+			elif self.fmtstr[kk][-1] == 'd':
+				xx = np.int_
+			else:
+				print('Did not understand format code')
+				raise IOError
+			self.fmtnp[kk] = xx
 
-		self.ldelim_i = ([
-			11,7,
-			7,7,
-			8,
-			12,5,
-			11,
-			12,5,
-			11,
-			6,6,
-			6,6,
-			6,6,
-			11,
-			5,2,2,
-			3,6,3,6,
-			10,10,6,4,2,
-			])
+		ldelim_i = []
+		for kk in self.fmtstr.keys():
+			tmpfmt = self.fmtstr[kk][:-1]
+			if '.' in tmpfmt:
+				num = int(tmpfmt.split('.')[0])
+			else:
+				num = int(tmpfmt)
+			ldelim_i.append(num)
 		
-		self.ldelim = np.cumsum(self.ldelim_i)
+		self.ldelim = np.cumsum(ldelim_i)
 		self.ldelim_stop = self.ldelim
-		self.ldelim_star = [0]
-		[self.ldelim_star.append(xx) for xx in self.ldelim]
-		self.ldelim_star = self.ldelim_star[:-1]
+		self.ldelim_start = [0]
+		[self.ldelim_start.append(xx) for xx in self.ldelim]
+		self.ldelim_start = self.ldelim_start[:-1]
 
 		self.linedict = {}
 		for lp in self.lpars:
@@ -114,26 +135,26 @@ class glue(object):
 		# THE FOLLOWING ARE FOR THE LINE LIST FROM SYNTOASCANGA.EXE (includes resid at end)
 
 		# for line parameters
-		self.lpars_raw = self.lpars+['RESID']
+		# self.lpars_raw = self.lpars+['RESID']
 		
 		# array to convert arrays into actual dtypes
 		# keep some arrays as strings because we won't
 		# change those.
 		
-		self.fmtstr_raw = self.fmtstr+['8.4f']
-		self.fmtnp_raw = self.fmtnp+[np.float64]
+		# self.fmtstr_raw = self.fmtstr+['8.4f']
+		# self.fmtnp_raw = self.fmtnp+[np.float64]
 
-		self.ldelim_raw_i = self.ldelim_i+[8]
+		# self.ldelim_raw_i = self.ldelim_i+[8]
 		
-		self.ldelim_raw = np.cumsum(self.ldelim_raw_i)
-		self.ldelim_raw_stop = self.ldelim_raw
-		self.ldelim_raw_star = [0]
-		[self.ldelim_raw_star.append(xx) for xx in self.ldelim_raw]
-		self.ldelim_raw_star = self.ldelim_raw_star[:-1]
+		# self.ldelim_raw = np.cumsum(self.ldelim_raw_i)
+		# self.ldelim_raw_stop = self.ldelim_raw
+		# self.ldelim_raw_star = [0]
+		# [self.ldelim_raw_star.append(xx) for xx in self.ldelim_raw]
+		# self.ldelim_raw_star = self.ldelim_raw_star[:-1]
 
-		self.linedict_raw = {}
-		for lp in self.lpars_raw:
-			self.linedict_raw[lp] = []
+		# self.linedict_raw = {}
+		# for lp in self.lpars_raw:
+		# 	self.linedict_raw[lp] = []
 		
 			
 	def readspecbin(self,filename,NWL=int(12000),NLINES=int(10000000)):
@@ -162,7 +183,7 @@ class glue(object):
 		GWin       = np.zeros(NLINES,dtype='double')
 		DGAMMAWin  = np.zeros(NLINES,dtype='double')
 		WAVENOin   = np.zeros(NLINES,dtype='double')
-		REFin      = np.zeros((NLINES,5),dtype='str')
+		REFin      = np.zeros((NLINES,4),dtype='str')
 		NBLOin     = np.zeros(NLINES,dtype=np.int64)
 		NBUPin     = np.zeros(NLINES,dtype=np.int64)
 		ISO1in     = np.zeros(NLINES,dtype=np.int64)
@@ -216,11 +237,6 @@ class glue(object):
 			RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
-		# WL = np.trim_zeros(WL,trim='b')
-		# QMU1 = np.trim_zeros(QMU1,trim='b')
-		# QMU2 = np.trim_zeros(QMU2,trim='b')
-
-		# for pp,inarr in zip([11,11,5,10,10],[LABELin,LABELPin,REFin,OTHER1in,OTHER2in]):
 
 		x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
@@ -232,7 +248,7 @@ class glue(object):
 
 		x = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
-		REFin = list(map(''.join, zip(*[iter(x)]*5)))
+		REFin = list(map(''.join, zip(*[iter(x)]*4)))
 
 		x = np.array([''.join(OTHER1in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
@@ -241,9 +257,6 @@ class glue(object):
 		x = np.array([''.join(OTHER2in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
 		OTHER2in = list(map(''.join, zip(*[iter(x)]*10)))
-
-		print(LABELin)
-
 
 		outspec = {'WAVE':SWL,'QMU1':QMU1,'QMU2':QMU2}
 		ll = {}
@@ -256,37 +269,42 @@ class glue(object):
 		ll['E']        = np.array(['{0:12.3f}'.format(x) for x in Ein],dtype='float')    
 		ll['XJ']       = np.array(['{0:5.1f}'.format(x) for x in XJin],dtype='float')
 		# ll['LABEL']    = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		ll['LABEL']    = np.array(LABELin,dtype=str)
+		ll['LABEL']    = np.array([' {0:11s}'.format(x) for x in LABELin],dtype=str)
 		ll['EP']       = np.array(['{0:12.3f}'.format(x) for x in EPin],dtype='float')
 		ll['XJP']      = np.array(['{0:5.1f}'.format(x) for x in XJPin],dtype='float')
 		# ll['LABELP']   = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		ll['LABELP']    = np.array(LABELPin,dtype=str)
+		ll['LABELP']   = np.array([' {0:11s}'.format(x) for x in LABELPin],dtype=str)
 		ll['GR']       = np.array(['{0:6.2f}'.format(x) for x in GRin],dtype='float')
-		ll['DGAMMAR']  = DGAMMARin
+		ll['DGAMMAR']  = np.array(['{0:6.2f}'.format(x) for x in DGAMMARin], dtype='float')
 		ll['GS']       = np.array(['{0:6.2f}'.format(x) for x in GSin],dtype='float')
-		ll['DGAMMAS']  = DGAMMASin
+		ll['DGAMMAS']  = np.array(['{0:6.2f}'.format(x) for x in DGAMMASin], dtype='float')
 		ll['GW']       = np.array(['{0:6.2f}'.format(x) for x in GWin],dtype='float')
-		ll['DGAMMAW']  = DGAMMAWin
+		ll['DGAMMAW']  = np.array(['{0:6.2f}'.format(x) for x in DGAMMAWin], dtype='float')
 		ll['WAVENO']   = np.array(['{0:11.3f}'.format(x) for x in WAVENOin],dtype='float')
 		# ll['REF']      = np.array([''.join(REFin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
-		ll['REF']      = np.array(REFin,dtype='str')
-		ll['NBLO']     = NBLOin
-		ll['NBUP']     = NBUPin
-		ll['ISO1']     = ISO1in
+		# ll['REF']      = np.array(REFin,dtype='str')
+		ll['REF']      = np.array([' {0:4s} '.format(x) for x in REFin],dtype=str)
+		ll['NBLO']     = np.array(['{0:2d}'.format(x) for x in NBLOin],dtype='int')
+		ll['NBUP']     = np.array(['{0:2d}'.format(x) for x in NBUPin],dtype='int')
+		ll['ISO1']     = np.array(['{0:3d}'.format(x) for x in ISO1in],dtype='int')
 		ll['X1']       = np.array(['{0:6.3f}'.format(x) for x in X1in],dtype='float')
-		ll['ISO2']     = ISO2in
+		ll['ISO2']     = np.array(['{0:3d}'.format(x) for x in ISO2in],dtype='int')
 		ll['X2']       = np.array(['{0:6.3f}'.format(x) for x in X2in],dtype='float')  
 		# ll['OTHER1']   = np.array([''.join(OTHER1in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		# ll['OTHER2']   = np.array([''.join(OTHER2in[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		ll['OTHER1']   = np.array(OTHER1in,dtype='str')
 		ll['OTHER2']   = np.array(OTHER2in,dtype='str')
-		print(ll)
-		ll['ISOSHIFT'] = ISOSHIFTin
-		ll['NELION']   = NELIONin
-		ll['OTHER'] = np.array(
-			['{0}{1}{2:6.0f}{3:4.0f}'.format(x1,x2,x3,x4) for x1,x2,x3,x4 in zip(
-				ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
-		ll['RESID']    = np.array(['{0:7.5f}'.format(x) for x in RESIDin],dtype='float')
+		ll['ISOSHIFT'] = np.array(['{0:6d}'.format(x) for x in ISOSHIFTin], dtype='int')
+		ll['NELION']   = np.array(['{0:4d}'.format(x) for x in NELIONin], dtype='int')
+		# ll['OTHER'] = np.array(
+		# 	['{0}{1}{2:6.0f}{3:4.0f}'.format(x1,x2,x3,x4) for x1,x2,x3,x4 in zip(
+		# 		ll['OTHER1'],ll['OTHER2'],ll['ISOSHIFT'],ll['NELION'])])
+		ll['RESID']    = np.array(['{0:.4f}'.format(x) for x in RESIDin],dtype='float')
+
+		sortind = np.argsort(ll['WL'])
+
+		for kk in ll.keys():
+			ll[kk] = ll[kk][sortind]
 
 		return (outspec,ll)
 
@@ -302,16 +320,16 @@ class glue(object):
 		"""
 
 		# make copy of line dictionary
-		self.linedict_i = copy.deepcopy(self.linedict)
+		linedict_i = copy.deepcopy(self.linedict)
 		
 		# read in ascii line file into an astropy table
 		with open(filename,'r') as infile:
 			for line in infile:
 				for jj,start in enumerate(self.ldelim_star):
 					par = line[start:self.ldelim_stop[jj]]
-					self.linedict_i[self.lpars[jj]].append(par)
+					linedict_i[self.lpars[jj]].append(par)
 		# change dictionary to astropy table
-		x = Table(self.linedict_i)
+		x = Table(linedict_i)
 		# order Table correctly because dictionaries are unordered
 		x = x[tuple(self.lpars)]
 		return x
@@ -325,11 +343,11 @@ class glue(object):
 	def writelp(self,tab,filename):
 		# write an ascii line file from an astropy table
 		with open(filename,'w') as outfile:
-			for ii in range(len(tab)):
+			for ii,tab_i in enumerate(tab):
 				if (ii == len(tab)-1):
-					outstr = ''.join(tab[ii])
+					outstr = ''.join(tab_i)
 				else:
-					outstr = ''.join(tab[ii])+'\n'					
+					outstr = ''.join(tab_i)+'\n'					
 				outfile.write(outstr)
 			outfile.write('\n')
 		return None
@@ -340,17 +358,14 @@ class glue(object):
 
 	def con_nptolp(self,nptab):
 		outtab_arr = []
+		outpar_arr = []
 		for ii,fmt in enumerate(self.lpars):
-			# if 's' in self.fmtstr[ii]:
-			# 	temparr = ([('{0:>'+self.fmtstr[ii]+'}').format(
-			# 				'{0}'.format(xx)) for xx in nptab[fmt]])
-			# 	outtab_arr.append(temparr)
-			# else:
-			temparr = ([('{0:'+self.fmtstr[ii]+'}').format(
-						xx) for xx in nptab[fmt]])
-			outtab_arr.append(temparr)
-
-		outtab = Table(outtab_arr,names=self.lpars)
+			if fmt in nptab.dtype.names:
+				temparr = ([('{0:'+self.fmtstr[fmt]+'}').format(
+							xx) for xx in nptab[fmt]])
+				outtab_arr.append(temparr)
+				outpar_arr.append(fmt)
+		outtab = Table(outtab_arr,names=outpar_arr)
 		return outtab
 
 	def readlp_raw(self,filename):

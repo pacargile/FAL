@@ -78,7 +78,8 @@ class synthe(object):
         self.atmomod = '/dev/shm/FAL/{0}/mod.dat'.format(self.ID)
 
         # set up some useful strings
-        self.rotatevar = ("    1\n{VROT:4.3f}")
+        # self.rotatevar = ("{NROT:5d}\n{VROT:10.1f}")
+        self.rotatevar = ("{NROT:5d}{NRADIUS:5d}\n{VROT:10.1f}\n")
         self.macpar = "MACRO     {MACVEL:3.1f}       KM                  COMMENT FIELD"
 
         # move some static files into memory
@@ -136,10 +137,12 @@ class synthe(object):
 
         if inpipe != None:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
-                                   stdin=open(inpipe,'r'),stdout=_FNULL,encoding='utf-8')
+                                   stdin=open(inpipe,'r'),stdout=_FNULL,encoding='ascii',
+                                   universal_newlines=True)
         else:
             pro = subprocess.Popen([self.exedir+function+".exe","_"+self.ID],
-                                   stdin=subprocess.PIPE,stdout=_FNULL,encoding='utf-8')
+                                   stdin=subprocess.PIPE,stdout=_FNULL,encoding='ascii',
+                                   universal_newlines=True)
 
         if type(_inputstr) != type(None):
             output = pro.communicate(input=_inputstr)
@@ -342,7 +345,7 @@ class synthe(object):
         if 'LINOUT' in self.starpars.keys():
             self.LINOUT = self.starpars['LINOUT']
         else:
-            self.LINOUT = 30
+            self.LINOUT = 1
         if 'TOL' in self.starpars.keys():
             self.TOL = self.starpars['TOL']
         else:
@@ -428,7 +431,7 @@ class synthe(object):
             os.symlink(MLL,'fort.11')
 
             # run read master list program
-            self.rmasterout = self._callpro("rpunchbin",verbose=verbose)
+            self.rmasterout = self._callpro("rpunchbin",verbose=True)
 
 
         # move fort.14 to fort.99 and clean up
@@ -439,7 +442,6 @@ class synthe(object):
 
     def rgfalldel(self,verbose=None,reuse_ll=True,userll=None):
         """
-        Run RMOLECASC codes
         
         Reads In: 
             fort.11 (ascii)[Line List]
@@ -509,7 +511,7 @@ class synthe(object):
 
         try:
             if rlinedict['moles']==True:
-                print('... Reading MOLECULES')
+                # print('... Reading MOLECULES')
                 self.molefiles = ([
                     'alopatrascu.asc', # AlO
                     'nah.dat', # NaH
@@ -533,6 +535,11 @@ class synthe(object):
                     'crhax.dat', # CrH
                     'cah.dat', # CaH
                     ])
+
+                # self.molefiles = ([
+                #     'mgh.dat', #MgH
+                #     # 'mghax.dat','mghbx.dat',
+                #     ])
                 # read molecular files
                 self.rmolecascout = {}
                 for mf in self.molefiles:
@@ -646,14 +653,10 @@ class synthe(object):
         """
         # write molfile line list into fort.11
         if os.path.isfile("fort.11"):
-            print('FOUND fort.11')
             self._rmsym('fort.11',verbose=verbose)
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'fort.11')
         os.symlink(self.bigdatadir+'MOLECULES/{0}'.format(molfile),'/dev/shm/FAL/{0}/fort.11'.format(self.ID))        
-
-        if os.path.isfile("fort.11"):
-            print('CREATED fort.11')
-        
+                
         # check to make sure all input/output files are right
         filesdict = {}
         filesdict['infiles'] = {'fort.11':'ascii'}
@@ -684,7 +687,10 @@ class synthe(object):
             self._rmsym('fort.11',verbose=verbose)
         # os.symlink(self.bigdatadir+'/gfpred27sep15.bin','fort.11')
         os.symlink(self.bigdatadir+'/gfpred29dec2014.bin','fort.11')
-        self.rmoleout = self._callpro("rpredict",verbose=verbose)
+
+        if verbose:
+            print('RUNNING RPRED')
+        self.rpredout = self._callpro("rpredict",verbose=verbose)
 
     def ratomic(self,verbose=True):
         """
@@ -697,8 +703,10 @@ class synthe(object):
         # os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
         # os.symlink(self.bigdatadir+'/gfall05jun16.dat','fort.11')
         # os.symlink(self.bigdatadir+'/gfall05jun16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
-        os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
-        os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        # os.symlink(self.bigdatadir+'/gfall18feb16.dat','fort.11')
+        # os.symlink(self.bigdatadir+'/gfall18feb16.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
+        os.symlink(self.bigdatadir+'/gfall08oct17.dat','fort.11')
+        os.symlink(self.bigdatadir+'/gfall08oct17.dat','/dev/shm/FAL/{0}/fort.11'.format(self.ID))
 
 
         # check to make sure all input/output files are right
@@ -713,9 +721,11 @@ class synthe(object):
         except AssertionError:
             raise IOError("Something wrong with Input/Output files")
 
-        # print("Running RGFALL")
+        if verbose:
+            print("Running RGFALL")
         self.ratomicout = self._callpro("rgfall",verbose=verbose)
-        # print("Finished RGFALL")
+        if verbose:
+            print("Finished RGFALL")
 
     def rinjectlines(self,verbose=None,injectll=None):
         """
@@ -839,12 +849,16 @@ class synthe(object):
         # write in information into input string
         # print("Running Synthe")
         if speed == 'slow':
-            self.synout = self._callpro("synthe_slow",verbose=verbose)
+            # print("Running Synthe SLOW")
+            self.synout = self._callpro("synthe_slow",verbose=True)
         elif speed == 'fast':
+            # print("Running Synthe FAST")
             self.synout = self._callpro("synthe_fast",verbose=verbose)
         elif speed == 'ultrafast':
+            # print("Running Synthe ULTRAFAST")
             self.synout = self._callpro("synthe_ultrafast",verbose=verbose)
         else:
+            # print("Running Synthe REGULAR")
             self.synout = self._callpro("synthe",verbose=verbose)
         # print("Finished Synthe")
 
@@ -948,14 +962,17 @@ class synthe(object):
             
 
         # write in information into input string
-        # print("Running Rotate")
-        rotatestr = self.rotatevar.format(VROT=VROT)
+        if verbose:
+            print("Running Rotate")
+        rotatestr = self.rotatevar.format(NROT=1,NRADIUS=0,VROT=VROT)
         self.rotateout = self._callpro("rotate",rotatestr,verbose=verbose)
-        # print("Finished Rotate")
+        if verbose:
+            print("Finished Rotate")
 
         return (self.rotateout,self.ID)
     
     def broaden(self,inspec,VMAC=0.0,broadtype=None,WLreg=None,write=False,verbose=None):
+        verbose=True
         if broadtype==None:
             raise ValueError('Must define broadening type')
 

@@ -16,7 +16,7 @@ class FALmod(object):
     Class to take delta line parameters and return a synthesized
     spectrum from SYNTHE to use in python
     """    
-    def __init__(self,ID=None,starpars='Sun',waverange=None,verbose=False,extra={}):
+    def __init__(self,ID=None,starpars=None,waverange=None,verbose=False,extra={}):
         '''
         FALmod -> Python wrapper around SYNTHE
 
@@ -51,8 +51,17 @@ class FALmod(object):
             self.starpars['MACVEL'] = 3.0
             self.starpars['OBJECT'] = 'Arcturus'
             self.starpars['RESOL'] = 500000.0
+        elif starpars == 'Mdwarf':
+            self.starpars = {}
+            self.starpars['VROT'] = 0.1
+            self.starpars['MACVEL'] = -1.0
+            self.starpars['OBJECT'] = 'Mdwarf'
+            self.starpars['RESOL'] = 3000000.0
         else:
-            self.starpars = starpars
+            if starpars is None:
+                self.starpars = {'OBJECT':None}
+            else:
+                self.starpars = starpars
 
         if waverange == None:
             self.starpars['WSTART'] = 1500.0
@@ -184,7 +193,7 @@ class FALmod(object):
                 verbose_i = verbose
             else:
                 verbose_i = False
-        outspec,newll,binspecname = self._broaden(verbose_i)
+        outspec,newll,binspecname = self._broaden(verbose=True)
 
         if archive:
             # write newll into INT/ for archiving purposes
@@ -230,8 +239,8 @@ class FALmod(object):
         elif linelist == 'readall':
             # read all individual line lists
             # rlinedict = {"TiO":True} # atoms, molecules + H2O & TiO
-            # rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":False,"predict":True} # atoms, molecules + H2O & TiO
-            rlinedict = {"atoms":True} 
+            # rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":True,"predict":True} # atoms, molecules + H2O & TiO
+            rlinedict = {"atoms":True,"moles":False,"H2O":False,"TiO":False,"predict":False} 
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
             self.speed = 'slow'
 
@@ -351,7 +360,7 @@ class FALmod(object):
             verbose_i = True
         else:
             verbose_i = False
-        self.SYNTHE.syn(verbose=verbose_i,speed=self.speed)
+        self.SYNTHE.syn(verbose=verbose,speed=self.speed)
         if self.timeit:
             print("Pro: {1} --> SYNTHE -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
@@ -361,7 +370,7 @@ class FALmod(object):
             verbose_i = True
         else:
             verbose_i = False
-        self.SYNTHE.spectrv(verbose=verbose_i,tau=self.tau_i)
+        self.SYNTHE.spectrv(verbose=verbose,tau=self.tau_i)
         if self.timeit:
             print("Pro: {1} --> SPECTRV -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
@@ -372,54 +381,52 @@ class FALmod(object):
             verbose_i = True
         else:
             verbose_i = False
-        self.SYNTHE.rotate(self.starpars['VROT'],verbose=verbose_i)
+        self.SYNTHE.rotate(self.starpars['VROT'],verbose=verbose)
         if self.timeit:
             print("Pro: {1} --> ROTATE -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
             self.lasttime = time.time()
 
         # pull outspec and newll from rotate.for code
-        outspec,newll = self._specout('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),verbose=True)
+        outspec,newll = self._specout('/dev/shm/FAL/{0}/{1}'.format(self.ID,'ROT1'),verbose=verbose)
+
+        # -- do broaden for stellar broadening --
+        if (verbose == True or verbose == 'broaden:broad_star'):
+            verbose_i = True
+        else:
+            verbose_i = False
 
         # -- check if the user wants broadening --
-        if self.starpars['MACVEL'] == -1:
-            # no macrovel applied, just return rotated spectrum to output
-            print("Pro: {1} --> No Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
-            self.lasttime = time.time()
-            return (outspec,newll,'ROT1')
-    
-        else:
-            # -- do broaden for macroturblence --
-            if (verbose == True or verbose == 'broaden:broad_mac'):
-                verbose_i = True
-            else:
-                verbose_i = False
-            vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
-            QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],vmacdict)
-            outspec['QMU1'] = QMU1['FLUX']
-            if self.timeit:
-                print("Pro: {1} --> BROADEN MACRO -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+        if 'MACVEL' in self.starpars.keys():
+            if self.starpars['MACVEL'] == -1:
+                # no macrovel applied, just return rotated spectrum to output
+                print("Pro: {1} --> No Stellar Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
-
-            # -- do broaden for instrumental --
-            if (verbose == True or verbose == 'broaden:broad_inst'):
-                verbose_i = True
             else:
-                verbose_i = False
+                vmacdict = {'type':'MACRO','units':'KM','val':self.starpars['MACVEL']}
+                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],vmacdict)
+                outspec['QMU1'] = QMU1['FLUX']
+                if self.timeit:
+                    print("Pro: {1} --> BROADEN MACRO -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                    self.lasttime = time.time()
 
-            intpars = self.SYNTHE.instparstr['HBAND']
+        # -- do broaden for instrumental --
+        if (verbose == True or verbose == 'broaden:broad_inst'):
+            verbose_i = True
+        else:
+            verbose_i = False
 
-            parset = intpars.keys()
-            if len(intpars.keys()) == 1:
-                if intpars['GAUSSIAN'] != None:
-                    # the case with only one instrumental broadening (likely just a gaussian)
-                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':intpars['GAUSSIAN']}
-                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
-                    outspec['QMU1'] = QMU1['FLUX']
-                else:                    
-                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.starpars['OUTRES']}
-                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
-                    outspec['QMU1'] = QMU1['FLUX']
+        if 'OUTRES' in self.starpars.keys():
+            if self.starpars['OUTRES'] == -1:
+                # no instrument broadening applied, just return rotated spectrum to output
+                print("Pro: {1} --> No Instrument Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+                self.lasttime = time.time()        
             else:
+                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.starpars['OUTRES']}
+                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                outspec['QMU1'] = QMU1['FLUX']
+
+        else:
+            if self.starpars['OBJECT'] == 'Sun':                
                 # the special case of the solar line profile with a SINC and a gaussian
                 instdict1 = {'type':'SINX/X','val':intpars['SINC'],'units':'CM-1'}
                 instdict2 = {'type':'GAUSSIAN','val':intpars['GAUSSIAN'],'units':'CM-1'}
@@ -428,9 +435,22 @@ class FALmod(object):
                     QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict_i)
                     outspec['QMU1'] = QMU1['FLUX']
 
-            if self.timeit:
-                print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            elif self.starpars['OBJECT'] == 'Arcturus':
+                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':intpars['GAUSSIAN']}
+                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                    outspec['QMU1'] = QMU1['FLUX']
+            elif self.starpars['OBJECT'] == 'Mdwarf':
+                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':intpars['GAUSSIAN']}
+                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                    outspec['QMU1'] = QMU1['FLUX']
+            else:
+                # no instrument broadening applied, just return rotated spectrum to output
+                print("Pro: {1} --> No Instrument Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
+
+        if self.timeit:
+            print("Pro: {1} --> BROADEN INSTR -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
+            self.lasttime = time.time()
         return (outspec,newll,'ROT1_mac_inst')
 
     def _specout(self,infile,verbose=False):
