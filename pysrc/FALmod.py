@@ -454,9 +454,9 @@ class FALmod(object):
 
             elif self.starpars['OBJECT'] == 'Arcturus':
                 if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1300.0):               
-                    self.SYNTHE.instparstr['OPT']['GAUSSIAN']
+                    instpars = self.SYNTHE.instparstr['OPT']['GAUSSIAN']
                 elif (self.starpars['WSTART'] > 1399.0) & (self.starpars['WEND'] < 1901.0):
-                    self.SYNTHE.instparstr['HBAND']['GAUSSIAN']
+                    instpars = self.SYNTHE.instparstr['HBAND']['GAUSSIAN']
 
                 instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':instpars}
                 QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
