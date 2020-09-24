@@ -439,21 +439,22 @@ class FALmod(object):
         else:
             if self.starpars['OBJECT'] == 'Sun':                
                 # the special case of the solar line profile with a SINC and a gaussian
-                instdict1 = {'type':'SINX/X','val':intpars['SINC'],'units':'CM-1'}
-                instdict2 = {'type':'GAUSSIAN','val':intpars['GAUSSIAN'],'units':'CM-1'}
+                instdict1 = {'type':'SINX/X','val':self.SYNTHE.instparstr['SINC'],'units':'CM-1'}
+                instdict2 = {'type':'GAUSSIAN','val':self.SYNTHE.instparstr['GAUSSIAN'],'units':'CM-1'}
 
                 for instdict_i in [instdict1,instdict2]:
                     QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict_i)
                     outspec['QMU1'] = QMU1['FLUX']
 
             elif self.starpars['OBJECT'] == 'Arcturus':
-                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':intpars['GAUSSIAN']}
-                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
-                    outspec['QMU1'] = QMU1['FLUX']
+
+                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.SYNTHE.instparstr['GAUSSIAN']}
+                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                outspec['QMU1'] = QMU1['FLUX']
             elif self.starpars['OBJECT'] == 'Mdwarf':
-                    instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':intpars['GAUSSIAN']}
-                    QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
-                    outspec['QMU1'] = QMU1['FLUX']
+                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.SYNTHE.instparstr['GAUSSIAN']}
+                QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
+                outspec['QMU1'] = QMU1['FLUX']
             else:
                 # no instrument broadening applied, just return rotated spectrum to output
                 print("Pro: {1} --> No Instrument Broadening Applied -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
