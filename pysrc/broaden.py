@@ -1,6 +1,17 @@
 from ctypes import cdll, CDLL, POINTER, c_int, c_double, c_char_p, c_char, c_void_p
 import numpy as np
+import os
 
+import socket
+hostname = socket.gethostname()
+if hostname[:4] == 'holy':
+     RUNLOC = 'ODY'
+else:
+     RUNLOC = 'LOCAL'
+
+conroypath = os.environ.get('CSCRATCH')
+holypath   = os.environ.get('HOLYSCRATCH')
+homepath   = os.environ.get('HOME')
 
 class broaden(object):
 	def __init__(self):
@@ -9,10 +20,10 @@ class broaden(object):
 		"""
 
 		# read in fortran library with ctype hooks
-		try:
+		if RUNLOC == 'ODY':
+			self.fortran = cdll.LoadLibrary('{0}/pac/broadenx-py/libbroaden.so'.format(conroypath))		
+		else:
 			self.fortran = cdll.LoadLibrary('/Users/pcargile/Astro/bin/FORTRAN/SYNTHE/lib/libbroaden.so')
-		except OSError:
-			self.fortran = cdll.LoadLibrary('/n/conroyfs1/pac/broadenx-py/libbroaden.so')		
 
 		# define this useful thing for later
 		self.c_double_p = POINTER(c_double)
