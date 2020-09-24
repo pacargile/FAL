@@ -437,22 +437,32 @@ class FALmod(object):
                 outspec['QMU1'] = QMU1['FLUX']
 
         else:
-            if self.starpars['OBJECT'] == 'Sun':                
+            if self.starpars['OBJECT'] == 'Sun': 
+                if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1300.0):               
+                    instpars1 = self.SYNTHE.intpars['OPT']['SINC']
+                    instpars2 = self.SYNTHE.intpars['OPT']['GAUSSIAN']
+                elif (self.starpars['WSTART'] > 1399.0) & (self.starpars['WEND'] < 1901.0):
+                    instpars1 = self.SYNTHE.intpars['HBAND']['SINC']
+                    instpars2 = self.SYNTHE.intpars['HBAND']['GAUSSIAN']
                 # the special case of the solar line profile with a SINC and a gaussian
-                instdict1 = {'type':'SINX/X','val':self.SYNTHE.intpars['SINC'],'units':'CM-1'}
-                instdict2 = {'type':'GAUSSIAN','val':self.SYNTHE.intpars['GAUSSIAN'],'units':'CM-1'}
+                instdict1 = {'type':'SINX/X',  'val':instpars1,'units':'CM-1'}
+                instdict2 = {'type':'GAUSSIAN','val':instpars2,'units':'CM-1'}
 
                 for instdict_i in [instdict1,instdict2]:
                     QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict_i)
                     outspec['QMU1'] = QMU1['FLUX']
 
             elif self.starpars['OBJECT'] == 'Arcturus':
+                if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1300.0):               
+                    self.SYNTHE.intpars['OPT']['GAUSSIAN']
+                elif (self.starpars['WSTART'] > 1399.0) & (self.starpars['WEND'] < 1901.0):
+                    self.SYNTHE.intpars['HBAND']['GAUSSIAN']
 
-                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.SYNTHE.intpars['GAUSSIAN']}
+                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':instpars}
                 QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
                 outspec['QMU1'] = QMU1['FLUX']
             elif self.starpars['OBJECT'] == 'Mdwarf':
-                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.SYNTHE.intpars['GAUSSIAN']}
+                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':instpars}
                 QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
                 outspec['QMU1'] = QMU1['FLUX']
             else:
