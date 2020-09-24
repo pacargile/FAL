@@ -6,13 +6,20 @@ from astropy.table import Table
 import subprocess
 import copy
 
+import socket
+hostname = socket.gethostname()
+if hostname[:4] == 'holy':
+     RUNLOC = 'ODY'
+else:
+     RUNLOC = 'LOCAL'
+
 class glue(object):
 	def __init__(self):
 
-		try:
+		if RUNLOC == 'ODY':
 			# read in fortran libraray
 			self.fortran = cdll.LoadLibrary('/n/conroyfs1/pac/FAL/lib/FALglue.so')
-		except OSError:
+		else:
 			self.fortran = cdll.LoadLibrary('/Users/pcargile/Astro/FAL/PYSCRIPT/lib/FALglue.so')
 
 
