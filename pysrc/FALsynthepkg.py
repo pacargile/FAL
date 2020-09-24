@@ -17,6 +17,17 @@ warnings.simplefilter(action='ignore',category=FutureWarning)
 
 __all__ = ["synthepkg"]
 
+import socket
+hostname = socket.gethostname()
+if hostname[:4] == 'holy':
+     RUNLOC = 'ODY'
+else:
+     RUNLOC = 'LOCAL'
+
+conroypath = os.environ.get('CSCRATCH')
+holypath   = os.environ.get('HOLYSCRATCH')
+homepath   = os.environ.get('HOME')
+
 
 class synthe(object):
     def __init__(self,ID=None,verbose=True,clobber=False,starpars=None):
@@ -61,8 +72,8 @@ class synthe(object):
         # Set up exec directory and data directory
         # self.HOMEDIR = os.path.expandvars("$HOME")
         # self.WORKDIR = os.path.expandvars("$WORK")
-        self.HOMEDIR = '/n/conroyfs1/pac/FAL'
-        self.WORKDIR = '/n/conroyfs1/pac/FAL'
+        self.HOMEDIR = '{}/pac/FAL'.format(conroypath)
+        self.WORKDIR = '{}/pac/FAL'.format(conroypath)
         self.exedir = self.HOMEDIR+"/bin/"
         self.datadir = self.HOMEDIR+"/data/"
         self.bigdatadir = self.WORKDIR+"/data/"
