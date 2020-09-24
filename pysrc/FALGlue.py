@@ -4,7 +4,7 @@ import fortranformat
 from astropy.io import ascii
 from astropy.table import Table
 import subprocess
-import copy
+import copy,os
 
 import socket
 hostname = socket.gethostname()
