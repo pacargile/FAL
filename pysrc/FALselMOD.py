@@ -1,6 +1,17 @@
 import numpy as np
 import os
 
+import socket
+hostname = socket.gethostname()
+if hostname[:4] == 'holy':
+     RUNLOC = 'ODY'
+else:
+     RUNLOC = 'LOCAL'
+
+conroypath = os.environ.get('CSCRATCH')
+holypath   = os.environ.get('HOLYSCRATCH')
+homepath   = os.environ.get('HOME')
+
 def selmod(starpars):
 
 	if starpars['OBJECT'] == 'Arcturus':
@@ -14,7 +25,7 @@ def selmod(starpars):
 		instparstr = {"OPT":{"GAUSSIAN":gausspar_opt},"HBAND":{"GAUSSIAN":gausspar_hband}}
 
 		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/Arcturus_NEWpars_V4.dat"
-		modatm = '/n/conroyfs1/pac/FAL/data/ATM/arcturus_at12.atm'
+		modatm = '{0}/pac/FAL/data/ATM/arcturus_at12.atm'.format(conroypath)
 
 	elif starpars['OBJECT'] == 'Sun':
 		# set synbeg string to use
@@ -106,7 +117,7 @@ def selmod(starpars):
 		# set model atmosphere to use
 		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
 		# modatm = '/work/02349/cargilpa/FAL/TESTING/YSmod/YSsol.atm'
-		modatm = '/n/conroyfs1/pac/FAL/data/ATM/solar_at12.atm'
+		modatm = '{}/pac/FAL/data/ATM/solar_at12.atm'.format(conroypath)
 
 	elif starpars['OBJECT'] == 'Mdwarf':
 		# set up some object specific strings
@@ -116,7 +127,7 @@ def selmod(starpars):
 		instparstr = {'OPT':None,'HBAND':None}
 
 		instparstr = {'OPT':{"GAUSSIAN":150000.0},'HBAND':{'GAUSSIAN':150000.0}}
-		modatm = '/n/conroyfs1/pac/FAL/data/ATM/mdwarf_at12.atm'
+		modatm = '{}/pac/FAL/data/ATM/mdwarf_at12.atm'.format(conroypath)
 
 	else:
 		# set up some object specific strings
@@ -127,6 +138,6 @@ def selmod(starpars):
 
 		# set model atmosphere to use **USING SOLAR BECAUSE THIS WILL CHANGE TO AN INTERPOLATOR**
 		# modatm = os.path.expandvars("$HOME")+"/FAL/PYTHON/data/modcaspf.dat"
-		modatm = '/n/conroyfs1/pac/FAL/data/ATM/arcturus_at12.atm'
+		modatm = '{}/pac/FAL/data/ATM/arcturus_at12.atm'.format(conroypath)
 
 	return (synbegvar,instparstr,modatm)
