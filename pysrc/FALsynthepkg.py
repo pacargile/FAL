@@ -430,8 +430,8 @@ class synthe(object):
         """
         # Master lines file is gigantic, so don't copy into memory just sym link it
         if MASTERLL == None:
-            MASTERLL = (['/n/conroyfs1/pac/FAL/data/LL/KuruczLL_1400_1900.bin',
-                '/n/conroyfs1/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'])
+            MASTERLL = (['{0}/pac/FAL/data/LL/KuruczLL_1400_1900.bin'.format(conroypath),
+                '{0}/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'.format(conroypath)])
 
         # for each line list in MASTERLL, run rpunchbin
         for MLL in MASTERLL:
