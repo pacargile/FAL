@@ -1021,20 +1021,20 @@ class synthe(object):
             tag = 'inst'
             # determine which instrument settings should be used
             if WLreg=='OPT':
-                intpars = self.instparstr['OPT']
+                self.intpars = self.instparstr['OPT']
             elif WLreg=='HBAND':
-                intpars = self.instparstr['HBAND']
+                self.intpars = self.instparstr['HBAND']
             else:
-                intpars = self.instparstr['HBAND']
+                self.intpars = self.instparstr['HBAND']
 
-            parset = intpars.keys()
-            if len(intpars.keys()) == 1:
+            parset = self.intpars.keys()
+            if len(self.intpars.keys()) == 1:
                 # the case with only one instrumental broadening (likely just a gaussian)
-                self.broadout = self._callpro("broadenx",inputstr=intpars[parset[0]],verbose=verbose)
+                self.broadout = self._callpro("broadenx",inputstr=self.intpars[parset[0]],verbose=verbose)
             else:
                 # the special case of the solar line profile with a SINC and a gaussian
-                intpars_1 = intpars[parset[0]]
-                intpars_2 = intpars[parset[1]]
+                intpars_1 = self.intpars[parset[0]]
+                intpars_2 = self.intpars[parset[1]]
 
                 # first run sinc
                 self.broadout1 = self._callpro("broadenx",inputstr=intpars_1,verbose=verbose)

@@ -439,8 +439,8 @@ class FALmod(object):
         else:
             if self.starpars['OBJECT'] == 'Sun':                
                 # the special case of the solar line profile with a SINC and a gaussian
-                instdict1 = {'type':'SINX/X','val':self.SYNTHE.instparstr['SINC'],'units':'CM-1'}
-                instdict2 = {'type':'GAUSSIAN','val':self.SYNTHE.instparstr['GAUSSIAN'],'units':'CM-1'}
+                instdict1 = {'type':'SINX/X','val':self.SYNTHE.intpars['SINC'],'units':'CM-1'}
+                instdict2 = {'type':'GAUSSIAN','val':self.SYNTHE.intpars['GAUSSIAN'],'units':'CM-1'}
 
                 for instdict_i in [instdict1,instdict2]:
                     QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict_i)
@@ -448,11 +448,11 @@ class FALmod(object):
 
             elif self.starpars['OBJECT'] == 'Arcturus':
 
-                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.SYNTHE.instparstr['GAUSSIAN']}
+                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.SYNTHE.intpars['GAUSSIAN']}
                 QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
                 outspec['QMU1'] = QMU1['FLUX']
             elif self.starpars['OBJECT'] == 'Mdwarf':
-                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.SYNTHE.instparstr['GAUSSIAN']}
+                instdict = {'type':'GAUSSIAN','units':'RESOLUTION','val':self.SYNTHE.intpars['GAUSSIAN']}
                 QMU1 = self.brd.broaden(outspec['WAVE'],outspec['QMU1'],instdict)
                 outspec['QMU1'] = QMU1['FLUX']
             else:
