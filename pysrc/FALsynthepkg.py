@@ -24,10 +24,12 @@ if hostname[:4] == 'holy':
 else:
      RUNLOC = 'LOCAL'
 
-conroypath = os.environ.get('CSCRATCH')
-holypath   = os.environ.get('HOLYSCRATCH')
+conroypath = os.environ.get('CSCRATCH')+'/pac/'
+holypath   = os.environ.get('HOLYSCRATCH')+'/conroypath/pacargile/'
 homepath   = os.environ.get('HOME')
 
+exepath  = conroypath+'FAL/bin/'
+datapath = holypath
 
 class synthe(object):
     def __init__(self,ID=None,verbose=True,clobber=False,starpars=None):
@@ -72,11 +74,14 @@ class synthe(object):
         # Set up exec directory and data directory
         # self.HOMEDIR = os.path.expandvars("$HOME")
         # self.WORKDIR = os.path.expandvars("$WORK")
-        self.HOMEDIR = '{}/pac/FAL'.format(conroypath)
-        self.WORKDIR = '{}/pac/FAL'.format(conroypath)
-        self.exedir = self.HOMEDIR+"/bin/"
-        self.datadir = self.HOMEDIR+"/data/"
-        self.bigdatadir = self.WORKDIR+"/data/"
+        # self.HOMEDIR = '{}/pac/FAL'.format(conroypath)
+        # self.WORKDIR = '{}/pac/FAL'.format(conroypath)
+        # self.exedir = self.HOMEDIR+"/bin/"
+        # self.datadir = self.HOMEDIR+"/data/"
+        # self.bigdatadir = self.WORKDIR+"/data/"
+
+        self.datadir = datapath
+        self.exedir  = exepath
 
         # create the glue  
         self.glue = FALGlue.glue()
@@ -430,8 +435,8 @@ class synthe(object):
         """
         # Master lines file is gigantic, so don't copy into memory just sym link it
         if MASTERLL == None:
-            MASTERLL = (['{0}/pac/FAL/data/LL/KuruczLL_1400_1900.bin'.format(conroypath),
-                '{0}/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'.format(conroypath)])
+            MASTERLL = (['{0}/FAL/MASTERLL/FULLOPT/KuruczLL_450_1350.bin'.format(datapath),
+                '{0}/FAL/MASTERLL/TiO/TiO_LL_450_1300.bin'.format(datapath)])
 
         # for each line list in MASTERLL, run rpunchbin
         for MLL in MASTERLL:

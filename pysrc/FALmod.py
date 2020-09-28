@@ -15,9 +15,11 @@ if hostname[:4] == 'holy':
 else:
      RUNLOC = 'LOCAL'
 
-conroypath = os.environ.get('CSCRATCH')
-holypath   = os.environ.get('HOLYSCRATCH')
+conroypath = os.environ.get('CSCRATCH')+'/pac/'
+holypath   = os.environ.get('HOLYSCRATCH')+'/conroypath/pacargile/'
 homepath   = os.environ.get('HOME')
+
+datapath = holypath
 
 import warnings
 warnings.simplefilter(action='ignore',category=FutureWarning)
@@ -264,12 +266,12 @@ class FALmod(object):
             # determine which readmaster line list to use base on wavelength range
             if self.masterll == None:
                 if (self.starpars['WSTART'] > 450.0) & (self.starpars['WEND'] < 1300.0):
-                    MASTERLL = (['{0}/pac/MASTERLL/FULLOPT/LL/Kur_LL_450_1300_CLEAN.bin'.format(conroypath),
-                        '{0}/pac/MASTERLL/TiO/LL/TiO_LL_450_1300.bin'.format(conroypath)])
+                    MASTERLL = (['{0}/FAL/MASTERLL/FULLOPT/KuruczLL_450_1350.bin'.format(datapath),
+                        '{0}/FAL/MASTERLL/TiO/TiO_LL_450_1300.bin'.format(datapath)])
                     # MASTERLL = (['/n/conroyfs1/pac/MASTERLL/FULLOPT/LL/Kur_LL_450_1300_CLEAN.bin'])
                 elif (self.starpars['WSTART'] > 1399.0) & (self.starpars['WEND'] < 1901.0):
-                    MASTERLL = (['{0}/pac/MASTERLL/HBAND/KUR_CLEAN.bin'.format(conroypath),
-                    '{0}/pac/FAL/data/LL/KuruczH2OLL_1400_1900.bin'.format(conroypath)])
+                    MASTERLL = (['{0}/FAL/MASTERLL/HBAND/KuruczLL_1400_1900.bin'.format(datapath),
+                    '{0}/FAL/MASTERLL/H2O/KuruczH2OLL_1400_1900.bin'.format(datapath)])
 
                 else:
                     print(self.starpars['WSTART'],self.starpars['WEND'])

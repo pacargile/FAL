@@ -9,9 +9,12 @@ if hostname[:4] == 'holy':
 else:
      RUNLOC = 'LOCAL'
 
-conroypath = os.environ.get('CSCRATCH')
-holypath   = os.environ.get('HOLYSCRATCH')
+conroypath = os.environ.get('CSCRATCH')+'/pac/'
+holypath   = os.environ.get('HOLYSCRATCH')+'/conroypath/pacargile/'
 homepath   = os.environ.get('HOME')
+
+exepath  = conroypath+'FAL/bin/'
+datapath = holypath
 
 class broaden(object):
 	def __init__(self):
@@ -21,7 +24,8 @@ class broaden(object):
 
 		# read in fortran library with ctype hooks
 		if RUNLOC == 'ODY':
-			self.fortran = cdll.LoadLibrary('{0}/pac/broadenx-py/libbroaden.so'.format(conroypath))		
+			# self.fortran = cdll.LoadLibrary('{0}/pac/broadenx-py/libbroaden.so'.format(conroypath))		
+			self.fortran = cdll.LoadLibrary('{0}/FAL/lib/libbroaden.so'.format(datapath))		
 		else:
 			self.fortran = cdll.LoadLibrary('/Users/pcargile/Astro/bin/FORTRAN/SYNTHE/lib/libbroaden.so')
 

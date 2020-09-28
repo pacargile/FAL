@@ -13,16 +13,19 @@ if hostname[:4] == 'holy':
 else:
      RUNLOC = 'LOCAL'
 
-conroypath = os.environ.get('CSCRATCH')
-holypath   = os.environ.get('HOLYSCRATCH')
+conroypath = os.environ.get('CSCRATCH')+'/pac/'
+holypath   = os.environ.get('HOLYSCRATCH')+'/conroypath/pacargile/'
 homepath   = os.environ.get('HOME')
+
+exepath  = conroypath+'FAL/bin/'
+datapath = holypath
 
 class glue(object):
 	def __init__(self):
 
 		if RUNLOC == 'ODY':
 			# read in fortran libraray
-			self.fortran = cdll.LoadLibrary('{}/pac/FAL/lib/FALglue.so'.format(conroypath))
+			self.fortran = cdll.LoadLibrary('{0}/FAL/lib/FALglue.so'.format(datapath))
 		else:
 			self.fortran = cdll.LoadLibrary('/Users/pcargile/Astro/FAL/PYSCRIPT/lib/FALglue.so')
 
