@@ -8,8 +8,8 @@ if hostname[:4] == 'holy':
 else:
      RUNLOC = 'LOCAL'
 
-conroypath = os.environ.get('CSCRATCH')+'pac/'
-holypath   = os.environ.get('HOLYSCRATCH')+'conroypath/pacargile/'
+conroypath = os.environ.get('CSCRATCH')+'pac'
+holypath   = os.environ.get('HOLYSCRATCH')+'conroy_lab/pacargile'
 homepath   = os.environ.get('HOME')
 
 datapath = holypath
