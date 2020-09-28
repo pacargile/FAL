@@ -105,7 +105,7 @@ class synthe(object):
         except OSError:
             pass
         # BOB's MOLECULES FILE
-        self._fastcopy(self.datadir+'molecules.dat','/dev/shm/FAL/{0}/molecules.dat'.format(self.ID))
+        self._fastcopy(self.datadir+'/molecules.dat','/dev/shm/FAL/{0}/molecules.dat'.format(self.ID))
         self.molecules = '/dev/shm/FAL/{0}/molecules.dat'.format(self.ID)
         
         # CONTINUA
@@ -114,7 +114,7 @@ class synthe(object):
         except OSError:
             pass
         # BOB's CONTINUA FILE
-        self._fastcopy(self.datadir+'continua.dat','/dev/shm/FAL/{0}/continua.dat'.format(self.ID))
+        self._fastcopy(self.datadir+'/continua.dat','/dev/shm/FAL/{0}/continua.dat'.format(self.ID))
         self.continua = '/dev/shm/FAL/{0}/continua.dat'.format(self.ID)
         
         # He1Tables
@@ -122,7 +122,7 @@ class synthe(object):
             os.remove('/dev/shm/FAL/{0}/he1tables.dat'.format(self.ID))
         except OSError:
             pass
-        self._fastcopy(self.datadir+'he1tables.dat','/dev/shm/FAL/{0}/he1tables.dat'.format(self.ID))
+        self._fastcopy(self.datadir+'/he1tables.dat','/dev/shm/FAL/{0}/he1tables.dat'.format(self.ID))
         self.he1tables = '/dev/shm/FAL/{0}/he1tables.dat'.format(self.ID)
 
         # SPECTRV.INPUT
@@ -130,7 +130,7 @@ class synthe(object):
             os.remove('/dev/shm/FAL/{0}/spectrv.input'.format(self.ID))
         except OSError:
             pass
-        self._fastcopy(self.datadir+'spectrv.input','/dev/shm/FAL/{0}/spectrv.input'.format(self.ID))
+        self._fastcopy(self.datadir+'/spectrv.input','/dev/shm/FAL/{0}/spectrv.input'.format(self.ID))
         self.spectrvin = '/dev/shm/FAL/{0}/spectrv.input'.format(self.ID)
 
     def __delete_(self):
