@@ -28,7 +28,7 @@ conroypath = os.environ.get('CSCRATCH')+'pac'
 holypath   = os.environ.get('HOLYSCRATCH')+'conroy_lab/pacargile'
 homepath   = os.environ.get('HOME')
 
-exepath  = conroypath+'FAL/bin/'
+exepath  = conroypath+'/FAL/bin/'
 datapath = holypath
 
 class synthe(object):
