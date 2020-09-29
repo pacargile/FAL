@@ -18,6 +18,11 @@ from FALGlue import *
 import warnings
 warnings.simplefilter(action='ignore',category=FutureWarning)
 
+conroypath = os.environ.get('CSCRATCH')+'pac'
+holypath   = os.environ.get('HOLYSCRATCH')+'conroy_lab/pacargile'
+homepath   = os.environ.get('HOME')
+
+datapath = holypath
 
 def lnprob(pin,args,verbose=False,justprior=False):
 
@@ -302,7 +307,6 @@ class FALmcmc(object):
         # stack the tables
         fmll = vstack([origsyndict[ID_i][1] for ID_i in self.IDlist])
         # fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
-        print(fmll.keys())
         # sort tables on all collumns, include RESID as that way the stronger line will be listed first and will be set as a fit parameter
         tabpars = ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER1', 'OTHER2']
         fmll.sort(tabpars+['RESID'])
@@ -443,7 +447,7 @@ class FALmcmc(object):
 
         # Read previous table: LINE INFO, DWL, DGFLOG, DGAMMA (will figure out which GAMMA after the fact)
         if presetll == None:
-            initlines = '/n/conroyfs1/pac/FAL/data/LL/SL_pars4.h5'
+            initlines = '{0}/FAL/data/SL_pars4.h5'.format(datapath)
             ilines = Table(np.array(h5py.File(initlines,'r')['data']))
         else:
             initlines = presetll
@@ -511,8 +515,8 @@ class FALmcmc(object):
         if ((self.minWL > 470.0) & (self.maxWL < 755.0)):
             print("Pro: {0} --> Working with Blue Optical Spectrum".format(self.ID))
             # read in observed data for the Sun and Acturus
-            sol_i = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/SOL_4750_8270.fits',format='fits')            
-            arc_ii = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/ARC_3800_9300_HINKLE.fits',format='fits')
+            sol_i = Table.read('{0}/FAL/data/SOL_4750_8270.fits'.format(datapath),format='fits')            
+            arc_ii = Table.read('{0}/FAL/data/ARC_3800_9300_HINKLE.fits'.format(datapath),format='fits')
             arc_i = Table()
             arc_i['WAVE'] = arc_ii['WAVELENGTH']/10.0
             arc_i['FLUX'] = arc_ii['ARCTURUS'].copy()
@@ -522,22 +526,22 @@ class FALmcmc(object):
             arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
-            transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_OPT_10_22_15.h5','r')
+            transh5 = h5py.File('{0}/FAL/data/TRANS/TRANS_OPT_10_22_15.h5'.format(datapath),'r')
             trans = Table(np.array(transh5['spec']))
             trans.sort('WAVE')
             # correct for slight doppler shift
             trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
 
             # read in background spectrum for each model
-            bg_sol_i = Table.read('/n/conroyfs1/pac/MASTERLL/WEAKLL/SPEC_SOL_weak_475_1000.fits.gz',format='fits')
-            bg_arc_i = Table.read('/n/conroyfs1/pac/MASTERLL/WEAKLL/SPEC_ARC_weak_475_1000.fits.gz',format='fits')
+            bg_sol_i = Table.read('{0}/FAL/data/SPEC_SOL_weak_475_1000.fits.gz'.format(datapath),format='fits')
+            bg_arc_i = Table.read('{0}/FAL/data/SPEC_ARC_weak_475_1000.fits.gz'.format(datapath),format='fits')
 
 
         elif ((self.minWL > 745.0) & (self.maxWL < 1010.0)):
             print("Pro: {0} --> Working with Red Optical Spectrum".format(self.ID))
             # read in observed data for the Sun and Acturus
-            sol_i = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/SOL_710_1098.fits',format='fits')            
-            arc_ii = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/ARC_3800_9300_HINKLE.fits',format='fits')
+            sol_i = Table.read('{0}/FAL/data/SOL_710_1098.fits'.format(datapath),format='fits')            
+            arc_ii = Table.read('{0}/FAL/data/ARC_3800_9300_HINKLE.fits'.format(datapath),format='fits')
             arc_i = Table()
             arc_i['WAVE'] = arc_ii['WAVELENGTH']/10.0
             arc_i['FLUX'] = arc_ii['ARCTURUS'].copy()
@@ -547,20 +551,20 @@ class FALmcmc(object):
             arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
-            transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_RED_2_21_17.h5','r')
+            transh5 = h5py.File('{0}/FAL/data/TRANS/TRANS_RED_2_21_17.h5'.format(datapath),'r')
             trans = Table(np.array(transh5['spec']))
             trans.sort('WAVE')
             # correct for slight doppler shift
             trans['WAVE'] = trans['WAVE']*(1.0-(1.231/speedoflight))
 
             # read in background spectrum for each model
-            bg_sol_i = Table.read('/n/conroyfs1/pac/MASTERLL/WEAKLL/SPEC_SOL_weak_475_1000.fits.gz',format='fits')
-            bg_arc_i = Table.read('/n/conroyfs1/pac/MASTERLL/WEAKLL/SPEC_ARC_weak_475_1000.fits.gz',format='fits')
+            bg_sol_i = Table.read('{0}/FAL/data/SPEC_SOL_weak_475_1000.fits.gz'.format(datapath),format='fits')
+            bg_arc_i = Table.read('{0}/FAL/data/SPEC_ARC_weak_475_1000.fits.gz'.format(datapath),format='fits')
 
         elif ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
             print("Pro: {0} --> Working with H-Band Spectrum".format(self.ID))
-            sol_i = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/SOL_HBAND_Kur_8_26_15.fits',format='fits')
-            arc_ii = Table.read('/n/conroyfs1/pac/FAL/data/ATLASES/ARC_HBAND_HINKLE.fits',format='fits')
+            sol_i  = Table.read('{0}/FAL/data/SOL_HBAND_Kur_8_26_15.fits'.format(datapath),format='fits')
+            arc_ii = Table.read('{0}/FAL/data/ARC_HBAND_HINKLE.fits'.format(datapath),format='fits')
             arc_i = Table()
             arc_i['WAVE'] = (arc_ii['Wavelength_air'].copy()/10.0)*(1.0+(-12.1/speedoflight))
             arc_i['FLUX'] = arc_ii['Flux'].copy()
@@ -570,7 +574,7 @@ class FALmcmc(object):
             arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
-            transh5 = h5py.File('/n/conroyfs1/pac/FAL/data/TRANS/TRANS_HBAND_10_22_15.h5','r')
+            transh5 = h5py.File('{0}/FAL/data/TRANS_HBAND_10_22_15.h5'.format(datapath),'r')
             trans = Table(np.array(transh5['spec']))
             trans.sort('WAVE')
 
