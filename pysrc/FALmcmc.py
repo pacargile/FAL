@@ -440,8 +440,8 @@ class FALmcmc(object):
                 # str(ill['ISO2']),str(ill['X2']),
                 str(ill['ISO1']),
                 str(ill['ISO2']),
-                ill['OTHER1'],
-                ill['OTHER2'],
+                str(ill['OTHER1']),
+                str(ill['OTHER2']),
                 ]
                 ).replace(" ","")
 
@@ -483,8 +483,8 @@ class FALmcmc(object):
                 # str(ill['ISO2']),str(ill['X2']),
                 str(ill['ISO1']),
                 str(ill['ISO2']),
-                ill['OTHER1'],
-                ill['OTHER2'],
+                str(ill['OTHER1']),
+                str(ill['OTHER2']),
                 ]
             ).replace(" ","")
 
