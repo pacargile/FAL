@@ -432,7 +432,7 @@ class FALmcmc(object):
                     [
                     str(ill['WL']),
                     str(ill['GFLOG']),
-                    ill['CODE'],
+                    str(ill['CODE']),
                     # str(ill['E']),str(ill['EP']),
                     str(ill['XJ']),str(ill['XJP']),
                     str(ill['LABEL']),str(ill['LABELP']),
@@ -478,7 +478,7 @@ class FALmcmc(object):
                 [
                 str(ill['WL']),
                 str(ill['GFLOG']),
-                ill['CODE'],
+                str(ill['CODE']),
                 # str(ill['E']),str(ill['EP']),
                 str(ill['XJ']),str(ill['XJP']),
                 str(ill['LABEL']),str(ill['LABELP']),
