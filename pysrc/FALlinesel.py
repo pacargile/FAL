@@ -68,7 +68,7 @@ def linesel(LL,condst,minWL,maxWL):
 				try:
 					molbandarr[ii] = AA+BB
 				except UnboundLocalError:
-					print LL[ii]
+					print(LL[ii])
 					raise
 
 
