@@ -530,7 +530,7 @@ class FALmcmc(object):
             arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
-            transh5 = h5py.File('{0}/FAL/data/TRANS/TRANS_OPT_10_22_15.h5'.format(datapath),'r')
+            transh5 = h5py.File('{0}/FAL/data/TRANS_OPT_10_22_15.h5'.format(datapath),'r')
             trans = Table(np.array(transh5['spec']))
             trans.sort('WAVE')
             # correct for slight doppler shift
@@ -555,7 +555,7 @@ class FALmcmc(object):
             arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
-            transh5 = h5py.File('{0}/FAL/data/TRANS/TRANS_RED_2_21_17.h5'.format(datapath),'r')
+            transh5 = h5py.File('{0}/FAL/data/TRANS_RED_2_21_17.h5'.format(datapath),'r')
             trans = Table(np.array(transh5['spec']))
             trans.sort('WAVE')
             # correct for slight doppler shift
