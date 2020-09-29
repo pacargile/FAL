@@ -1,4 +1,3 @@
-from __future__ import print_function
 import sys,time,os
 from datetime import datetime
 import emcee
@@ -292,7 +291,7 @@ class FALmcmc(object):
         for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
             print('Pro: {0} --> Running original synthe on full master line list for {1}'.format(self.ID,star_i))
             # initialize the class
-            fm_i = FALmod.FALmod(ID=ID_i,waverange=self.waverange,starpars=star_i)
+            fm_i = FALmod.FALmod(ID=ID_i,waverange=self.waverange,starpars=star_i,verbose=False)
             # run SYNTHE using the master line list to grab all important lines
             spec_i,ll_i = fm_i.runsynthe(timeit=False,linelist='readmaster')
             self.fmdict[ID_i] = fm_i
@@ -303,6 +302,7 @@ class FALmcmc(object):
         # stack the tables
         fmll = vstack([origsyndict[ID_i][1] for ID_i in self.IDlist])
         # fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
+        print(fmll.keys())
         # sort tables on all collumns, include RESID as that way the stronger line will be listed first and will be set as a fit parameter
         tabpars = ['WL','GFLOG', 'CODE', 'E', 'XJ', 'LABEL', 'EP', 'XJP', 'LABELP', 'GR', 'GS', 'GW', 'WAVENO', 'REF', 'NBLO', 'NBUP', 'ISO1', 'X1', 'ISO2', 'X2', 'OTHER']
         fmll.sort(tabpars+['RESID'])
