@@ -727,7 +727,7 @@ class FALmcmc(object):
         if nwalkers == 0:
             # calculate number of walkers (default: 5 x number of free parameters)
             self.nwalkers = 5 * self.ndim
-        else:	
+        else:   
             # use user defined number of walkers
             self.nwalkers = nwalkers
 
