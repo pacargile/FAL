@@ -151,7 +151,7 @@ def makeinlist(infilename):
             'minlinWL':float(rf_i['LINWLstart']),'maxlinWL':float(rf_i['LINWLend']),
             'arcscale':float(rf_i['ARCSCALE']),
             'outputfile':'MCMC_{0}.dat'.format(rf_i['ID']),
-            'outputdir':'/n/regal/conroy_lab/pac/FAL/OPTSEG/RUN2/MCMCoutput/',
+            'outputdir':'/n/holyscratch01/conroy_lab/pacargile/FAL/test/output/',
             # 'initlines':None,
             # 'initlines':'/n/regal/conroy_lab/pac/FAL/OPTSEG/CarRun1_LL_475_750_new.h5',
             'initlines':MASTERLL,
@@ -163,7 +163,7 @@ def makeinlist(infilename):
 
 if __name__ == '__main__':
     # run makeinlist
-    indictlist = makeinlist(sys.argv[1])
+    indictlist = (sys.argv[1])
     if int(sys.argv[2]) <= len(indictlist):
         indict = indictlist[int(sys.argv[2])-1]
         print("READ IN SEGMENT {0}".format(indict['IDin']))
