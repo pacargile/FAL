@@ -427,23 +427,27 @@ class FALmcmc(object):
         # make a unique ID for each line
         fmllcode = np.empty(len(fmll),dtype=object)
         for nnn,ill in enumerate(fmll):
-            fmllcode[nnn] = "".join(
-                [
-                str(ill['WL']),
-                str(ill['GFLOG']),
-                ill['CODE'],
-                # str(ill['E']),str(ill['EP']),
-                str(ill['XJ']),str(ill['XJP']),
-                str(ill['LABEL']),str(ill['LABELP']),
-                # ill['REF'],
-                # str(ill['ISO1']),str(ill['X1']),
-                # str(ill['ISO2']),str(ill['X2']),
-                str(ill['ISO1']),
-                str(ill['ISO2']),
-                str(ill['OTHER1']),
-                str(ill['OTHER2']),
-                ]
-                ).replace(" ","")
+            try:
+                fmllcode[nnn] = "".join(
+                    [
+                    str(ill['WL']),
+                    str(ill['GFLOG']),
+                    ill['CODE'],
+                    # str(ill['E']),str(ill['EP']),
+                    str(ill['XJ']),str(ill['XJP']),
+                    str(ill['LABEL']),str(ill['LABELP']),
+                    # ill['REF'],
+                    # str(ill['ISO1']),str(ill['X1']),
+                    # str(ill['ISO2']),str(ill['X2']),
+                    str(ill['ISO1']),
+                    str(ill['ISO2']),
+                    str(ill['OTHER1']),
+                    str(ill['OTHER2']),
+                    ]
+                    ).replace(" ","")
+            except:
+                print(ill)
+                raise
 
         # Read previous table: LINE INFO, DWL, DGFLOG, DGAMMA (will figure out which GAMMA after the fact)
         if presetll == None:
