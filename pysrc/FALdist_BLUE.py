@@ -10,6 +10,18 @@ import traceback
 import warnings
 warnings.simplefilter(action='ignore',category=FutureWarning)
 
+import socket
+hostname = socket.gethostname()
+if hostname[:4] == 'holy':
+     RUNLOC = 'ODY'
+else:
+     RUNLOC = 'LOCAL'
+
+conroypath = os.environ.get('CSCRATCH')+'pac'
+holypath   = os.environ.get('HOLYSCRATCH')+'conroy_lab/pacargile'
+homepath   = os.environ.get('HOME')
+
+datapath = holypath
 
 def runFAL(indict):
 	starttime = indict['starttime']
@@ -130,6 +142,9 @@ def makeinlist(infilename):
 
 	indictlist = []
 
+    MASTERLL = (['{0}/FAL/MASTERLL/FULLOPT/KuruczLL_450_1350.bin'.format(datapath),
+        '{0}/FAL/MASTERLL/TiO/TiO_LL_450_1300.bin'.format(datapath)])
+
 	for ii,rf_i in enumerate(regfile):
 		tempdict = ({'starttime':starttime,'walltime':walltime,'IDin':int(rf_i['ID']),
 			'minWLin':float(rf_i['WLstart']),'maxWLin':float(rf_i['WLend']),
@@ -139,7 +154,7 @@ def makeinlist(infilename):
 			'outputdir':'/n/regal/conroy_lab/pac/FAL/OPTSEG/RUN2/MCMCoutput/',
 			# 'initlines':None,
 			# 'initlines':'/n/regal/conroy_lab/pac/FAL/OPTSEG/CarRun1_LL_475_750_new.h5',
-			'initlines':['/n/conroyfs1/pac/MASTERLL/OPTSEG/LL/CR1_LL_475_750.h5','/n/conroyfs1/pac/MASTERLL/OPTSEG/LL/CR1_TiO_475_750.h5'],
+			'initlines':MASTERLL,
 			'RUNID':ii})
 
 		indictlist.append(tempdict)
