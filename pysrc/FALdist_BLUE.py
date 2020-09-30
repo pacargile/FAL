@@ -100,7 +100,7 @@ def runFAL(indict):
             # MCMC.run_MCMC(500,burnin=False,nburn=0)
 
             # build samplers
-            MCMC.buildsampler(nwalkers=150,threads=0)
+            MCMC.buildsampler(nwalkers=100,threads=0)
             # run MCMC
             MCMC.run_MCMC(3000,burnin=False,nburn=0)
             
