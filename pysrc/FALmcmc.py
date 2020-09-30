@@ -914,7 +914,9 @@ class FALmcmc(object):
         finalflag = 0
 
         for pos,prob,_,blob in sampler.sample(
-            p0,log_prob0=lnprob0,rstate0=rstate0,iterations=niter,storechain=False
+            p0,log_prob0=lnprob0,rstate0=rstate0,
+            iterations=niter,
+            store=False,tune=False,progress=False,skip_initial_state_check=False,
             ):
             # set up output arrays
             pos_matrix=pos.reshape(self.nwalkers,self.ndim)
