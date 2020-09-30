@@ -498,7 +498,7 @@ class synthe(object):
 
         #print("Running RgfAlldel")
         # self.rgfalldelout = self._callpro("rgfalldel",verbose=verbose)
-        self.rgfalldelout = self._callpro("rpunchxx",verbose=verbose)
+        self.rgfalldelout = self._callpro("rpunchxx",verbose=True)
         #print("Finished RgfAlldel")
 
         # move fort.14 to fort.99 and clean up
