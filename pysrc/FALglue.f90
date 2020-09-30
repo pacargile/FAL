@@ -63,10 +63,10 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: CODEin(NLINESi)
   real(c_double), intent(out) :: Ein(NLINESi)
   real(c_double), intent(out) :: XJin(NLINESi)
-  character(kind=c_char,len=1),  intent(out) :: LABELin(10,NLINESi)
+  character(kind=c_char,len=1),  intent(out) :: LABELin(11,NLINESi)
   real(c_double), intent(out) :: EPin(NLINESi)
   real(c_double), intent(out) :: XJPin(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: LABELPin(10,NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: LABELPin(11,NLINESi)
   real(c_double), intent(out) :: GRin(NLINESi)
   real(c_double), intent(out) :: DGAMMARin(NLINESi)
   real(c_double), intent(out) :: GSin(NLINESi)
@@ -74,7 +74,7 @@ subroutine readoutspecbin(&
   real(c_double), intent(out) :: GWin(NLINESi)
   real(c_double), intent(out) :: DGAMMAWin(NLINESi)
   real(c_double), intent(out) :: WAVENOin(NLINESi)
-  character(kind=c_char,len=1),   intent(out) :: REFin(4,NLINESi)
+  character(kind=c_char,len=1),   intent(out) :: REFin(5,NLINESi)
   integer(c_long), intent(out) :: NBLOin(NLINESi)
   integer(c_long), intent(out) :: NBUPin(NLINESi)
   integer(c_long), intent(out) :: ISO1in(NLINESi)
@@ -166,16 +166,16 @@ subroutine readoutspecbin(&
      ! END DO
      Ein(I) = E
      XJin(I) = XJ
-     WRITE(SLABEL,'(A8,A2)') LABEL
+     WRITE(SLABEL,'(1X,A8,A2)') LABEL
      SLABEL = SLABEL//c_null_char
-     DO J=1,10
+     DO J=1,11
        LABELin(J,I) = SLABEL(J:J)
      END DO
      EPin(I) = EP
      XJPin(I) = XJP
-     WRITE(SLABEL,'(A8,A2)') LABELP
+     WRITE(SLABEL,'(1X,A8,A2)') LABELP
      SLABEL = SLABEL//c_null_char
-     DO J=1,10
+     DO J=1,11
        LABELPin(J,I) = SLABEL(J:J)
      END DO
      GRin(I) = GR
@@ -185,9 +185,9 @@ subroutine readoutspecbin(&
      GWin(I) = GW
      DGAMMAWin(I) = DGAMMAW
      WAVENOin(I) = WAVENO
-     WRITE(SLABEL,'(A4)') REF
+     WRITE(SLABEL,'(1X,A4)') REF
      SLABEL = SLABEL//c_null_char
-     DO J=1,4
+     DO J=1,5
        REFin(J,I) = SLABEL(J:J)
      END DO
      NBLOin(I) = INT(NBLO)
