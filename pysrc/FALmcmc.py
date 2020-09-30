@@ -884,9 +884,9 @@ class FALmcmc(object):
             self.lnprob0_i = None
             self.rstate0_i = None
             
-        self._mcmc(self.sampler,nsteps,self.p0_i,lnprob0=self.lnprob0_i,rstate0=self.rstate0_i)
+        self._mcmc(self.sampler,niter=nsteps,p0=self.p0_i,lnprob0=self.lnprob0_i,rstate0=self.rstate0_i)
 
-    def _mcmc(self,sampler,niter,p0,lnprob0=None,rstate0=None):
+    def _mcmc(self,sampler,niter=1,p0=[],lnprob0=None,rstate0=None):
         # RUN FINAL CHAIN MCMC
         print("Pro: {0} --> Starting MCMC with {1:n} links and {2:n} walkers".format(self.ID,niter,self.nwalkers))
         text = (
