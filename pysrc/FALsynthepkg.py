@@ -446,7 +446,7 @@ class synthe(object):
             os.symlink(MLL,'fort.11')
 
             # run read master list program
-            self.rmasterout = self._callpro("rpunchbin",verbose=True)
+            self.rmasterout = self._callpro("rpunchbin",verbose=verbose)
 
 
         # move fort.14 to fort.99 and clean up
@@ -498,7 +498,7 @@ class synthe(object):
 
         #print("Running RgfAlldel")
         # self.rgfalldelout = self._callpro("rgfalldel",verbose=verbose)
-        self.rgfalldelout = self._callpro("rpunchxx",verbose=True)
+        self.rgfalldelout = self._callpro("rpunchxx",verbose=verbose)
         #print("Finished RgfAlldel")
 
         # move fort.14 to fort.99 and clean up
@@ -865,7 +865,7 @@ class synthe(object):
         # print("Running Synthe")
         if speed == 'slow':
             # print("Running Synthe SLOW")
-            self.synout = self._callpro("synthe_slow",verbose=True)
+            self.synout = self._callpro("synthe_slow",verbose=verbose)
         elif speed == 'fast':
             # print("Running Synthe FAST")
             self.synout = self._callpro("synthe_fast",verbose=verbose)
@@ -987,7 +987,6 @@ class synthe(object):
         return (self.rotateout,self.ID)
     
     def broaden(self,inspec,VMAC=0.0,broadtype=None,WLreg=None,write=False,verbose=None):
-        verbose=True
         if broadtype==None:
             raise ValueError('Must define broadening type')
 
