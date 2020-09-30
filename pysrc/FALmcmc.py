@@ -891,8 +891,8 @@ class FALmcmc(object):
         print("Seg: {0} --> Starting MCMC with {1:n} links and {2:n} walkers".format(self.ID,niter,self.nwalkers))
         text = (
             "\rSeg: {ID} --> MCMC step: {STEP:n}\n"+
-            "Seg: {ID} --> Sampler's average acceptance fraction: {AF:5.2f}                  \n"+
-            "Seg: {ID} --> Sampler's average autocorelation time: {AC:5.2f}                  \n"+
+            # "Seg: {ID} --> Sampler's average acceptance fraction: {AF:5.2f}                  \n"+
+            # "Seg: {ID} --> Sampler's average autocorelation time: {AC:5.2f}                  \n"+
             "Seg: {ID} --> Std(ln(Pr))/Avg(ln(Pr)) of Walker ln(Pr): {STAT:n}"
             )
         # flush STDOUT before chain starts, just to pring info to log
@@ -942,8 +942,8 @@ class FALmcmc(object):
                 text.format(
                     ID=self.ID,
                     STEP=ii,
-                    AF=np.nanmean(sampler.acceptance_fraction),
-                    AC=np.nanmean(sampler.get_autocorr_time()),
+                    # AF=np.nanmean(sampler.acceptance_fraction),
+                    # AC=np.nanmean(sampler.get_autocorr_time()),
                     # STAT=(np.std(prob[goodind])/np.abs(np.average(prob[goodind])))
                     STAT=(np.nanstd(prob)/np.abs(np.nanmean(prob)))
                     )
