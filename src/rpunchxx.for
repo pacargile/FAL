@@ -139,6 +139,7 @@ C      PRINT *, 'XXXX increase strength of MgH, DGFLOG=+0.140 XXXX'
 CXXXXX
 C      DO 900 ILINE=1,10000000
       ILINE = 0
+      WRITE(6,*)'STARTING TO READ IN LINES WITH RPUNCHXX'
       DO WHILE (1.EQ.1)
       WRITE(6,*)ILINE    
 C     201 character record,  last 2 still available
