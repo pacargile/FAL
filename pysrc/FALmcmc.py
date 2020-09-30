@@ -942,7 +942,7 @@ class FALmcmc(object):
                 text.format(
                     ID=self.ID,
                     STEP=ii,
-                    AF=np.nanmean(sampler.acceptance_fraction()),
+                    AF=np.nanmean(sampler.acceptance_fraction),
                     AC=np.nanmean(sampler.get_autocorr_time()),
                     # STAT=(np.std(prob[goodind])/np.abs(np.average(prob[goodind])))
                     STAT=(np.nanstd(prob)/np.abs(np.nanmean(prob)))
