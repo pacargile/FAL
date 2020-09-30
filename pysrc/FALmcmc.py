@@ -161,7 +161,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
             wlshift = pp[1]+pp[0]
             if (wlshift < minLWL-0.05) or (wlshift > maxLWL+0.05):
                 if verbose:
-                    print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE SPECTRUM BOUNDS {1}-{2}, {3} LINE SHIFTED TO: {4}'.format(ID,minLWL-0.025,maxLWL+0.025,pp[1],wlshift))
+                    print('Seg: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE SPECTRUM BOUNDS {1}-{2}, {3} LINE SHIFTED TO: {4}'.format(ID,minLWL-0.025,maxLWL+0.025,pp[1],wlshift))
                 return -np.inf
 
     # Prior on gamma using beta function
@@ -177,7 +177,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
         any(np.isinf(gammarprior)) or 
         any(np.isinf(gammasprior))) :
         if verbose:
-            print('Pro: {0} --> CAUGHT A GAMMA SHIFT OUTSIDE THE PRIORS'.format(ID))
+            print('Seg: {0} --> CAUGHT A GAMMA SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
     # Prior on gf using beta function
@@ -189,7 +189,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
     # check to see if it returns any priors outside uniform prior
     if any(np.isinf(gfprior)):
         if verbose:
-            print('Pro: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
+            print('Seg: {0} --> CAUGHT A LOG(GF) SHIFT OUTSIDE THE PRIORS'.format(ID))
         return -np.inf
 
     velshift = 50.0 #km/s
@@ -205,7 +205,7 @@ def lnprior(p,ID,Tarr,fmll,minWL,maxWL,minLWL,maxLWL,verbose=False):
         if verbose:
             for ii,wlp in enumerate(wlprior):
                 if np.isinf(wlp):
-                    print('Pro: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE THE PRIORS: line {2} shifted by {1} nm'.format(ID,p['DWL'][ii],fmll['WL'][ii]))
+                    print('Seg: {0} --> CAUGHT A WAVELENGTH SHIFT OUTSIDE THE PRIORS: line {2} shifted by {1} nm'.format(ID,p['DWL'][ii],fmll['WL'][ii]))
         return -np.inf
 
     # check to see if arrays are empty, if so add 0.0 so that the sumation works
@@ -284,8 +284,8 @@ class FALmcmc(object):
             self.walltime = self.starttime + 300000
         else:
             self.walltime = walltime # walltime in seconds
-        print('Pro: {0} --> Total possible run time = {1} seconds'.format(self.ID,self.walltime-self.starttime))
-        print('Pro: {0} --> Full Wavelength Range = {1:9.5f}-{2:9.5f} ({3:9.5f}) nm'.format(
+        print('Seg: {0} --> Total possible run time = {1} seconds'.format(self.ID,self.walltime-self.starttime))
+        print('Seg: {0} --> Full Wavelength Range = {1:9.5f}-{2:9.5f} ({3:9.5f}) nm'.format(
             self.ID,self.minWL-self.wavebuffer,self.maxWL+self.wavebuffer,self.maxWL-self.minWL+(2.0*self.wavebuffer)))
 
 
@@ -295,7 +295,7 @@ class FALmcmc(object):
 
         # run synthe to get all needed lines
         for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
-            print('Pro: {0} --> Running original synthe on full master line list for {1}'.format(self.ID,star_i))
+            print('Seg: {0} --> Running original synthe on full master line list for {1}'.format(self.ID,star_i))
             # initialize the class
             fm_i = FALmod.FALmod(ID=ID_i,waverange=self.waverange,starpars=star_i,verbose=False)
             # run SYNTHE using the master line list to grab all important lines
@@ -304,7 +304,7 @@ class FALmcmc(object):
             origsyndict[ID_i] = [Table(spec_i),ll_i]
 
         # Assemble working line list (union of ll_i from last for-loop)
-        print('Pro: {0} --> Assemble working line list'.format(self.ID))
+        print('Seg: {0} --> Assemble working line list'.format(self.ID))
         # stack the tables
         fmll = vstack([origsyndict[ID_i][1] for ID_i in self.IDlist])
         # fmll['FILTERBOOL'] = np.zeros(len(fmll['WL']),dtype=int)
@@ -318,25 +318,25 @@ class FALmcmc(object):
 
         # check to see if working in H-band where we don't incldue a background model
         if ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
-            print("Pro: {0} --> Not using a background model for weak lines".format(self.ID))
+            print("Seg: {0} --> Not using a background model for weak lines".format(self.ID))
         else:
             # remove lines with RESID > 0.9999 as these are included in the static background model
             fmll = fmll[fmll['RESID'] < 0.9999]
-            print("Pro: {0} --> Using a background model for weak lines".format(self.ID))
+            print("Seg: {0} --> Using a background model for weak lines".format(self.ID))
 
         # # inject fake lines
         # fmll = self.injectfake(fmll.copy())
 
         if initlines != None:
             # inject previous parameters
-            print('Pro: {0} --> Injecting Previous Line Parameters'.format(self.ID))
+            print('Seg: {0} --> Injecting Previous Line Parameters'.format(self.ID))
             if type(initlines) == type(''):
                 fmll = self.injectprev(fmll.copy(),presetll=initlines)
             elif type(initlines) == type([]):
                 for initlines_i in initlines:
                     fmll = self.injectprev(fmll.copy(),presetll=initlines_i)
             else:
-                print("Pro: {0} --> WARNING!!! Did not understand previous line parameter file".format(self.ID))
+                print("Seg: {0} --> WARNING!!! Did not understand previous line parameter file".format(self.ID))
 
 
         # set it into self
@@ -350,10 +350,10 @@ class FALmcmc(object):
         self.fmll['DWL'] = np.zeros_like(self.fmll['DWL'])
 
         # now run each stellar spectrum again and archive the results
-        print('Pro: {0} --> Archiving the results into working directories'.format(self.ID))
+        print('Seg: {0} --> Archiving the results into working directories'.format(self.ID))
         for ID_i,star_i in zip(self.IDlist,['Sun','Arcturus']):
             if star_i == 'Arcturus':
-                print('Pro: {0} --> Changing C12/C13 abundance fraction for Arcturus'.format(self.ID))
+                print('Seg: {0} --> Changing C12/C13 abundance fraction for Arcturus'.format(self.ID))
                 C12C13 = 7.4
                 fmll_i = self.fmll.copy()
                 for ll_ii in fmll_i:
@@ -382,17 +382,17 @@ class FALmcmc(object):
                 fitlinewl.append(float(self.fmll['WL'][ii]))
 
 
-        print("Pro: {0} --> Total number of lines considered in WL segment = {1}".format(self.ID,len(self.fmll)))
-        print("Pro: {0} --> Number of lines that are free in WL segment = {1}".format(self.ID,len(fitlinewl)))
-        # print("Pro: {0} --> Index in line list of the modeled lines...".format(self.ID),fitlineind)
-        # print("Pro: {0} --> WL of modeled lines...".format(self.ID),fitlinewl)
+        print("Seg: {0} --> Total number of lines considered in WL segment = {1}".format(self.ID,len(self.fmll)))
+        print("Seg: {0} --> Number of lines that are free in WL segment = {1}".format(self.ID,len(fitlinewl)))
+        # print("Seg: {0} --> Index in line list of the modeled lines...".format(self.ID),fitlineind)
+        # print("Seg: {0} --> WL of modeled lines...".format(self.ID),fitlinewl)
 
         # number of dimensions
         self.ndim = len(self.parr)
-        print("Pro: {0} --> Number of Free Line Parameters...".format(self.ID),self.ndim)
-        print("Pro: {0} --> Fitting Transmission Spectrum (scaling and velocity)".format(self.ID))
+        print("Seg: {0} --> Number of Free Line Parameters...".format(self.ID),self.ndim)
+        print("Seg: {0} --> Fitting Transmission Spectrum (scaling and velocity)".format(self.ID))
         self.ndim = self.ndim + 2
-        print("Pro: {0} --> Fitting Arcturus Spectrum scaling and velocity".format(self.ID))
+        print("Seg: {0} --> Fitting Arcturus Spectrum scaling and velocity".format(self.ID))
         self.ndim = self.ndim + 2
 
         # get observed data, transmission spectrum, and background model
@@ -409,21 +409,21 @@ class FALmcmc(object):
 
         self.arcobsflux = self.arcobsflux*self.arcscale
 
-        print("Pro: {0} --> Number of Pixels in Obs Sol ...".format(self.ID),len(self.solobswave))
-        print("Pro: {0} --> Number of Pixels in Obs Arc ...".format(self.ID),len(self.arcobswave))
-        print("Pro: {0} --> Using an initial scaling of {1} for Obs Arc ...".format(self.ID,self.arcscale))
+        print("Seg: {0} --> Number of Pixels in Obs Sol ...".format(self.ID),len(self.solobswave))
+        print("Seg: {0} --> Number of Pixels in Obs Arc ...".format(self.ID),len(self.arcobswave))
+        print("Seg: {0} --> Using an initial scaling of {1} for Obs Arc ...".format(self.ID,self.arcscale))
 
-        print("Pro: {0} --> Finished Setup".format(self.ID))
+        print("Seg: {0} --> Finished Setup".format(self.ID))
 
     def injectfake(self):
         # # print out if the code found any lines to inject
         # FAKELINES = 0
         # for ll_t in self.fmll:
         #     if 'FAK' in str(ll_t['REF']):
-        #         print("Pro: {0} --> Inject FAKE line at WL={1}".format(self.ID,ll_t['WL']))
+        #         print("Seg: {0} --> Inject FAKE line at WL={1}".format(self.ID,ll_t['WL']))
         #         FAKELINES = FAKELINES + 1
         # if FAKELINES == 0:
-        #     print("Pro: {0} --> NO FAKE LINES FOUND IN SEGMENT".format(self.ID))
+        #     print("Seg: {0} --> NO FAKE LINES FOUND IN SEGMENT".format(self.ID))
         return
 
     def injectprev(self,fmll,presetll=None):
@@ -502,14 +502,14 @@ class FALmcmc(object):
             cond_intl = np.in1d(ilines['UNIQ_ID'],fmlc,assume_unique=True)
             if any(cond_intl):
                 numpreset = numpreset + 1
-                # print("Pro: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(fmll['WL'][ii])))
+                # print("Seg: {0} --> Setting Previous Pars for WL = {1:7.4f}".format(self.ID,float(fmll['WL'][ii])))
                 fmll['DWL'][ii]     = float('{0:6.4f}'.format(float(ilines['DWL'][cond_intl])))
                 fmll['DGFLOG'][ii]  = float('{0:6.4f}'.format(float(ilines['DGFLOG'][cond_intl])))
                 fmll['DGAMMAW'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAW'][cond_intl])))
                 fmll['DGAMMAR'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAR'][cond_intl])))
                 fmll['DGAMMAS'][ii] = float('{0:6.4f}'.format(float(ilines['DGAMMAS'][cond_intl])))
 
-        print("Pro: {0} --> Setting Previous Pars for {1} lines from {2}".format(self.ID,numpreset,initlines))
+        print("Seg: {0} --> Setting Previous Pars for {1} lines from {2}".format(self.ID,numpreset,initlines))
 
         # clean up some memory
         del ilines
@@ -521,7 +521,7 @@ class FALmcmc(object):
 
     def getspecdata(self):
         if ((self.minWL > 470.0) & (self.maxWL < 755.0)):
-            print("Pro: {0} --> Working with Blue Optical Spectrum".format(self.ID))
+            print("Seg: {0} --> Working with Blue Optical Spectrum".format(self.ID))
             # read in observed data for the Sun and Acturus
             sol_i = Table.read('{0}/FAL/data/SOL_4750_8270.fits'.format(datapath),format='fits')            
             arc_ii = Table.read('{0}/FAL/data/ARC_3800_9300_HINKLE.fits'.format(datapath),format='fits')
@@ -530,7 +530,7 @@ class FALmcmc(object):
             arc_i['FLUX'] = arc_ii['ARCTURUS'].copy()
             fluxcond = arc_i['FLUX'] >= 0.0
             fluxcond = np.array(fluxcond,dtype=bool)
-            print("Pro: {0} --> Number of pixels clipped out of Arcturus spectrum: {1}".format(self.ID,len(arc_i)-len(fluxcond.nonzero()[0])))
+            print("Seg: {0} --> Number of pixels clipped out of Arcturus spectrum: {1}".format(self.ID,len(arc_i)-len(fluxcond.nonzero()[0])))
             arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
@@ -546,7 +546,7 @@ class FALmcmc(object):
 
 
         elif ((self.minWL > 745.0) & (self.maxWL < 1010.0)):
-            print("Pro: {0} --> Working with Red Optical Spectrum".format(self.ID))
+            print("Seg: {0} --> Working with Red Optical Spectrum".format(self.ID))
             # read in observed data for the Sun and Acturus
             sol_i = Table.read('{0}/FAL/data/SOL_710_1098.fits'.format(datapath),format='fits')            
             arc_ii = Table.read('{0}/FAL/data/ARC_3800_9300_HINKLE.fits'.format(datapath),format='fits')
@@ -555,7 +555,7 @@ class FALmcmc(object):
             arc_i['FLUX'] = arc_ii['ARCTURUS'].copy()
             fluxcond = arc_i['FLUX'] >= 0.0
             fluxcond = np.array(fluxcond,dtype=bool)
-            print("Pro: {0} --> Number of pixels clipped out of Arcturus spectrum: {1}".format(self.ID,len(arc_i)-len(fluxcond.nonzero()[0])))
+            print("Seg: {0} --> Number of pixels clipped out of Arcturus spectrum: {1}".format(self.ID,len(arc_i)-len(fluxcond.nonzero()[0])))
             arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
@@ -570,7 +570,7 @@ class FALmcmc(object):
             bg_arc_i = Table.read('{0}/FAL/data/SPEC_ARC_weak_475_1000.fits.gz'.format(datapath),format='fits')
 
         elif ((self.minWL > 1300.0) & (self.maxWL < 2300.0)):
-            print("Pro: {0} --> Working with H-Band Spectrum".format(self.ID))
+            print("Seg: {0} --> Working with H-Band Spectrum".format(self.ID))
             sol_i  = Table.read('{0}/FAL/data/SOL_HBAND_Kur_8_26_15.fits'.format(datapath),format='fits')
             arc_ii = Table.read('{0}/FAL/data/ARC_HBAND_HINKLE.fits'.format(datapath),format='fits')
             arc_i = Table()
@@ -578,7 +578,7 @@ class FALmcmc(object):
             arc_i['FLUX'] = arc_ii['Flux'].copy()
             fluxcond = arc_i['FLUX'] >= 0.0
             fluxcond = np.array(fluxcond,dtype=bool)
-            print("Pro: {0} --> Number of pixels clipped out of Arcturus spectrum: {1}".format(self.ID,len(arc_i)-len(fluxcond.nonzero()[0])))
+            print("Seg: {0} --> Number of pixels clipped out of Arcturus spectrum: {1}".format(self.ID,len(arc_i)-len(fluxcond.nonzero()[0])))
             arc_i = arc_i[fluxcond]
 
             # read in transmission spectrum
@@ -636,7 +636,7 @@ class FALmcmc(object):
         return (solobswave,solobsflux,arcobswave,arcobsflux,transflux,bg_sol_flux,bg_arc_flux)
 
     def initoutput(self):
-        print("Pro: {0} --> Initializing Output Files".format(self.ID))
+        print("Seg: {0} --> Initializing Output Files".format(self.ID))
         # set up outfile
         if self.outputfile == None:
             self.outputfile = 'MCMC_{0:n}.dat'.format(time.time())
@@ -735,7 +735,7 @@ class FALmcmc(object):
             # use user defined number of walkers
             self.nwalkers = nwalkers
 
-        print('Pro: {0} --> Number of walkers being used: {1}'.format(self.ID,self.nwalkers))
+        print('Seg: {0} --> Number of walkers being used: {1}'.format(self.ID,self.nwalkers))
 
         # build sampler object
         args = ([(self.solobswave,self.solobsflux,
@@ -754,7 +754,7 @@ class FALmcmc(object):
             live_dangerously=True)
 
         # get p0 array and check for all finite values
-        print('Pro: {0} --> Get inital walker positions'.format(self.ID))
+        print('Seg: {0} --> Get inital walker positions'.format(self.ID))
 
         if self.previousball == None:
             self.p0 = [self.buildball() for _ in range(self.nwalkers)]
@@ -769,7 +769,7 @@ class FALmcmc(object):
                         if np.isinf(testlp):
                             psigscale = psigscale * 0.9
                         else:
-                            print('Pro: {0} --> Fixed problematic inital ball position'.format(self.ID))
+                            print('Seg: {0} --> Fixed problematic inital ball position'.format(self.ID))
                             break
 
         else:
@@ -853,7 +853,7 @@ class FALmcmc(object):
                     fmll_i = self.ll_i[self.ll_i['FGAMMAR'] == ii]
                     offsetgamma = fmll_i['DGAMMAR'][0]
                 else:
-                    print('Pro: {0} --> ---- PROBELM WITH SETTING GAMMA OFFSET'.format(self.ID))
+                    print('Seg: {0} --> ---- PROBELM WITH SETTING GAMMA OFFSET'.format(self.ID))
                     offsetgamma = 0.0
                 gammashift = beta.rvs(4.0,4.0,loc=(mingamma+offsetgamma)*scalefact,scale=rangegamma*scalefact)
                 if gammashift >= 0.9:
@@ -888,11 +888,11 @@ class FALmcmc(object):
 
     def _mcmc(self,sampler,niter=1,p0=[],lnprob0=None,rstate0=None):
         # RUN FINAL CHAIN MCMC
-        print("Pro: {0} --> Starting MCMC with {1:n} links and {2:n} walkers".format(self.ID,niter,self.nwalkers))
+        print("Seg: {0} --> Starting MCMC with {1:n} links and {2:n} walkers".format(self.ID,niter,self.nwalkers))
         text = (
-            "\rPro: {ID} --> MCMC step: {STEP:n}\n"+
-            "Pro: {ID} --> Sampler's average acceptance fraction: {AF:5.2f}                  \n"+
-            "Pro: {ID} --> Std(ln(Pr))/Avg(ln(Pr)) of Walker ln(Pr): {STAT:n}"
+            "\rSeg: {ID} --> MCMC step: {STEP:n}\n"+
+            "Seg: {ID} --> Sampler's average acceptance fraction: {AF:5.2f}                  \n"+
+            "Seg: {ID} --> Std(ln(Pr))/Avg(ln(Pr)) of Walker ln(Pr): {STAT:n}"
             )
         # flush STDOUT before chain starts, just to pring info to log
         sys.stdout.flush()
@@ -946,12 +946,12 @@ class FALmcmc(object):
                     STAT=(np.nanstd(prob)/np.abs(np.nanmean(prob)))
                     )
                 )
-            print("Pro: {0} --> Step time: {1:5.3f}".format(self.ID,time.time()-lasttime))
+            print("Seg: {0} --> Step time: {1:5.3f}".format(self.ID,time.time()-lasttime))
             lasttime = time.time()
             ii = ii + 1
             # check if time is within ~1 min of wall time, if so stop the for-loop
             if ( (lasttime-self.starttime) > (self.walltime-120.0) ):
-                print('Pro: {0} --> Stopping 2 min before walltime'.format(self.ID))
+                print('Seg: {0} --> Stopping 2 min before walltime'.format(self.ID))
                 finalflag = 1
                 outf.flush()
                 outspec.flush()
@@ -959,7 +959,7 @@ class FALmcmc(object):
                 outspec.close()
                 break
         if finalflag == 0:
-            print('Pro: {0} --> Stopping at max iterations'.format(self.ID))            
-            print('Pro: {0} --> Run time: {1} seconds'.format(self.ID,time.time()-self.starttime))
+            print('Seg: {0} --> Stopping at max iterations'.format(self.ID))            
+            print('Seg: {0} --> Run time: {1} seconds'.format(self.ID,time.time()-self.starttime))
         outf.close()
         outspec.close()

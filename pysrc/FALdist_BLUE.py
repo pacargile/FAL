@@ -34,7 +34,7 @@ def runFAL(indict):
     arcscale = indict['arcscale']
     runID = indict['RUNID']
 
-    print('... Setting up Seg{0}'.format(IDin))
+    print('... Setting up Seg {0}:'.format(IDin))
 
     # test keys in indict
     if 'testrun' in indict.keys():
@@ -90,7 +90,7 @@ def runFAL(indict):
         if testrun:
             return MCMC
         else:
-            print("Seg{0} - Working on {1}".format(IDin,multiprocessing.current_process().name))
+            print("Seg: {0} - Working on {1}".format(IDin,multiprocessing.current_process().name))
 
             # 100 walkers, 500 steps
 
@@ -104,7 +104,7 @@ def runFAL(indict):
             # run MCMC
             MCMC.run_MCMC(3000,burnin=False,nburn=0)
             
-            print("Seg{0} - RUN TOOK {1:10.5f}".format(IDin,time.time()-MCMC.starttime))
+            print("Seg: {0} - RUN TOOK {1:10.5f}".format(IDin,time.time()-MCMC.starttime))
             return 
 
     except Exception as e:
