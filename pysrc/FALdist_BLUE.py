@@ -104,7 +104,8 @@ def runFAL(indict):
             # run MCMC
             MCMC.run_MCMC(3000,burnin=False,nburn=0)
             
-            return  "RUN TOOK {0:10.5f}".format(time.time()-MCMC.starttime)
+            print("Seg{0} - RUN TOOK {1:10.5f}".format(IDin,time.time()-MCMC.starttime))
+            return 
 
     except Exception as e:
         print('Caught Exception in worker thread (Seg{0} - Working on {1})'.format(IDin,multiprocessing.current_process().name))
