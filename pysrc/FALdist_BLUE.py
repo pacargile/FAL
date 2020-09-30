@@ -34,7 +34,7 @@ def runFAL(indict):
     arcscale = indict['arcscale']
     runID = indict['RUNID']
 
-    print('Seg {0}: Setting up segment'.format(IDin))
+    print('Seg: {0} --> Setting up segment'.format(IDin))
 
     # test keys in indict
     if 'testrun' in indict.keys():
@@ -90,7 +90,7 @@ def runFAL(indict):
         if testrun:
             return MCMC
         else:
-            print("Seg: {0} - Working on {1}".format(IDin,multiprocessing.current_process().name))
+            print("Seg: {0} --> Working on {1}".format(IDin,multiprocessing.current_process().name))
 
             # 100 walkers, 500 steps
 
@@ -104,7 +104,7 @@ def runFAL(indict):
             # run MCMC
             MCMC.run_MCMC(3000,burnin=False,nburn=0)
             
-            print("Seg: {0} - RUN TOOK {1:10.5f}".format(IDin,time.time()-MCMC.starttime))
+            print("Seg: {0} --> RUN TOOK {1:10.5f}".format(IDin,time.time()-MCMC.starttime))
             return 
 
     except Exception as e:
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     indictlist = makeinlist(sys.argv[1])
     if int(sys.argv[2]) <= len(indictlist):
         indict = indictlist[int(sys.argv[2])-1]
-        print("Seg {0}: Read in segment".format(indict['IDin']))
+        print("Seg: {0} --> Read in segment".format(indict['IDin']))
         runFAL(indict)
     else:
         print("NOT ENOUGH LINES IN SEG FILE FOR THIS RUN!")
