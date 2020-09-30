@@ -284,7 +284,7 @@ class glue(object):
 		ll['XJ']       = np.array(['{0:5.1f}'.format(x) for x in XJin],dtype='float')
 		# ll['LABEL']    = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		# ll['LABEL']    = np.array([' {0:11s}'.format(x) for x in LABELin],dtype=str)
-		ll['LABELP']   = np.array(LABELin,dtype='str')
+		ll['LABEL']    = np.array(LABELin,dtype='str')
 		ll['EP']       = np.array(['{0:12.3f}'.format(x) for x in EPin],dtype='float')
 		ll['XJP']      = np.array(['{0:5.1f}'.format(x) for x in XJPin],dtype='float')
 		# ll['LABELP']   = np.array([''.join(LABELPin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
