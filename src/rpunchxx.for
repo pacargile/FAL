@@ -76,7 +76,7 @@ C 396.8470 116  8.24 -4.44 -7.80 REF
       CHARACTER*3 AUTO
       CHARACTER*6 IXFIXFP
       DIMENSION DECKJ(7,kw)
-      INTEGER TYPE
+      INTEGER TYPE,ILINE
       EQUIVALENCE (GAMMAS,ASHORE),(GAMMAW,BSHORE)
       EQUIVALENCE (GF,G,CGF),(TYPE,NLAST),(GAMMAR,XSECT,GAUNT)
 C     correction 18 May 2011  plus new version of subroutine ionpots.
@@ -138,8 +138,9 @@ C      PRINT *, 'XXXX increase strength of C2, DGFLOG=+0.250 XXXX'
 C      PRINT *, 'XXXX increase strength of MgH, DGFLOG=+0.140 XXXX'
 CXXXXX
 C      DO 900 ILINE=1,10000000
+      ILINE = 0
       DO WHILE (1.EQ.1)
-C
+      WRITE(6,*)ILINE    
 C     201 character record,  last 2 still available
       READ(11,140,END=145)WL,DWL,GFLOG,DGFLOG,CODE,E,XJ,LABEL,
      1 EP,XJP,LABELP,GR,DGAMMAR,GS,DGAMMAS,GW,DGAMMAW,WAVENO,

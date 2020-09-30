@@ -362,8 +362,6 @@ class FALmcmc(object):
             else:
                 fmll_i = self.fmll.copy()
             fmll_i.remove_column('RESID')
-            print(fmll_i.keys())
-            print(fmll_i)
             fmll_i.write('tmp_{0}.fits'.format(star_i),format='fits',overwrite=True)
             _spec,_ll = self.fmdict[ID_i].runsynthe(timeit=False,linelist=fmll_i,archive=True)
             # reset orgll to fmll because we don't want to use the synthe parsed ll
