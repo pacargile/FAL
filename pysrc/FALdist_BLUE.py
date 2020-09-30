@@ -1,7 +1,7 @@
 from __future__ import print_function
 import sys, time
 import FALmcmc as FALmcmc
-import time, shutil, os, multiprocessing
+import time, shutil, os, multiprocessing, argparse
 import numpy as np
 # import psutil
 from astropy.table import Table
@@ -100,7 +100,7 @@ def runFAL(indict):
             MCMC.run_MCMC(500,burnin=False,nburn=0)
 
             # # build samplers
-            # MCMC.buildsampler(nwalkers=100,threads=0)
+            # MCMC.buildsampler(nwalkers=250,threads=0)
             # # run MCMC
             # MCMC.run_MCMC(3000,burnin=False,nburn=0)
             
@@ -163,46 +163,22 @@ def makeinlist(infilename):
     return indictlist
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s','--segfile',
+        help='Name of file containing segment information',
+        type=str,default='./SEG_OPT.dat')
+    parser.add_argument('-i','--index',
+        help='Index in segment file for which one user wants to run',
+        type=int,default=0)
+
+    args = parser.parse_args()
+
     # run makeinlist
-    indictlist = makeinlist(sys.argv[1])
-    if int(sys.argv[2]) <= len(indictlist):
-        indict = indictlist[int(sys.argv[2])-1]
+    indictlist = makeinlist(args.segfile)
+
+    if args.index <= len(indictlist):
+        indict = indictlist[args.index]
         print("Seg: {0} --> Read in segment".format(indict['IDin']))
         runFAL(indict)
     else:
-        print("NOT ENOUGH LINES IN SEG FILE FOR THIS RUN!")
-    # MPI = False
-
-    # ##### multiprocessing stuff #######
-    # pool_size = multiprocessing.cpu_count()
-    # # pool_size = 2*multiprocessing.cpu_count()
-    # # pool_size = 8
-
-    # os.system("taskset -pc 0-%d %s" % (pool_size,os.getpid()))
-
-    # if MPI:
-    #   # Initialize the MPI-based pool used for parallelization.
-    #   pool = MPIPool(debug=False)
-
-    #   if not pool.is_master():
-    #       # Wait for instructions from the master process.
-    #       pool.wait()
-    #       sys.exit(0)
-
-    # else:
-
-    #   pool = multiprocessing.Pool(processes=pool_size)
-
-
-    # # set up CPU precentage reader
-    # # psutil.cpu_percent(interval=1, percpu=True)
-
-
-    # print("FOUND POOL SIZE OF {0} CPUS".format(pool_size))
-
-    # pool.map(runFAL, indictlist)
-    # pool.close() # no more tasks
-    # pool.join()  # wrap up current tasks
-
-    # print('... CPU Percentage Usage:')
-    # print(psutil.cpu_percent(percpu=True))
+        print("NOT ENOUGH ROWS IN SEG FILE FOR THIS RUN!")
