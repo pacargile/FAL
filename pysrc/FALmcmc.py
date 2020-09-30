@@ -114,7 +114,7 @@ def lnprob(pin,args,verbose=False,justprior=False):
     
 def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     # generate ID list
-    IDlist = fmdict.keys()
+    IDlist = list(fmdict)
     IDlist.sort()
 
     sig = {}
