@@ -29,7 +29,7 @@ def lnprob(pin,args,verbose=False,justprior=False):
     # read in arguments
     (solobswave,solobsflux,arcobswave,arcobsflux,transflux,bg_sol_flux,bg_arc_flux,fmdict,fmll,Tarr,minWL,maxWL,minLWL,maxLWL) = args
     # for printing to command line, generate an ID
-    fmdictkeys = list(fmdict.keys())
+    fmdictkeys = list(fmdict)
     ID = fmdictkeys[0] - 10000000
 
     # set up observed data dictionaries
