@@ -34,7 +34,7 @@ def runFAL(indict):
     arcscale = indict['arcscale']
     runID = indict['RUNID']
 
-    print('... Setting up Seg {0}:'.format(IDin))
+    print('Seg {0}: Setting up segment'.format(IDin))
 
     # test keys in indict
     if 'testrun' in indict.keys():
@@ -108,7 +108,7 @@ def runFAL(indict):
             return 
 
     except Exception as e:
-        print('Caught Exception in worker thread (Seg{0} - Working on {1})'.format(IDin,multiprocessing.current_process().name))
+        print('Caught Exception in worker thread (Seg: {0}, Working on {1})'.format(IDin,multiprocessing.current_process().name))
         traceback.print_exc()
         print()
         raise e
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     indictlist = makeinlist(sys.argv[1])
     if int(sys.argv[2]) <= len(indictlist):
         indict = indictlist[int(sys.argv[2])-1]
-        print("READ IN SEGMENT {0}".format(indict['IDin']))
+        print("Seg {0}: Read in segment".format(indict['IDin']))
         runFAL(indict)
     else:
         print("NOT ENOUGH LINES IN SEG FILE FOR THIS RUN!")
