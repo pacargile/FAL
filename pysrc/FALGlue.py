@@ -251,6 +251,7 @@ class glue(object):
 			RESIDin.ctypes.data_as(self.c_double_p)  
 			)
 
+		print(LABELin)
 
 		x = np.array([''.join(LABELin[i,:].tostring('F').decode('ascii')) for i in range(NLINES)])
 		x = ''.join(x)
