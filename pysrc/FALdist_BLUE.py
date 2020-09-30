@@ -94,15 +94,15 @@ def runFAL(indict):
 
             # 100 walkers, 500 steps
 
-            # # build samplers
-            # MCMC.buildsampler(nwalkers=100,threads=0)
-            # # run MCMC
-            # MCMC.run_MCMC(500,burnin=False,nburn=0)
-
             # build samplers
             MCMC.buildsampler(nwalkers=100,threads=0)
             # run MCMC
-            MCMC.run_MCMC(3000,burnin=False,nburn=0)
+            MCMC.run_MCMC(500,burnin=False,nburn=0)
+
+            # # build samplers
+            # MCMC.buildsampler(nwalkers=100,threads=0)
+            # # run MCMC
+            # MCMC.run_MCMC(3000,burnin=False,nburn=0)
             
             print("Seg: {0} --> RUN TOOK {1:10.5f}".format(IDin,time.time()-MCMC.starttime))
             return 
