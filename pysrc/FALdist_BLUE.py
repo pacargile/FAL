@@ -178,7 +178,8 @@ if __name__ == '__main__':
 
     if args.index <= len(indictlist):
         indict = indictlist[args.index]
-        print("Seg: {0} --> Read in segment".format(indict['IDin']))
+        print("Seg: {0} --> Read in segment with index {1} from {2}".format(
+            indict['IDin'],args.index,args.segfile))
         runFAL(indict)
     else:
         print("NOT ENOUGH ROWS IN SEG FILE FOR THIS RUN!")
