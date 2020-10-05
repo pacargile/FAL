@@ -7,6 +7,7 @@ import numpy as np
 from astropy.table import Table,vstack,unique
 from scipy.interpolate import UnivariateSpline
 from scipy.stats import beta
+from scipy.optimize import minimize
 from scipy import constants
 speedoflight = constants.c / 1000.0
 
