@@ -26,7 +26,8 @@ homepath   = os.environ.get('HOME')
 datapath = holypath
 
 def fmin(pin,args,verbose=False):
-    return -0.5 * lnprob(pin,args,verbose)
+    res = lnprob(pin,args,verbose)
+    return -0.5 * res[0]
 
 def lnprob(pin,args,verbose=False):
 
