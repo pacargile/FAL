@@ -29,7 +29,8 @@ class FALmod(object):
     Class to take delta line parameters and return a synthesized
     spectrum from SYNTHE to use in python
     """    
-    def __init__(self,ID=None,starpars=None,waverange=None,verbose=False,extra={}):
+    # def __init__(self,ID=None,starpars=None,waverange=None,verbose=False,extra={}):
+    def __init__(self,**kwargs):
         '''
         FALmod -> Python wrapper around SYNTHE
 
@@ -42,30 +43,30 @@ class FALmod(object):
 
 
         # set ID
-        if ID != None:
-            self.IDraw = ID
-            self.ID = str(ID).rjust(8,str(0))
-        else:
+        ID = kwargs.get('ID',None)
+        if ID is None:
             import uuid
             self.ID = uuid.uuid4().hex[:8]
             self.IDraw = None
+        else:
+            self.IDraw = ID
+            self.ID = str(ID).rjust(8,str(0))
 
         # set starpars if starpars='Sun' or starpars='Arcturus'
-        if starpars == 'Sun':
-            self.starpars = {}
+        starpars = kwargs.get('starpars',None)
+        self.starpars = {}
+        if starpars is 'Sun':
             self.starpars['VROT'] = -2.02
             self.starpars['MACVEL'] = 1.5
             # self.starpars['MACVEL'] = -1
             self.starpars['OBJECT'] = 'Sun'
             self.starpars['RESOL'] = 3000000.0
-        elif starpars == 'Arcturus':
-            self.starpars = {}
+        elif starpars is 'Arcturus':
             self.starpars['VROT'] = 1.0
             self.starpars['MACVEL'] = 3.0
             self.starpars['OBJECT'] = 'Arcturus'
             self.starpars['RESOL'] = 500000.0
-        elif starpars == 'Mdwarf':
-            self.starpars = {}
+        elif starpars is 'Mdwarf':
             self.starpars['VROT'] = 0.1
             self.starpars['MACVEL'] = -1.0
             self.starpars['OBJECT'] = 'Mdwarf'
@@ -76,19 +77,23 @@ class FALmod(object):
             else:
                 self.starpars = starpars
 
-        if waverange == None:
+        waverange = kwargs.get('waverange',None)
+        if waverange is None:
             self.starpars['WSTART'] = 1500.0
             self.starpars['WEND'] = 1501.0
         else:
             self.starpars['WSTART'] = waverange[0]
             self.starpars['WEND'] = waverange[1]
 
+        extra = kwargs.get('extra',{})
         for kk in extra.keys():
             self.starpars[kk] = extra[kk]
 
-        # make dir in memory if not already there
-        if not os.path.exists('/dev/shm/FAL/{0}'.format(self.ID)):
-            os.makedirs('/dev/shm/FAL/{0}'.format(self.ID))
+        runinmem = kwargs.get('runinmem',True)
+        if runinmem:
+            # make dir in memory if not already there
+            if not os.path.exists('/dev/shm/FAL/{0}'.format(self.ID)):
+                os.makedirs('/dev/shm/FAL/{0}'.format(self.ID))
 
         # make local dir to work in
         if not os.path.exists('{0}'.format(self.ID)):
@@ -147,19 +152,20 @@ class FALmod(object):
 
         # call synbeg if readline != readlast
 
-        if str(linelist) == 'readlast':
+        if linelist is 'readlast':
             if not os.path.exists('/dev/shm/FAL/{0}/INT'.format(self.ID)):
                 raise IOError("Pro: {1} --> WARNING: COULD NOT FIND INITIAL FILES!!!! {0:7.5f} s".format(time.time()-self.starttime,self.IDraw))
             else:
                 self.SYNTHE.reset()
-        elif str(linelist) != 'readlast':
+            # elif str(linelist) != 'readlast':
+        else:
             if (verbose == True or verbose == 'synbeg'):
                 verbose_i = True
             else:
                 verbose_i = False
             self.SYNTHE.synbeg(self.starpars,clobber=True,verbose=verbose_i)
-        else:
-            pass
+        # else:
+        #     pass
 
         if archive:
             self.SYNTHE.archive()
