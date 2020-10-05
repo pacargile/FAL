@@ -95,7 +95,7 @@ def runFAL(indict):
             # 100 walkers, 500 steps
 
             # build samplers
-            MCMC.buildsampler(nwalkers=100,threads=0)
+            MCMC.buildsampler(nwalkers=150,threads=0)
             # run MCMC
             MCMC.run_MCMC(500,burnin=False,nburn=0)
 
@@ -142,9 +142,6 @@ def makeinlist(infilename):
         regfile = Table.read(infilename,names=['ID','WLstart','WLend','LINWLstart','LINWLend','WLRAN','NUMLINES','ARCSCALE'],format='ascii')
 
     indictlist = []
-
-    MASTERLL = (['{0}/FAL/MASTERLL/FULLOPT/KuruczLL_450_1350.bin'.format(datapath),
-        '{0}/FAL/MASTERLL/TiO/TiO_LL_450_1300.bin'.format(datapath)])
 
     for ii,rf_i in enumerate(regfile):
         tempdict = ({'starttime':starttime,'walltime':walltime,'IDin':int(rf_i['ID']),
