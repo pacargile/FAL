@@ -61,17 +61,21 @@ def lnprob(pin,args,verbose=False):
 
     # check to make sure transcale is > 0.0
     if transcale < 0.0:
+        print('transcale issue')
         return -np.inf,[np.nan,np.nan]
     # apply gaussian prior to transscale
     tsprior = -0.5*( ((transcale-1.0)**2.0)/(0.001**2.0))
 
     if (tranvel < -1.0) or (tranvel > 1.0):
+        print('tranvel issue')
         return -np.inf,[np.nan,np.nan]
 
     # check arcturus scalings
     if (arcscale > 1.05) or (arcscale < 0.95):
+        print('arcscale issue')
         return -np.inf,[np.nan,np.nan]
     if (arcvel < -1.0) or (arcvel > 1.0):
+        print('arcvel issue')
         return -np.inf,[np.nan,np.nan]
 
     # scale transmission spectrum, renormalize it
@@ -126,7 +130,6 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         # calculate model spectrum for p
         _spec,_ll = fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=p,verbose=False)
         _spectab_i = Table(_spec)
-        print(min(_spec['QMU1']),max(_spec['QMU1']))
         _spectab = _spectab_i[(_spectab_i['WAVE'] <= maxWL) & (_spectab_i['WAVE'] >= minWL)]
         _specflux = _spectab['QMU1']/_spectab['QMU2']
         _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
@@ -544,7 +547,11 @@ class FALopt(object):
             self.minLINWL,self.maxLINWL
             )])
 
-        p0 = np.zeros(len(self.parr),dtype='float')
+        p0 = list(np.zeros(len(self.parr),dtype='float'))
+        p0.append(0.975)
+        p0.append(-0.5)
+        p0.append(1.0)
+        p0.append(0.0)
 
         res = minimize(fmin, p0, args=inargs,
             method='Nelder-Mead', tol=1e-6, options={'disp': True})
