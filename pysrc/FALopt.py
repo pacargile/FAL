@@ -542,6 +542,7 @@ class FALopt(object):
 
         p0 = np.zeros(len(self.parr),dtype='float')
 
-        res = minimize(fmin, p0, method='Nelder-Mead', tol=1e-6)
+        res = minimize(fmin, p0, method='Nelder-Mead', 
+            tol=1e-6, options={'gtol': 1e-6, 'disp': True})
 
         return res
