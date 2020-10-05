@@ -27,7 +27,9 @@ datapath = holypath
 
 def fmin(pin,args,verbose=False):
     res = lnprob(pin,args,verbose)
-    return -0.5 * res[0]
+    chisq = -0.5 * res[0]
+    print(chisq)
+    return chisq
 
 def lnprob(pin,args,verbose=False):
 
