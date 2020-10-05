@@ -166,7 +166,6 @@ class FALopt(object):
 
         self.ID = IDin
         self.numstars = 2
-        self.previousball = previousball
         self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
         # Define synthesis wavelength range
