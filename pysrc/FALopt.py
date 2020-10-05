@@ -27,7 +27,7 @@ datapath = holypath
 
 def fmin(pin,args,verbose=False):
     res = lnprob(pin,args,verbose)
-    chisq = -0.5 * res[0]
+    chisq = -1.0 * res[0]
     print(chisq)
     return chisq
 
@@ -126,6 +126,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         # calculate model spectrum for p
         _spec,_ll = fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=p,verbose=False)
         _spectab_i = Table(_spec)
+        print(min(_spec['QMU1']),max(_spec['QMU1']))
         _spectab = _spectab_i[(_spectab_i['WAVE'] <= maxWL) & (_spectab_i['WAVE'] >= minWL)]
         _specflux = _spectab['QMU1']/_spectab['QMU2']
         _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
