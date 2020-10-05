@@ -95,6 +95,8 @@ class FALmod(object):
             if not os.path.exists('/dev/shm/FAL/{0}'.format(self.ID)):
                 os.makedirs('/dev/shm/FAL/{0}'.format(self.ID))
 
+        verbose = kwargs.get('verbose',False)
+
         # make local dir to work in
         if not os.path.exists('{0}'.format(self.ID)):
             os.makedirs('{0}'.format(self.ID))
