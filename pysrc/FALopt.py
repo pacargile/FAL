@@ -102,7 +102,7 @@ def lnprob(pin,args,verbose=False):
     modblob = mod
 
     # return the lnprob value
-    lnpr = lp + lnl
+    lnpr = lnl
     return lnpr, modblob
     
 def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
