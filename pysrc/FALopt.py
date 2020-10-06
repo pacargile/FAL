@@ -8,6 +8,7 @@ from astropy.table import Table,vstack,unique
 from scipy.interpolate import UnivariateSpline
 from scipy.stats import beta
 from scipy.optimize import minimize
+from scipy.optimize import SR1
 from scipy import constants
 speedoflight = constants.c / 1000.0
 
@@ -553,7 +554,10 @@ class FALopt(object):
         p0.append(1.0)
         p0.append(0.0)
 
-        res = minimize(fmin, p0, args=inargs,
-            method='BFGS', options={'disp': True})
+        res = minimize(fmin, p0, 
+            args=inargs,
+            method='BFGS', 
+            jac="2-point", hess=SR1(),
+            options={'disp': True})
 
         return res
