@@ -554,6 +554,6 @@ class FALopt(object):
         p0.append(0.0)
 
         res = minimize(fmin, p0, args=inargs,
-            method='Nelder-Mead', options={'disp': True})
+            method='BFGS', options={'disp': True})
 
         return res
