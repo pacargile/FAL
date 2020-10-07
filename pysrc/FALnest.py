@@ -56,21 +56,21 @@ def lnprob(pin,args,verbose=False):
 
     # check to make sure transcale is > 0.0
     if transcale < 0.0:
-        print('transcale issue')
+        print('transcale issue {0}'.format(transcale))
         return -np.inf,[np.nan,np.nan]
     # apply gaussian prior to transscale
     tsprior = -0.5*( ((transcale-1.0)**2.0)/(0.001**2.0))
 
     if (tranvel < -1.0) or (tranvel > 1.0):
-        print('tranvel issue')
+        print('tranvel issue {0}'.format(tranvel))
         return -np.inf,[np.nan,np.nan]
 
     # check arcturus scalings
     if (arcscale > 1.05) or (arcscale < 0.95):
-        print('arcscale issue')
+        print('arcscale issue {}'.format(arcscale))
         return -np.inf,[np.nan,np.nan]
     if (arcvel < -1.0) or (arcvel > 1.0):
-        print('arcvel issue')
+        print('arcvel issue {}'.format(arcvel))
         return -np.inf,[np.nan,np.nan]
 
     # scale transmission spectrum, renormalize it
@@ -160,8 +160,6 @@ def priortrans(upars,args):
     pars.append( (1.0  - -1.0) *upars[-3] - -1.0)
     pars.append( (0.0  - -0.75)*upars[-2] - -0.75)
     pars.append( (1.0  - -1.0) *upars[-1] - -1.0)
-
-    print(len(upars),len(pars))
 
     return pars
 
