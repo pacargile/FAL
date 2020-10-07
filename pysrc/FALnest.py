@@ -94,11 +94,11 @@ def lnprob(pin,args,verbose=False):
 
     # print(pin,gplp,lp,lnl)
 
-    modblob = mod
+    # modblob = mod
 
     # return the lnprob value
     lnpr = lnl
-    return lnpr, modblob
+    return lnpr
     
 def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     # generate ID list
