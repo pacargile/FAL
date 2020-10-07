@@ -245,13 +245,17 @@ class FALmod(object):
     def __del__(self):
         os.chdir(self.parentdir)
 
-    def _readline(self,linelist,verbose_i=False):
+    def _readline(self,linelist,verbose_i=False,speed=''):
         # read the line list appropriate for the user call
         # catch the case where the line list is a numpy table
         if type(linelist).__name__ == 'Table':
             # linelist equal to a path to user defined line list 
             self.SYNTHE.readlines(rtype=linelist,verbose=verbose_i)
-            self.speed = 'slow'
+            if speed == '':
+                self.speed = 'fast'
+            else:
+                self.speed = speed
+
             if self.timeit:
                 print("Pro: {1} --> Read in user defined numpy table line list -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
@@ -263,7 +267,10 @@ class FALmod(object):
             # rlinedict = {"atoms":True,"moles":True,"H2O":True,"TiO":True,"predict":True} # atoms, molecules + H2O & TiO
             rlinedict = {"atoms":True,"moles":False,"H2O":False,"TiO":False,"predict":False} 
             self.SYNTHE.readlines(rtype='readall',rlinedict=rlinedict,verbose=verbose_i)
-            self.speed = 'slow'
+            if speed == '':
+                self.speed = 'slow'
+            else:
+                self.speed = speed
 
             if self.timeit:
                 print("Pro: {1} --> Read in all line lists -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
@@ -289,7 +296,11 @@ class FALmod(object):
 
             # read the masterline lists (cargile or kurucz plus H2O+TiO)
             self.SYNTHE.readlines(rtype='readmaster',verbose=verbose_i,MASTERLL=MASTERLL)
-            self.speed = 'slow'
+            if speed == '':
+                self.speed = 'slow'
+            else:
+                self.speed = speed
+
             if self.timeit:
                 print("Pro: {1} --> Read in master line list: {2} -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw,MASTERLL))
                 self.lasttime = time.time()
@@ -298,7 +309,11 @@ class FALmod(object):
         elif linelist == 'readlast':
             # read the previously created line list in directory
             self.SYNTHE.readlines(rtype='readlast',verbose=verbose_i)
-            self.speed = 'fast'
+            if speed == '':
+                self.speed = 'fast'
+            else:
+                self.speed = speed
+
             if self.timeit:
                 print("Pro: {1} --> Read in lines -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw))
                 self.lasttime = time.time()
@@ -307,7 +322,11 @@ class FALmod(object):
         else:
             # linelist equal to a path to user defined line list 
             self.SYNTHE.readlines(rtype=linelist,verbose=verbose_i)
-            self.speed = 'fast'
+            if speed == '':
+                self.speed = 'fast'
+            else:
+                self.speed = speed
+
             linelistname = linelist
             if self.timeit:
                 print("Pro: {1} --> Read in user defined line list {2} -- Step time: {0:7.5f} s".format(time.time()-self.lasttime,self.IDraw,linelistname))
