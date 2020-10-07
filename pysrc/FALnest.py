@@ -558,7 +558,7 @@ class FALnest(object):
             )])
 
         dysampler = dynesty.NestedSampler(
-               lnprobfn,
+               lnprob,
                priortrans,
                self.ndim,
                logl_args=inargs,
