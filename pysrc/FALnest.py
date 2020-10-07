@@ -158,7 +158,7 @@ def priortrans(upars,args):
 
     pars.append( (1.05 - 0.95) *upars[-4] + 0.95)
     pars.append( (1.0  - -1.0) *upars[-3] + -1.0)
-    pars.append( (0.0  - -0.75)*upars[-2] + -0.75)
+    pars.append( (1.25 -  0.0) *upars[-2] + 0.0)
     pars.append( (1.0  - -1.0) *upars[-1] + -1.0)
 
     return pars
