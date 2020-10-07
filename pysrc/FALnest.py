@@ -575,4 +575,5 @@ class FALnest(object):
                walks=5,
                )
 
-        return res
+        dysampler.run_nested(dlogz=0.5)
+        return dysampler
