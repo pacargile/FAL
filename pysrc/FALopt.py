@@ -27,9 +27,10 @@ homepath   = os.environ.get('HOME')
 datapath = holypath
 
 def fmin(pin,args,verbose=False):
+    startime = datetime.now()
     res = lnprob(pin,args,verbose)
     chisq = -1.0 * res[0]
-    print(chisq)
+    print('{0:n} -- {1}'.format(chisq,datetime.now()-starttime))
     return chisq
 
 def lnprob(pin,args,verbose=False):
