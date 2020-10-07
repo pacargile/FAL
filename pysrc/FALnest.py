@@ -143,6 +143,8 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
 def priortrans(upars,args):
     pflag = args
 
+    print(len(upars),len(pflag))
+
     pars = []
     for upars_i,pflag_i in zip(upars[:-4],pflag):
         if pflag_i == 'WL':
