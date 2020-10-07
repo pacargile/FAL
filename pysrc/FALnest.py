@@ -29,7 +29,7 @@ datapath = holypath
 def lnprob(pin,args,verbose=False):
 
     # read in arguments
-    (solobswave,solobsflux,arcobswave,arcobsflux,transflux,bg_sol_flux,bg_arc_flux,fmdict,fmll,Tarr,minWL,maxWL,minLWL,maxLWL) = args[0]
+    (solobswave,solobsflux,arcobswave,arcobsflux,transflux,bg_sol_flux,bg_arc_flux,fmdict,fmll,Tarr,minWL,maxWL,minLWL,maxLWL) = args
     # for printing to command line, generate an ID
     fmdictkeys = list(fmdict)
     ID = fmdictkeys[0] - 10000000
@@ -145,7 +145,6 @@ def priortrans(upars,args):
 
     pars = []
     for upars_i,pflag_i in zip(upars[:-4],pflag):
-        print(pflag_i)
         if pflag_i == 'WL':
             pars_i = 0.02*upars_i - -0.01
 
