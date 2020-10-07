@@ -141,7 +141,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     return lnp, modintrp
 
 def priortrans(upars,args):
-    pflag = args[0]
+    pflag = args
 
     pars = []
     for upars_i,pflag_i in zip(upars[:-4],pflag):
