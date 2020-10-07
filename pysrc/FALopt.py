@@ -130,7 +130,7 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     # loop over stars and calclate lnp_i
     for ID_i,star_i in zip(IDlist,['Sun','Arcturus']):
         # calculate model spectrum for p
-        _spec,_ll = fmdict[ID_i].runsynthe(timeit=True,linelist='readlast',parr=p,verbose=False)
+        _spec,_ll = fmdict[ID_i].runsynthe(timeit=False,linelist='readlast',parr=p,verbose=False)
         _spectab_i = Table(_spec)
         _spectab = _spectab_i[(_spectab_i['WAVE'] <= maxWL) & (_spectab_i['WAVE'] >= minWL)]
         _specflux = _spectab['QMU1']/_spectab['QMU2']
@@ -557,7 +557,7 @@ class FALopt(object):
 
         res = minimize(fmin, p0, 
             args=inargs,
-            method='CG', 
+            method='Nelder-Mead', 
             jac="2-point", 
             hess=SR1(),
             options={'disp': True, 'return_all':True})
