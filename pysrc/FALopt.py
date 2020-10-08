@@ -557,7 +557,7 @@ class FALopt(object):
 
         res = minimize(fmin, p0, 
             args=inargs,
-            method='BFGS', 
+            method='Newton-CG', 
             jac="2-point", 
             hess=SR1(),
             options={'disp': True, 'return_all':True})
