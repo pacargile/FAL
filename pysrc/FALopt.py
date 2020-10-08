@@ -30,7 +30,7 @@ def fmin(pin,args,verbose=False):
     starttime = datetime.now()
     res = lnprob(pin,args,verbose)
     chisq = -1.0 * res[0]
-    print('{0:n} -- {1}'.format(chisq,datetime.now()-starttime))
+    print('{0:f} -- {1}'.format(chisq,datetime.now()-starttime))
     return chisq
 
 def lnprob(pin,args,verbose=False):
