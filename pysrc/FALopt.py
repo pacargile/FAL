@@ -178,7 +178,7 @@ class FALopt(object):
         self.IDlist = [int(10000000*x)+self.ID for x in range(1,self.numstars+1,1)]
 
         # Define synthesis wavelength range
-        self.wavebuffer = 0.15
+        self.wavebuffer = 0.0
         self.waverange = [self.minWL-self.wavebuffer,self.maxWL+self.wavebuffer]
 
         # setting cut for line selection
