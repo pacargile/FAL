@@ -568,11 +568,11 @@ class FALnest(object):
                self.ndim,
                logl_args=inargs,
                ptform_args=[self.pflag],
-               nlive=500,
+               nlive=50,
                bound='multi',
-               sample='rslice',
+               sample='unif',
                bootstrap=0,
-               slices=2,
+               slices=5,
                )
 
         dysampler.run_nested(dlogz=0.5)
