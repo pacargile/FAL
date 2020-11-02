@@ -154,12 +154,13 @@ def priortrans(upars,args):
         if pflag_i == 'GW':
             pars_i = (0.65 - -1.5)*upars_i + -1.5
 
+        pars.append(pars_i)
+
     pars.append( (1.05 - 0.95) *upars[-4] + 0.95)
     pars.append( (1.0  - -1.0) *upars[-3] + -1.0)
     pars.append( (1.25 -  0.0) *upars[-2] + 0.0)
     pars.append( (1.0  - -1.0) *upars[-1] + -1.0)
 
-    print(len(upars),len(pars))
     return pars
 
 class FALnest(object):
