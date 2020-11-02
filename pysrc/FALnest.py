@@ -27,6 +27,7 @@ homepath   = os.environ.get('HOME')
 datapath = holypath
 
 def lnprob(pin,args,verbose=False):
+    print(pin)
 
     # read in arguments
     (solobswave,solobsflux,arcobswave,arcobsflux,transflux,bg_sol_flux,bg_arc_flux,fmdict,fmll,Tarr,minWL,maxWL,minLWL,maxLWL) = args
@@ -306,6 +307,9 @@ class FALnest(object):
         # print("Seg: {0} --> Index in line list of the modeled lines...".format(self.ID),fitlineind)
         # print("Seg: {0} --> WL of modeled lines...".format(self.ID),fitlinewl)
 
+        # get observed data, transmission spectrum, and background model
+        (self.solobswave,self.solobsflux,self.arcobswave,self.arcobsflux,self.transflux,self.bg_sol_flux,self.bg_arc_flux) = self.getspecdata()
+
         # number of dimensions
         self.ndim = len(self.parr)
         print("Seg: {0} --> Number of Free Line Parameters...".format(self.ID),self.ndim)
@@ -313,9 +317,7 @@ class FALnest(object):
         self.ndim = self.ndim + 2
         print("Seg: {0} --> Fitting Arcturus Spectrum scaling and velocity".format(self.ID))
         self.ndim = self.ndim + 2
-
-        # get observed data, transmission spectrum, and background model
-        (self.solobswave,self.solobsflux,self.arcobswave,self.arcobsflux,self.transflux,self.bg_sol_flux,self.bg_arc_flux) = self.getspecdata()
+        print("Seg: {0} --> Total Number of Free Parameters...".format(self.ID),self.ndim)
 
         # # initialize output files
         # self.initoutput()
@@ -566,7 +568,7 @@ class FALnest(object):
                self.ndim,
                logl_args=inargs,
                ptform_args=[self.pflag],
-               nlive=60,
+               nlive=25,
                bound='multi',
                sample='rwalk',
                bootstrap=0,
