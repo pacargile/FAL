@@ -146,13 +146,13 @@ def priortrans(upars,args):
     pars = []
     for upars_i,pflag_i in zip(upars[:-4],pflag):
         if pflag_i == 'WL':
-            pars_i = 0.02*upars_i - -0.01
+            pars_i = 0.02*upars_i + -0.01
 
         if pflag_i == 'GF':
-            pars_i = (1.5 - -10.0)*upars_i - -10.0
+            pars_i = (1.5 - -10.0)*upars_i + -10.0
 
         if pflag_i == 'GW':
-            pars_i = (0.65 - -1.5)*upars_i - -1.5
+            pars_i = (0.65 - -1.5)*upars_i + -1.5
 
         print(pflag_i,pars_i)
         pars.append(pars_i)
