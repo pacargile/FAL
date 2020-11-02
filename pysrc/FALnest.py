@@ -568,7 +568,7 @@ class FALnest(object):
                self.ndim,
                logl_args=inargs,
                ptform_args=[self.pflag],
-               nlive=100,
+               nlive=60,
                bound='multi',
                sample='rwalk',
                bootstrap=0,
