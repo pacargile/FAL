@@ -149,7 +149,7 @@ def priortrans(upars,args):
             pars_i = 0.02*upars_i + -0.01
 
         if pflag_i == 'GF':
-            pars_i = (1.5 - -10.0)*upars_i + -10.0
+            pars_i = (1.5 - -9.9)*upars_i + -9.9
 
         if pflag_i == 'GW':
             pars_i = (0.65 - -1.5)*upars_i + -1.5
