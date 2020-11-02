@@ -159,7 +159,7 @@ def priortrans(upars,args):
     pars.append( (1.25 -  0.0) *upars[-2] + 0.0)
     pars.append( (1.0  - -1.0) *upars[-1] + -1.0)
 
-    print(len(pars))
+    print(len(upars),len(pars))
     return pars
 
 class FALnest(object):
@@ -562,7 +562,6 @@ class FALnest(object):
             self.minLINWL,self.maxLINWL
             )])
 
-        print('NDIM',self.ndim)
         dysampler = dynesty.NestedSampler(
                lnprob,
                priortrans,
