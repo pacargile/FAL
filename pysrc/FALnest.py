@@ -27,7 +27,6 @@ homepath   = os.environ.get('HOME')
 datapath = holypath
 
 def lnprob(pin,args,verbose=False):
-    print(pin)
 
     # read in arguments
     (solobswave,solobsflux,arcobswave,arcobsflux,transflux,bg_sol_flux,bg_arc_flux,fmdict,fmll,Tarr,minWL,maxWL,minLWL,maxLWL) = args
@@ -160,6 +159,7 @@ def priortrans(upars,args):
     pars.append( (1.25 -  0.0) *upars[-2] + 0.0)
     pars.append( (1.0  - -1.0) *upars[-1] + -1.0)
 
+    print(len(pars))
     return pars
 
 class FALnest(object):
@@ -562,13 +562,14 @@ class FALnest(object):
             self.minLINWL,self.maxLINWL
             )])
 
+        print('NDIM',self.ndim)
         dysampler = dynesty.NestedSampler(
                lnprob,
                priortrans,
                self.ndim,
                logl_args=inargs,
                ptform_args=[self.pflag],
-               nlive=25,
+               nlive=60,
                bound='multi',
                sample='rwalk',
                bootstrap=0,
