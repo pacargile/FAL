@@ -355,7 +355,7 @@ class FALnest(object):
         print("Seg: {0} --> FITINDEX, WL, CODE, GFLOG, GAMMAW")
         for ii,cond in enumerate(self.Tarr[...,0]): 
             if cond != -1: 
-                print(cond,self.fmll['WL','CODE','GFLOG','GW'][ii][0]) 
+                print(cond,list(self.fmll['WL','CODE','GFLOG','GW'][ii])) 
 
         print("Seg: {0} --> Finished Setup".format(self.ID))
 
