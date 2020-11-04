@@ -6,7 +6,7 @@ import h5py
 import numpy as np
 from astropy.table import Table,vstack,unique
 from scipy.interpolate import UnivariateSpline
-from scipy.stats import beta
+from scipy.stats import beta, truncnorm
 from scipy.optimize import minimize
 from scipy.optimize import SR1
 from scipy import constants
@@ -76,7 +76,8 @@ def lnprob(pin,args,verbose=False):
     # scale transmission spectrum, renormalize it
     transflux_i = ((transcale*transflux)-(transcale-1.0))
     # shfit transmission spectrum and resample it back to obswave
-    transflux_ii = UnivariateSpline(obswave['Sun']*(1.0+(tranvel/speedoflight)),transflux_i,s=0,k=1)(obswave['Sun'])
+    # transflux_ii = UnivariateSpline(obswave['Sun']*(1.0+(tranvel/speedoflight)),transflux_i,s=0,k=1)(obswave['Sun'])
+    transflux_ii = np.interp(obswave['Sun'],obswave['Sun']*(1.0+(tranvel/speedoflight)),transflux_i)
 
     # now divide the observed spectrum by the transmission spectrum
     obsflux['Sun'] = obsflux['Sun'] / transflux_ii
@@ -127,7 +128,8 @@ def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
         _spectab_i = Table(_spec)
         _spectab = _spectab_i[(_spectab_i['WAVE'] <= maxWL) & (_spectab_i['WAVE'] >= minWL)]
         _specflux = _spectab['QMU1']/_spectab['QMU2']
-        _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
+        # _specintr = UnivariateSpline(_spectab['WAVE'].data,_specflux,s=0,k=1,ext=1)(obswave[star_i])
+        _specintr = np.interp(obswave[star_i],_spectab['WAVE'].data,_specflux)
         modintrp[star_i] = _specintr
         # residsq = (np.subtract(obsflux[star_i],_specintr)**2.0)/(sig[star_i]**2.0)
         # lnp_i = np.sum(-0.5*residsq + np.log(1.0/np.sqrt(2*np.pi*(sig[star_i]**2.0))))
@@ -146,13 +148,27 @@ def priortrans(upars,args):
     pars = []
     for upars_i,pflag_i in zip(upars[:-4],pflag):
         if pflag_i == 'WL':
-            pars_i = 0.02*upars_i + -0.01
+            # # uniform prior
+            # pars_i = 0.02*upars_i + -0.01
+
+            # Truncated Normal
+            m, s = 0.0, 0.001  # mean and standard deviation
+            low, high = -0.025, 0.025  # lower and upper bounds
+            low_n, high_n = (low - m) / s, (high - m) / s  # standardize
+            pars_i = truncnorm.ppf(upars_i, low_n, high_n, loc=m, scale=s)
 
         if pflag_i == 'GF':
             pars_i = (1.5 - -9.9)*upars_i + -9.9
 
         if pflag_i == 'GW':
-            pars_i = (0.65 - -1.5)*upars_i + -1.5
+            # # uniform prior
+            # pars_i = (0.65 - -1.5)*upars_i + -1.5
+
+            # Truncated Normal
+            m, s = 0.0, 0.1  # mean and standard deviation
+            low, high = -1.5, 0.65  # lower and upper bounds
+            low_n, high_n = (low - m) / s, (high - m) / s  # standardize
+            pars_i = truncnorm.ppf(upars_i, low_n, high_n, loc=m, scale=s)
 
         pars.append(pars_i)
 
