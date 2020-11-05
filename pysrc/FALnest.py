@@ -585,7 +585,10 @@ class FALnest(object):
             self.minLINWL,self.maxLINWL
             )])
 
-        dysampler = dynesty.NestedSampler(
+        SAMPclass = dynesty.DynamicNestedSampler
+        # SAMPclass = dynesty.NestedSampler
+
+        dysampler = SAMPclass(
                lnprob,
                priortrans,
                self.ndim,
@@ -598,5 +601,12 @@ class FALnest(object):
                slice=3,
                )
 
-        dysampler.run_nested(dlogz=0.5,maxcall=10000)
+        # dysampler.run_nested(dlogz=0.5,maxcall=10000)
+        dysampler.run_nested(
+            dlogz_init=0.5, 
+            nlive_init=200, 
+            nlive_batch=1,
+            maxiter_init=10000,
+            maxiter_batch=1000, 
+            maxbatch=1)
         return dysampler
