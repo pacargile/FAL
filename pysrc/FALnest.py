@@ -352,10 +352,10 @@ class FALnest(object):
         print("Seg: {0} --> Using an initial scaling of {1} for Obs Arc ...".format(self.ID,self.arcscale))
 
         print("Seg: {0} --> Fit Line Parameters:".format(self.ID))
-        print("Seg: {0} --> FITINDEX, WL, CODE, GFLOG, GAMMAW")
+        print("Seg: {0} --> FITINDEX, WL, CODE, GFLOG, GAMMAW, RESID".format(self.ID))
         for ii,cond in enumerate(self.Tarr[...,0]): 
             if cond != -1: 
-                print(cond,list(self.fmll['WL','CODE','GFLOG','GW'][ii])) 
+                print(cond,list(self.fmll['WL','CODE','GFLOG','GW', 'RESID'][ii])) 
 
         print("Seg: {0} --> Finished Setup".format(self.ID))
 
