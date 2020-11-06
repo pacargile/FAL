@@ -594,7 +594,7 @@ class FALnest(object):
                self.ndim,
                logl_args=inargs,
                ptform_args=[self.pflag],
-               nlive=200,
+               nlive=100,
                bound='multi',
                sample='slice',
                bootstrap=0,
@@ -604,7 +604,7 @@ class FALnest(object):
         # dysampler.run_nested(dlogz=0.5,maxcall=10000)
         dysampler.run_nested(
             dlogz_init=0.5, 
-            nlive_init=200, 
+            nlive_init=100, 
             nlive_batch=1,
             maxiter_init=10000,
             maxiter_batch=1000, 
