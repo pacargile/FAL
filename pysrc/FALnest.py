@@ -598,14 +598,14 @@ class FALnest(object):
                bound='multi',
                sample='slice',
                bootstrap=0,
-               slice=3,
+               slice=2,
                )
 
         # dysampler.run_nested(dlogz=0.5,maxcall=10000)
         dysampler.run_nested(
             dlogz_init=0.5, 
             nlive_init=60, 
-            nlive_batch=2,
+            nlive_batch=1,
             maxiter_init=15000,
             maxiter_batch=2000, 
             maxbatch=5)
