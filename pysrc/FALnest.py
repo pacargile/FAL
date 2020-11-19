@@ -55,24 +55,24 @@ def lnprob(pin,args,verbose=False):
     transcale = pin[-2]
     tranvel   = pin[-1]
 
-    # check to make sure transcale is > 0.0
-    if transcale < 0.0:
-        print('transcale issue {0}'.format(transcale))
-        return -np.inf,[np.nan,np.nan]
-    # apply gaussian prior to transscale
-    tsprior = -0.5*( ((transcale-1.0)**2.0)/(0.001**2.0))
+    # # check to make sure transcale is > 0.0
+    # if transcale < 0.0:
+    #     print('transcale issue {0}'.format(transcale))
+    #     return -np.inf,[np.nan,np.nan]
+    # # apply gaussian prior to transscale
+    # # tsprior = -0.5*( ((transcale-1.0)**2.0)/(0.001**2.0))
 
-    if (tranvel < -1.0) or (tranvel > 1.0):
-        print('tranvel issue {0}'.format(tranvel))
-        return -np.inf,[np.nan,np.nan]
+    # if (tranvel < -1.0) or (tranvel > 1.0):
+    #     print('tranvel issue {0}'.format(tranvel))
+    #     return -np.inf,[np.nan,np.nan]
 
-    # check arcturus scalings
-    if (arcscale > 1.05) or (arcscale < 0.95):
-        print('arcscale issue {}'.format(arcscale))
-        return -np.inf,[np.nan,np.nan]
-    if (arcvel < -1.0) or (arcvel > 1.0):
-        print('arcvel issue {}'.format(arcvel))
-        return -np.inf,[np.nan,np.nan]
+    # # check arcturus scalings
+    # if (arcscale > 1.05) or (arcscale < 0.95):
+    #     print('arcscale issue {}'.format(arcscale))
+    #     return -np.inf,[np.nan,np.nan]
+    # if (arcvel < -1.0) or (arcvel > 1.0):
+    #     print('arcvel issue {}'.format(arcvel))
+    #     return -np.inf,[np.nan,np.nan]
 
     # scale transmission spectrum, renormalize it
     transflux_i = ((transcale*transflux)-(transcale-1.0))
@@ -99,8 +99,8 @@ def lnprob(pin,args,verbose=False):
     # modblob = mod
 
     # return the lnprob value
-    lnpr = lnl
-    return lnpr
+    # lnpr = lnl
+    return lnl
     
 def lnlike(p,obswave,obsflux,fmdict,minWL,maxWL):
     # generate ID list
@@ -173,10 +173,33 @@ def priortrans(upars,args):
 
         pars.append(pars_i)
 
+    # additonal pars
+    # 
+    # upars[-4] -> Arcturus Scaling
     pars.append( (1.05 - 0.95) *upars[-4] + 0.95)
+
+    # upars[-3] -> Arcturus Shift
     pars.append( (1.0  - -1.0) *upars[-3] + -1.0)
-    pars.append( (1.25 -  0.0) *upars[-2] + 0.0)
-    pars.append( (1.0  - -1.0) *upars[-1] + -1.0)
+
+    # upars[-2] -> Trans Scaling
+    # pars.append( (1.25 -  0.0) *upars[-2] + 0.0)
+
+    # Truncated Normal
+    m, s = 0.0, 0.001  # mean and standard deviation
+    low, high = 0.0, 1.25  # lower and upper bounds
+    low_n, high_n = (low - m) / s, (high - m) / s  # standardize
+    pars_i = truncnorm.ppf(upars[-2], low_n, high_n, loc=m, scale=s)
+    pars.append(pars_i)
+
+    # upars[-1] -> Trans Shift
+    # pars.append( (1.0  - -1.0) *upars[-1] + -1.0)
+
+    # Truncated Normal
+    m, s = 0.0, 0.25  # mean and standard deviation
+    low, high = -1.0, 1.0  # lower and upper bounds
+    low_n, high_n = (low - m) / s, (high - m) / s  # standardize
+    pars_i = truncnorm.ppf(upars[-1], low_n, high_n, loc=m, scale=s)
+    pars.append(pars_i)
 
     return pars
 
@@ -615,7 +638,6 @@ class FALnest(object):
         maxiter = 1000
         maxcall = 50000
         dlogz_final = 0.01
-        n_effective = 1000
 
         maxiter_b = 500
         maxcall_b = 1000
@@ -668,12 +690,11 @@ class FALnest(object):
                 if loglstar < -1e6:
                     loglstar = -np.inf
 
-                print("iter: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.3f} | "
-                    "logz: {4:6.3f} +/- {5:6.3f} | loglk: {6:6.3f} | dlogz: {7:6.3f} > {8:6.3f}   | mean(time):  {9:7.5f} | time: {10} \n"
+                print("It: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.1f} | "
+                    "logz: {4:6.2f} | loglk: {5:6.2f} | dlogz: {6:6.2f} | mean(time):  {7:7.5f} | time: {8} \n"
                     .format(nit_i, nc, ncall_i, eff, 
-                        logz, logzerr, loglstar, 
-                        delta_logz, dlogz_final,
-                        np.mean(deltaitertime_arr),datetime.now()))
+                        logz, loglstar, delta_logz,
+                        np.mean(deltaitertime_arr),datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
                 sys.stdout.flush()
                 deltaitertime_arr = []
 
@@ -728,10 +749,11 @@ class FALnest(object):
                         if loglstar < -1e6:
                             loglstar = -np.inf
 
-                        print("iter: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.3f} | "
+                        print("It: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.3f} | "
                             "loglk: {4:6.3f} | mean(time):  {5:7.5f} | time: {6} \n"
                             .format(nit_b, nc, ncall_b, eff, 
-                                loglstar, np.mean(deltaitertime_arr_b),datetime.now()))
+                                loglstar, np.mean(deltaitertime_arr_b),
+                                datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
                         sys.stdout.flush()
                         deltaitertime_arr_b = []
 
