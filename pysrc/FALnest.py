@@ -635,8 +635,8 @@ class FALnest(object):
         #     maxbatch=5)
 
         flushnum = 25
-        maxiter = 500
-        maxcall = 5000
+        maxiter = 1000
+        maxcall = 10000
         dlogz_final = 0.01
 
         maxiter_b = 500
@@ -717,7 +717,7 @@ class FALnest(object):
             print('Adding Batch {0} @ {1}'.format(nbatch,datetime.now()))
 
             stop_flg,stop_val = stopping_function(dysampler.results,return_vals=True)  # evaluate stop
-            print('... Stop_Post = {0}, Stop_Evi = {1}, Stop = {2}'.format(*stop_val))
+            print('... Stop_Post = {0}, Stop_Evi = {1}, Stop = {2} -> STOP? {3}'.format(*stop_val,stop_flg))
 
             if not stop_flg:
 
@@ -734,6 +734,7 @@ class FALnest(object):
                 nit_b = 0
 
                 for it,results in enumerate(dysampler.sample_batch(
+                    nlive_new=150,
                     logl_bounds=logl_bounds,
                     maxiter=maxiter_b,
                     maxcall=maxcall_b,)):
