@@ -619,7 +619,7 @@ class FALnest(object):
                logl_args=inargs,
                ptform_args=[self.pflag],
                bound='multi',
-               sample='slice',
+               sample='rwalk',
                bootstrap=0,
                slice=5,
                first_update={'min_ncall': 1000, 'min_eff': 20.0},
@@ -635,8 +635,8 @@ class FALnest(object):
         #     maxbatch=5)
 
         flushnum = 25
-        maxiter = 1000
-        maxcall = 50000
+        maxiter = 500
+        maxcall = 5000
         dlogz_final = 0.01
 
         maxiter_b = 500
@@ -654,7 +654,7 @@ class FALnest(object):
         deltaitertime_arr = []
 
         for it,results in enumerate(dysampler.sample_initial(
-            nlive=200,
+            nlive=150,
             maxiter=maxiter,
             maxcall=maxcall,
             dlogz=dlogz_final,
@@ -690,9 +690,9 @@ class FALnest(object):
                 if loglstar < -1e6:
                     loglstar = -np.inf
 
-                print("It: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.1f} | "
-                    "logz: {4:6.2f} | loglk: {5:6.2f} | dlogz: {6:6.2f} | mean(time):  {7:7.5f} | time: {8} \n"
-                    .format(nit_i, nc, ncall_i, eff, 
+                print("It: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.1f} | bound: {4:d} |"
+                    "logz: {5:6.2f} | loglk: {6:6.2f} | dlogz: {7:6.2f} | mean(time):  {8:7.5f} | time: {9} \n"
+                    .format(nit_i, nc, ncall_i, eff, bounditer,
                         logz, loglstar, delta_logz,
                         np.mean(deltaitertime_arr),datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
                 sys.stdout.flush()
@@ -749,9 +749,9 @@ class FALnest(object):
                         if loglstar < -1e6:
                             loglstar = -np.inf
 
-                        print("It: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.3f} | "
-                            "loglk: {4:6.3f} | mean(time):  {5:7.5f} | time: {6} \n"
-                            .format(nit_b, nc, ncall_b, eff, 
+                        print("It: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.3f} | bound: {4:d} | "
+                            "loglk: {5:6.3f} | mean(time):  {6:7.5f} | time: {7} \n"
+                            .format(nit_b, nc, ncall_b, eff, bounditer,
                                 loglstar, np.mean(deltaitertime_arr_b),
                                 datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
                         sys.stdout.flush()
