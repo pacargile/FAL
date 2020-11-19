@@ -612,7 +612,7 @@ class FALnest(object):
         #     maxbatch=5)
 
         flushnum = 25
-        maxiter = 5000
+        maxiter = 150
         maxcall = 50000
         dlogz_final = 0.01
         n_effective = 1000
@@ -692,7 +692,7 @@ class FALnest(object):
             if nbatch > maxnbatch:
                 print('HIT MAX NUMBER OF BATCHES OF {0} @ {1}'.format(maxnbatch,datetime.now()))
                 break
-                
+
             print('Adding Batch {0} @ {1}'.format(nbatch,datetime.now()))
 
             stop_flg,stop_val = stopping_function(dysampler.results,return_vals=True)  # evaluate stop
