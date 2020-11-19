@@ -1,6 +1,7 @@
 import sys,time,os
 from datetime import datetime
 import dynesty
+from dynesty.dynamicsampler import stopping_function, weight_function
 import h5py
 
 import numpy as np
@@ -594,19 +595,156 @@ class FALnest(object):
                self.ndim,
                logl_args=inargs,
                ptform_args=[self.pflag],
-               # nlive=250,
                bound='multi',
                sample='slice',
                bootstrap=0,
-               slice=2,
+               slice=5,
+               first_update={'min_ncall': 1000, 'min_eff': 20.0},
                )
 
-        # dysampler.run_nested(dlogz=0.5,maxcall=10000)
-        dysampler.run_nested(
-            dlogz_init=0.5, 
-            nlive_init=60, 
-            nlive_batch=1,
-            maxiter_init=15000,
-            maxiter_batch=2000, 
-            maxbatch=5)
+        # # dysampler.run_nested(dlogz=0.5,maxcall=10000)
+        # dysampler.run_nested(
+        #     dlogz_init=0.5, 
+        #     nlive_init=60, 
+        #     nlive_batch=1,
+        #     maxiter_init=15000,
+        #     maxiter_batch=2000, 
+        #     maxbatch=5)
+
+        flushnum = 25
+        maxiter = 5000
+        maxcall = 50000
+        dlogz_final = 0.01
+        n_effective = 1000
+
+        maxiter_b = 500
+        maxcall_b = 1000
+        maxnbatch = 10
+
+        # Baseline run.
+        ncall_i = 0
+        nit_i = 0
+
+        # start sampling
+        print('Start Initial Sampling @ {}'.format(datetime.now()))
+
+        iter_starttime = datetime.now()
+        deltaitertime_arr = []
+
+        for it,results in enumerate(dysampler.sample_initial(
+            nlive=100,
+            maxiter=maxiter,
+            maxcall=maxcall,
+            dlogz=dlogz_final,
+            n_effective=n_effective,
+            )):
+
+            (worst,ustar,vstar,
+                loglstar,logvol,logwt,logz,logzvar,
+                h,nc,
+                worst_it,boundidx,bounditer,
+                eff,delta_logz) = results
+
+            ncall_i += nc
+            nit_i = it
+
+            deltaitertime_arr.append((datetime.now()-iter_starttime).total_seconds()/float(nc))
+            iter_starttime = datetime.now()
+
+            if (it%flushnum) == 0:
+                if logz < -1e6:
+                    logz = -np.inf
+
+                if delta_logz > 1e8:
+                    delta_logz = np.inf
+
+                if logzvar > 0.:
+                    logzerr = np.sqrt(logzvar)
+                else:
+                  logzerr = np.nan
+
+                if logzerr > 1e8:
+                    logzerr = np.inf
+
+                if loglstar < -1e6:
+                    loglstar = -np.inf
+
+                print("iter: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.3f} | "
+                    "logz: {4:6.3f} +/- {5:6.3f} | loglk: {6:6.3f} | dlogz: {7:6.3f} > {8:6.3f}   | mean(time):  {9:7.5f} | time: {10} \n"
+                    .format(nit_i, nc, ncall_i, eff, 
+                        logz, logzerr, loglstar, 
+                        delta_logz, dlogz_final,
+                        np.mean(deltaitertime_arr),datetime.now()))
+                sys.stdout.flush()
+                deltaitertime_arr = []
+
+            if (it == maxiter) or (ncall_i == maxcall):
+                print('HIT STOPING CRITERIA:')
+                print('... it: {0}'.format(nit_i))
+                print('... ncall: {0}'.format(ncall_i))
+                print('... dlog(z): {0}'.format(delta_logz))
+                break
+
+        print('Finished Initial Sampling @ {}'.format(datetime.now()))
+
+        # Add batches until we hit the stopping criterion.
+        nbatch = 1
+        while True:
+            if nbatch > maxnbatch:
+                print('HIT MAX NUMBER OF BATCHES OF {0} @ {1}'.format(maxnbatch,datetime.now()))
+                break
+                
+            print('Adding Batch {0} @ {1}'.format(nbatch,datetime.now()))
+
+            stop_flg,stop_val = stopping_function(dysampler.results,return_vals=True)  # evaluate stop
+            print('... Stop_Post = {0}, Stop_Evi = {1}, Stop = {2}'.format(*stop_val))
+
+            if not stop_flg:
+
+                pardict = ({'pfrac':0.8,'maxfrac':0.8,'pad':1})
+                logl_bounds,weights = weight_function(dysampler.results,args=pardict,return_weights=True)  # derive bounds
+                print('... Pwgts = {0}, Zwgts = {1}, wgts = {2}'.format(*weights))
+
+                iter_starttime_b = datetime.now()
+                deltaitertime_arr_b = []
+
+                ncall_b = 0
+                nit_b = 0
+
+                for it,results in enumerate(dysampler.sample_batch(
+                    logl_bounds=logl_bounds,
+                    maxiter=maxiter_b,
+                    maxcall=maxcall_b,)):
+                    (worst,ustar,vstar,loglstar,nc,worst_it,boundidx,bounditer,eff) = results
+
+                    ncall_b += nc
+                    nit_b = it
+
+                    deltaitertime_arr_b.append((datetime.now()-iter_starttime_b).total_seconds()/float(nc))
+                    iter_starttime_b = datetime.now()
+
+                    if (it%flushnum) == 0:
+                        if loglstar < -1e6:
+                            loglstar = -np.inf
+
+                        print("iter: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:6.3f} | "
+                            "loglk: {4:6.3f} | mean(time):  {5:7.5f} | time: {6} \n"
+                            .format(nit_b, nc, ncall_b, eff, 
+                                loglstar, np.mean(deltaitertime_arr_b),datetime.now()))
+                        sys.stdout.flush()
+                        deltaitertime_arr_b = []
+
+                    if (it == maxiter_b) or (ncall_b == maxcall_b):
+                        print('HIT BATCH {0} STOPING CRITERIA:'.format(nbatch))
+                        print('... it: {0}'.format(nit_b))
+                        print('... ncall: {0}'.format(ncall_b))
+                        break
+
+                print('Combining New Batch {0} @ {1}'.format(nbatch,datetime.now()))
+                dysampler.combine_runs()  # add new samples to previous results
+                nbatch += 1
+
+            else:
+                break
+
         return dysampler
