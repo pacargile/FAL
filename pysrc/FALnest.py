@@ -700,6 +700,8 @@ class FALnest(object):
 
             if not stop_flg:
 
+                print('... Running New Batch {0}'.format(nbatch))
+
                 pardict = ({'pfrac':0.8,'maxfrac':0.8,'pad':1})
                 logl_bounds,weights = weight_function(dysampler.results,args=pardict,return_weights=True)  # derive bounds
                 print('... Pwgts = {0}, Zwgts = {1}, wgts = {2}'.format(*weights))
