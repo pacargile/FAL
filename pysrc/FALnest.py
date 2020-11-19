@@ -612,7 +612,7 @@ class FALnest(object):
         #     maxbatch=5)
 
         flushnum = 25
-        maxiter = 150
+        maxiter = 1000
         maxcall = 50000
         dlogz_final = 0.01
         n_effective = 1000
@@ -632,7 +632,7 @@ class FALnest(object):
         deltaitertime_arr = []
 
         for it,results in enumerate(dysampler.sample_initial(
-            nlive=100,
+            nlive=200,
             maxiter=maxiter,
             maxcall=maxcall,
             dlogz=dlogz_final,
