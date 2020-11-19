@@ -691,7 +691,7 @@ class FALnest(object):
                     loglstar = -np.inf
 
                 print("It: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:4.1f} | bound: {4:d} |"
-                    "logz: {5:6.2f} | loglk: {6:6.2f} | dlogz: {7:6.2f} | mean(time):  {8:7.5f} | time: {9} \n"
+                    "logz: {5:6.2f} | loglk: {6:6.2f} | dlogz: {7:6.2f} | mean(time):  {8:7.5f} | time: {9}"
                     .format(nit_i, nc, ncall_i, eff, bounditer,
                         logz, loglstar, delta_logz,
                         np.mean(deltaitertime_arr),datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
@@ -750,7 +750,7 @@ class FALnest(object):
                             loglstar = -np.inf
 
                         print("It: {0:d} | nc: {1:d} | ncall: {2:d} | eff(%): {3:4.1f} | bound: {4:d} | "
-                            "loglk: {5:6.3f} | mean(time):  {6:7.5f} | time: {7} \n"
+                            "loglk: {5:6.3f} | mean(time):  {6:7.5f} | time: {7}"
                             .format(nit_b, nc, ncall_b, eff, bounditer,
                                 loglstar, np.mean(deltaitertime_arr_b),
                                 datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
