@@ -636,7 +636,6 @@ class FALnest(object):
             maxiter=maxiter,
             maxcall=maxcall,
             dlogz=dlogz_final,
-            n_effective=n_effective,
             )):
 
             (worst,ustar,vstar,
