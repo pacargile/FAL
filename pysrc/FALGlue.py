@@ -381,8 +381,8 @@ class glue(object):
                          temparr = ([('{0:'+self.fmtstr[fmt]+'}').format(
                                         xx) for xx in nptab[fmt]])
                     except ValueError:
-                         print('PROBLEM WITH {0} ({1})'.format(fmt,self.fmtstr[fmt]))
-                         raise
+                         temparr = ([('{0:'+self.fmtstr[fmt]+'}').format(
+                                        float(xx)) for xx in nptab[fmt]])
 
                     outtab_arr.append(temparr)
                     outpar_arr.append(fmt)
